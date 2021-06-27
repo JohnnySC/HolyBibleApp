@@ -10,6 +10,11 @@ abstract class Abstract {
         abstract fun map(mapper: M): T
     }
 
+    // FIXME: 27.06.2021 rename
+    interface Mapable<T, M : Mapper> {
+        fun map(mapper: M): T
+    }
+
     interface Mapper {
         class Empty : Mapper
     }
