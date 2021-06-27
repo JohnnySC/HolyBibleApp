@@ -17,6 +17,7 @@ import com.github.johnnysc.holybibleapp.presentation.BaseBooksDomainToUiMapper
 import com.github.johnnysc.holybibleapp.presentation.BooksCommunication
 import com.github.johnnysc.holybibleapp.presentation.MainViewModel
 import com.github.johnnysc.holybibleapp.presentation.ResourceProvider
+import io.realm.Realm
 
 /**
  * @author Asatryan on 26.06.2021
@@ -31,7 +32,7 @@ class BibleApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
+        Realm.init(this)
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             //todo log http calls
@@ -50,9 +51,11 @@ class BibleApp : Application() {
             booksCacheMapper
         )
         val booksInteractor = BooksInteractor.Base(booksRepository, BaseBooksDataToDomainMapper())
+        val communication = BooksCommunication.Base()
         mainViewModel = MainViewModel(
             booksInteractor,
-            BaseBooksDomainToUiMapper(BooksCommunication.Base(), ResourceProvider.Base(this))
+            BaseBooksDomainToUiMapper(communication, ResourceProvider.Base(this)),
+            communication
         )
     }
 }
