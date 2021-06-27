@@ -11,6 +11,8 @@ import com.github.johnnysc.holybibleapp.data.cache.RealmProvider
 import com.github.johnnysc.holybibleapp.data.net.BookCloudMapper
 import com.github.johnnysc.holybibleapp.data.net.BooksService
 import retrofit2.Retrofit
+import com.github.johnnysc.holybibleapp.domain.BaseBooksDataToDomainMapper
+import com.github.johnnysc.holybibleapp.domain.BooksInteractor
 
 /**
  * @author Asatryan on 26.06.2021
@@ -41,6 +43,6 @@ class BibleApp : Application() {
             booksCloudMapper,
             booksCacheMapper
         )
-
+        val booksInteractor = BooksInteractor.Base(booksRepository, BaseBooksDataToDomainMapper())
     }
 }
