@@ -1,23 +1,21 @@
 package com.github.johnnysc.holybibleapp.core
 
 import android.app.Application
-import com.github.johnnysc.holybibleapp.data.BooksCloudDataSource
-import com.github.johnnysc.holybibleapp.data.BooksCloudMapper
-import com.github.johnnysc.holybibleapp.data.BooksRepository
-import com.github.johnnysc.holybibleapp.data.cache.BookCacheMapper
+import com.github.johnnysc.holybibleapp.data.*
 import com.github.johnnysc.holybibleapp.data.cache.BooksCacheDataSource
 import com.github.johnnysc.holybibleapp.data.cache.BooksCacheMapper
 import com.github.johnnysc.holybibleapp.data.cache.RealmProvider
-import com.github.johnnysc.holybibleapp.data.net.BookCloudMapper
 import com.github.johnnysc.holybibleapp.data.net.BooksService
+import com.github.johnnysc.holybibleapp.domain.BaseBookDataToDomainMapper
 import retrofit2.Retrofit
 import com.github.johnnysc.holybibleapp.domain.BaseBooksDataToDomainMapper
 import com.github.johnnysc.holybibleapp.domain.BooksInteractor
-import com.github.johnnysc.holybibleapp.presentation.BaseBooksDomainToUiMapper
-import com.github.johnnysc.holybibleapp.presentation.BooksCommunication
-import com.github.johnnysc.holybibleapp.presentation.MainViewModel
-import com.github.johnnysc.holybibleapp.presentation.ResourceProvider
+import com.github.johnnysc.holybibleapp.presentation.*
+import com.google.gson.Gson
 import io.realm.Realm
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import java.util.concurrent.TimeUnit
 
 /**
  * @author Asatryan on 26.06.2021
@@ -33,28 +31,40 @@ class BibleApp : Application() {
     override fun onCreate() {
         super.onCreate()
         Realm.init(this)
+        val client = OkHttpClient.Builder()
+            .connectTimeout(1, TimeUnit.MINUTES)
+            .readTimeout(1, TimeUnit.MINUTES)
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
+            .build()
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            //todo log http calls
+            .client(client)
             .build()
         val service = retrofit.create(BooksService::class.java)
 
-        val cloudDataSource = BooksCloudDataSource.Base(service)
-        val cacheDataSource = BooksCacheDataSource.Base(RealmProvider.Base())
-        val booksCloudMapper = BooksCloudMapper.Base(BookCloudMapper.Base())
-        val booksCacheMapper = BooksCacheMapper.Base(BookCacheMapper.Base())
-
+        val gson = Gson()
+        val cloudDataSource = BooksCloudDataSource.Base(service, gson)
+        val cacheDataSource =
+            BooksCacheDataSource.Base(RealmProvider.Base(), BookDataToDbMapper.Base())
+        val toBookMapper = ToBookMapper.Base()
+        val booksCloudMapper = BooksCloudMapper.Base(toBookMapper)
+        val booksCacheMapper = BooksCacheMapper.Base(toBookMapper)
         val booksRepository = BooksRepository.Base(
             cloudDataSource,
             cacheDataSource,
             booksCloudMapper,
             booksCacheMapper
         )
-        val booksInteractor = BooksInteractor.Base(booksRepository, BaseBooksDataToDomainMapper())
+        val booksInteractor = BooksInteractor.Base(
+            booksRepository,
+            BaseBooksDataToDomainMapper(BaseBookDataToDomainMapper())
+        )
         val communication = BooksCommunication.Base()
         mainViewModel = MainViewModel(
             booksInteractor,
-            BaseBooksDomainToUiMapper(communication, ResourceProvider.Base(this)),
+            BaseBooksDomainToUiMapper(ResourceProvider.Base(this), BaseBookDomainToUiMapper()),
             communication
         )
     }

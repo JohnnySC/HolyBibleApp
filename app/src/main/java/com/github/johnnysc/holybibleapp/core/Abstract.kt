@@ -5,13 +5,8 @@ package com.github.johnnysc.holybibleapp.core
  **/
 abstract class Abstract {
 
-    abstract class Object<T, M : Mapper> {
+    interface Object<T, M : Mapper> {
 
-        abstract fun map(mapper: M): T
-    }
-
-    // FIXME: 27.06.2021 rename
-    interface Mapable<T, M : Mapper> {
         fun map(mapper: M): T
     }
 

@@ -3,4 +3,5 @@
     <string name="service_unavailable_message">Service unavailable</string>
     <string name="no_connection_message">No connection</string>
     <string name="something_went_wrong">Something went wrong</string>
+    <string name="try_again">Try again</string>
 </resources>
