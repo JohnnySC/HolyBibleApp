@@ -47,9 +47,9 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
         val actual = repository.fetchBooks()
         val expected = BooksData.Success(
             listOf(
-                BookData(0, "name0"),
-                BookData(1, "name1"),
-                BookData(2, "name2"),
+                BookData(0, "name0", "ot"),
+                BookData(1, "name1", "ot"),
+                BookData(2, "name2", "ot"),
             )
         )
 
@@ -70,9 +70,9 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
         val actual = repository.fetchBooks()
         val expected = BooksData.Success(
             listOf(
-                BookData(10, "name10"),
-                BookData(11, "name11"),
-                BookData(12, "name12"),
+                BookData(10, "name10", "nt"),
+                BookData(11, "name11", "nt"),
+                BookData(12, "name12", "nt"),
             )
         )
         assertEquals(expected, actual)
@@ -92,9 +92,9 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
         val actual = repository.fetchBooks()
         val expected = BooksData.Success(
             listOf(
-                BookData(10, "name10"),
-                BookData(11, "name11"),
-                BookData(12, "name12"),
+                BookData(10, "name10", "nt"),
+                BookData(11, "name11", "nt"),
+                BookData(12, "name12", "nt"),
             )
         )
         assertEquals(expected, actual)
@@ -107,9 +107,9 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
         override suspend fun fetchBooks(): List<BookCloud> {
             if (returnSuccess) {
                 return listOf(
-                    BookCloud(0, "name0"),
-                    BookCloud(1, "name1"),
-                    BookCloud(2, "name2"),
+                    BookCloud(0, "name0", "ot"),
+                    BookCloud(1, "name1", "ot"),
+                    BookCloud(2, "name2", "ot"),
                 )
             } else {
                 throw unknownHostException
@@ -127,14 +127,17 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
                     BookDb().apply {
                         id = 10
                         name = "name10"
+                        testament = "nt"
                     },
                     BookDb().apply {
                         id = 11
                         name = "name11"
+                        testament = "nt"
                     },
                     BookDb().apply {
                         id = 12
                         name = "name12"
+                        testament = "nt"
                     }
                 ) else {
                 emptyList()

@@ -28,8 +28,8 @@ class BooksRepositorySaveBooksTest : BaseBooksRepositoryTest() {
         val actualCloud = repository.fetchBooks()
         val expectedCloud = BooksData.Success(
             listOf(
-                BookData(0, "name0"),
-                BookData(1, "name1")
+                BookData(0, "name0", "ot"),
+                BookData(1, "name1", "nt")
             )
         )
 
@@ -38,8 +38,8 @@ class BooksRepositorySaveBooksTest : BaseBooksRepositoryTest() {
         val actualCache = repository.fetchBooks()
         val expectedCache = BooksData.Success(
             listOf(
-                BookData(0, "name0 db"),
-                BookData(1, "name1 db")
+                BookData(0, "name0 db", "ot db"),
+                BookData(1, "name1 db", "nt db")
             )
         )
 
@@ -50,8 +50,8 @@ class BooksRepositorySaveBooksTest : BaseBooksRepositoryTest() {
 
         override suspend fun fetchBooks(): List<BookCloud> {
             return listOf(
-                BookCloud(0, "name0"),
-                BookCloud(1, "name1")
+                BookCloud(0, "name0", "ot"),
+                BookCloud(1, "name1", "nt")
             )
         }
     }
@@ -65,9 +65,10 @@ class BooksRepositorySaveBooksTest : BaseBooksRepositoryTest() {
         override fun saveBooks(books: List<BookData>) {
             books.map { book ->
                 list.add(book.mapTo(object : BookDataToDbMapper {
-                    override fun mapToDb(id: Int, name: String, db: DbWrapper) = BookDb().apply {
+                    override fun mapToDb(id: Int, name: String, testament:String, db: DbWrapper) = BookDb().apply {
                         this.id = id
                         this.name = "$name db"
+                        this.testament = "$testament db"
                     }
 
                 }, object : DbWrapper {
