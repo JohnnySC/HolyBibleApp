@@ -27,7 +27,7 @@ interface BooksCacheDataSource {
         override fun saveBooks(books: List<BookData>) = realmProvider.provide().use { realm ->
             realm.executeTransaction {
                 books.forEach { book ->
-                    book.mapTo(mapper, it)
+                    book.mapTo(mapper, DbWrapper.Base(it))
                 }
             }
         }
