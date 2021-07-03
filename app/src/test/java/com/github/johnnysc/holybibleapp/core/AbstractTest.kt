@@ -1,9 +1,11 @@
 package com.github.johnnysc.holybibleapp.core
 
+import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import org.junit.Test
 import java.io.IOException
 import java.lang.Exception
+import java.lang.IllegalStateException
 
 /**
  * @author Asatryan on 26.06.2021
@@ -14,7 +16,8 @@ class AbstractTest {
     fun test_success() {
         val dataObject = TestDataObject.Success("a", "b")
         val domainObject = dataObject.map(DataMapper.Base())
-        assertTrue(domainObject is DomainObject.Success)
+        val expected = DomainObject.Success("a b")
+        assertEquals(expected, domainObject)
     }
 
     @Test
@@ -55,29 +58,27 @@ class AbstractTest {
             }
 
             override fun map(exception: Exception): DomainObject {
-                return DomainObject.Fail()
+                return DomainObject.Fail
             }
         }
     }
 
     sealed class DomainObject : Abstract.Object<UiObject, DomainToUIMapper> {
 
-        class Success(private val textCombined: String) : DomainObject() {
+        data class Success(private val textCombined: String) : DomainObject() {
             override fun map(mapper: DomainToUIMapper): UiObject {
-                TODO("not done yet")
+                throw IllegalStateException("not implemented yet")
             }
         }
 
-        class Fail : DomainObject() {
+        object Fail : DomainObject() {
             override fun map(mapper: DomainToUIMapper): UiObject {
-                TODO("not done yet")
+                throw IllegalStateException("not implemented yet")
             }
         }
     }
 
     interface DomainToUIMapper : Abstract.Mapper
 
-    sealed class UiObject : Abstract.Object<Unit, Abstract.Mapper.Empty> {
-
-    }
+    sealed class UiObject : Abstract.Object<Unit, Abstract.Mapper.Empty>
 }
