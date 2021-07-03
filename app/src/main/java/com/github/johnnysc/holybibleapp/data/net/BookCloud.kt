@@ -13,7 +13,9 @@ data class BookCloud(
     @SerializedName("id")
     private val id: Int,
     @SerializedName("name")
-    private val name: String
+    private val name: String,
+    @SerializedName("testament")
+    private val testament: String,
 ) : Abstract.Object<BookData, ToBookMapper> {
-    override fun map(mapper: ToBookMapper) = mapper.map(id, name)
+    override fun map(mapper: ToBookMapper) = mapper.map(id, name, testament)
 }

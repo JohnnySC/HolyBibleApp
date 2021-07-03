@@ -4,4 +4,6 @@
     <string name="no_connection_message">No connection</string>
     <string name="something_went_wrong">Something went wrong</string>
     <string name="try_again">Try again</string>
+    <string name="new_testament">New Testament</string>
+    <string name="old_testament">Old Testament</string>
 </resources>

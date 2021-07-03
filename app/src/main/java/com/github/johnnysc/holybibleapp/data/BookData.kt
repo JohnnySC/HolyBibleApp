@@ -8,11 +8,15 @@ import io.realm.Realm
 /**
  * @author Asatryan on 03.07.2021
  **/
-class BookData(private val id: Int, private val name: String) :
+class BookData(private val id: Int, private val name: String, private val testament: String) :
     ToBookDb<BookDb, BookDataToDbMapper>,
     Abstract.Object<BookDomain, BookDataToDomainMapper> {
     override fun map(mapper: BookDataToDomainMapper) = mapper.map(id, name)
-    override fun mapTo(mapper: BookDataToDbMapper, realm: Realm) = mapper.mapToDb(id, name, realm)
+    override fun mapTo(mapper: BookDataToDbMapper, realm: Realm) =
+        mapper.mapToDb(id, name, testament, realm)
+
+    fun matches(temp: TestamentTemp) = temp.matches(testament)
+    fun saveTestament(temp: TestamentTemp) = temp.save(testament)
 }
 
 //todo make it better later
