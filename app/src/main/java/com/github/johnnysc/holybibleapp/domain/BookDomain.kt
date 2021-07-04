@@ -16,6 +16,6 @@ sealed class BookDomain : Abstract.Object<BookUi, BookDomainToUiMapper> {
     }
 
     data class Testament(private val type: TestamentType) : BookDomain() {
-        override fun map(mapper: BookDomainToUiMapper) = mapper.map(type.getId(), type.name)
+        override fun map(mapper: BookDomainToUiMapper) = type.map(mapper)
     }
 }
