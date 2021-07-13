@@ -1,8 +1,12 @@
 package com.github.johnnysc.holybibleapp.presentation
 
 import com.github.johnnysc.holybibleapp.R
-import com.github.johnnysc.holybibleapp.domain.BookDomainToUiMapper
-import com.github.johnnysc.holybibleapp.domain.ErrorType
+import com.github.johnnysc.holybibleapp.domain.books.BookDomainToUiMapper
+import com.github.johnnysc.holybibleapp.core.ErrorType
+import com.github.johnnysc.holybibleapp.core.ResourceProvider
+import com.github.johnnysc.holybibleapp.presentation.books.BaseBooksDomainToUiMapper
+import com.github.johnnysc.holybibleapp.presentation.books.BookUi
+import com.github.johnnysc.holybibleapp.presentation.books.BooksUi
 import org.junit.Assert.*
 import org.junit.Test
 import java.lang.IllegalStateException
@@ -37,6 +41,10 @@ class BaseBooksDomainToUiMapperTest {
             R.string.no_connection_message -> "noConnection"
             R.string.service_unavailable_message -> "serviceUnavailable"
             else -> "somethingWentWrong"
+        }
+
+        override fun getString(id: Int, vararg args: Any): String {
+            return getString(id)
         }
     }
 }

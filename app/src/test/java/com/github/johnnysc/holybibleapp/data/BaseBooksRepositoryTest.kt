@@ -1,5 +1,8 @@
 package com.github.johnnysc.holybibleapp.data
 
+import com.github.johnnysc.holybibleapp.data.books.BookData
+import com.github.johnnysc.holybibleapp.data.books.ToBookMapper
+
 
 /**
  * @author Asatryan on 29.06.2021

@@ -7,7 +7,7 @@
     android:background="@color/purple_200"
     android:layout_height="wrap_content">
 
-    <TextView
+    <com.github.johnnysc.holybibleapp.core.CustomTextView
         android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -19,7 +19,7 @@
         android:textColor="@color/white"
         tools:text="Genesis" />
 
-    <ImageView
+    <com.github.johnnysc.holybibleapp.core.CollapseView
         app:tint="@color/white"
         android:id="@+id/collapseView"
         android:layout_gravity="center_vertical"

@@ -1,9 +1,15 @@
 package com.github.johnnysc.holybibleapp.presentation
 
+import com.github.johnnysc.holybibleapp.presentation.books.BookUi
+import com.github.johnnysc.holybibleapp.presentation.books.BooksUi
+import com.github.johnnysc.holybibleapp.presentation.books.CollapsedIdsCache
+import com.github.johnnysc.holybibleapp.presentation.books.UiDataCache
 import org.junit.Assert.*
 import org.junit.Test
 
 /**
+ * Tests for [UiDataCache] method cache
+ *
  * @author Asatryan on 10.07.2021
  */
 class UiDataCacheSaveTest {
@@ -74,13 +80,13 @@ class UiDataCacheSaveTest {
         assertEquals(expected, actual)
     }
 
-    private inner class TestIdCache : IdCache {
+    private inner class TestIdCache : CollapsedIdsCache {
 
         private val set = HashSet<Int>()
 
         override fun read() = set
-        override fun save(id: Int) {
-            set.add(id)
+        override fun save(data: Int) {
+            set.add(data)
         }
 
         override fun start() = set.clear()

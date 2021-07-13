@@ -6,4 +6,5 @@
     <string name="try_again">Try again</string>
     <string name="new_testament">New Testament</string>
     <string name="old_testament">Old Testament</string>
+    <string name="chapter_number">Chapter %d</string>
 </resources>
