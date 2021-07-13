@@ -1,10 +1,14 @@
 package com.github.johnnysc.holybibleapp.data
 
-import com.github.johnnysc.holybibleapp.data.cache.BookDb
-import com.github.johnnysc.holybibleapp.data.cache.BooksCacheDataSource
-import com.github.johnnysc.holybibleapp.data.cache.BooksCacheMapper
-import com.github.johnnysc.holybibleapp.data.cache.DbWrapper
-import com.github.johnnysc.holybibleapp.data.net.BookCloud
+import com.github.johnnysc.holybibleapp.data.books.*
+import com.github.johnnysc.holybibleapp.data.books.cache.BookDb
+import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheDataSource
+import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheMapper
+import com.github.johnnysc.holybibleapp.core.DbWrapper
+import com.github.johnnysc.holybibleapp.data.books.cache.BookDataToDbMapper
+import com.github.johnnysc.holybibleapp.data.books.cloud.BookCloud
+import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudDataSource
+import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudMapper
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -60,18 +64,18 @@ class BooksRepositorySaveBooksTest : BaseBooksRepositoryTest() {
 
         private val list = ArrayList<BookDb>()
 
-        override fun fetchBooks() = list
+        override fun read() = list
 
-        override fun saveBooks(books: List<BookData>) {
-            books.map { book ->
-                list.add(book.mapTo(object : BookDataToDbMapper {
-                    override fun mapToDb(id: Int, name: String, testament:String, db: DbWrapper) = BookDb().apply {
+        override fun save(data: List<BookData>) {
+            data.map { book ->
+                list.add(book.mapBy(object : BookDataToDbMapper {
+                    override fun mapToDb(id: Int, name: String, testament:String, db: DbWrapper<BookDb>) = BookDb().apply {
                         this.id = id
                         this.name = "$name db"
                         this.testament = "$testament db"
                     }
 
-                }, object : DbWrapper {
+                }, object : DbWrapper<BookDb> {
                     override fun createObject(id: Int) = BookDb().apply {
                         this.id = id
                     }

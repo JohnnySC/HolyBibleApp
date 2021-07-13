@@ -1,7 +1,9 @@
 package com.github.johnnysc.holybibleapp.domain
 
-import com.github.johnnysc.holybibleapp.data.BookData
-import com.github.johnnysc.holybibleapp.data.BookDataToDomainMapper
+import com.github.johnnysc.holybibleapp.core.ErrorType
+import com.github.johnnysc.holybibleapp.data.books.BookData
+import com.github.johnnysc.holybibleapp.data.books.BookDataToDomainMapper
+import com.github.johnnysc.holybibleapp.domain.books.*
 import org.junit.Assert.*
 import org.junit.Test
 import java.lang.IllegalStateException

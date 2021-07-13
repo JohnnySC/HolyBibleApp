@@ -46,18 +46,16 @@ class AbstractTest {
         }
     }
 
-    interface DataMapper : Abstract.Mapper {
+    interface DataMapper : Abstract.Mapper.Data<Exception, DomainObject> {
 
         fun map(textOne: String, textTwo: String): DomainObject
-
-        fun map(exception: Exception): DomainObject
 
         class Base : DataMapper {
             override fun map(textOne: String, textTwo: String): DomainObject {
                 return DomainObject.Success("$textOne $textTwo")
             }
 
-            override fun map(exception: Exception): DomainObject {
+            override fun map(data: Exception): DomainObject {
                 return DomainObject.Fail
             }
         }

@@ -1,9 +1,12 @@
 package com.github.johnnysc.holybibleapp.data
 
-import com.github.johnnysc.holybibleapp.data.cache.BookDb
-import com.github.johnnysc.holybibleapp.data.cache.BooksCacheDataSource
-import com.github.johnnysc.holybibleapp.data.cache.BooksCacheMapper
-import com.github.johnnysc.holybibleapp.data.net.BookCloud
+import com.github.johnnysc.holybibleapp.data.books.*
+import com.github.johnnysc.holybibleapp.data.books.cache.BookDb
+import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheDataSource
+import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheMapper
+import com.github.johnnysc.holybibleapp.data.books.cloud.BookCloud
+import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudDataSource
+import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudMapper
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
@@ -121,7 +124,7 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
         private val returnSuccess: Boolean
     ) : BooksCacheDataSource {
 
-        override fun fetchBooks(): List<BookDb> {
+        override fun read(): List<BookDb> {
             return if (returnSuccess)
                 listOf(
                     BookDb().apply {
@@ -144,7 +147,7 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
             }
         }
 
-        override fun saveBooks(books: List<BookData>) {
+        override fun save(data: List<BookData>) {
             // not used here
         }
     }
