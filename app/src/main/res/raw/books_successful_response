@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Genesis",
+    "testament": "OT",
+    "genre": {
+      "id": 1,
+      "name": "Law"
+    }
+  },
+  {
+    "id": 2,
+    "name": "Exodus",
+    "testament": "OT",
+    "genre": {
+      "id": 1,
+      "name": "Law"
+    }
+  },
+  {
+    "id": 40,
+    "name": "Matthew",
+    "testament": "NT",
+    "genre": {
+      "id": 5,
+      "name": "Gospels"
+    }
+  },
+  {
+    "id": 41,
+    "name": "Mark",
+    "testament": "NT",
+    "genre": {
+      "id": 5,
+      "name": "Gospels"
+    }
+  }
+]

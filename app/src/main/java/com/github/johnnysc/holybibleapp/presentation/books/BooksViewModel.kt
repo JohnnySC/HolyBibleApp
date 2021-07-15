@@ -4,9 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.johnnysc.holybibleapp.presentation.NavigationCommunication
-import com.github.johnnysc.holybibleapp.presentation.Screens.Companion.BOOKS_SCREEN
-import com.github.johnnysc.holybibleapp.presentation.Screens.Companion.CHAPTERS_SCREEN
+import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
 import com.github.johnnysc.holybibleapp.core.Save
 import com.github.johnnysc.holybibleapp.domain.books.BooksDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.books.BooksInteractor
@@ -23,7 +21,7 @@ class BooksViewModel(
     private val communication: BooksCommunication,
     private val uiDataCache: UiDataCache,
     private val bookCache: Save<Pair<Int, String>>,
-    private val navigator : Save<Int>,
+    private val navigator : BooksNavigator,
     private val navigationCommunication: NavigationCommunication
 ) : ViewModel() {
 
@@ -32,9 +30,8 @@ class BooksViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             val resultDomain = booksInteractor.fetchBooks()
             val resultUi = resultDomain.map(mapper)
-            val actual = resultUi.cache(uiDataCache)
             withContext(Dispatchers.Main) {
-                actual.map(communication)
+                resultUi.map(communication)
             }
         }
     }
@@ -45,15 +42,15 @@ class BooksViewModel(
 
     fun collapseOrExpand(id: Int) = communication.map(uiDataCache.changeState(id))
 
-    fun saveCollapsedStates() = uiDataCache.saveState()
-
     fun showBook(id: Int, name:String) {
         bookCache.save(Pair(id, name))
-        navigationCommunication.map(CHAPTERS_SCREEN)
+        navigator.nextScreen(navigationCommunication)
     }
 
+    fun save() = uiDataCache.saveState()
+
     fun init() {
-        navigator.save(BOOKS_SCREEN)
+        navigator.saveBooksScreen()
         fetchBooks()
     }
 }

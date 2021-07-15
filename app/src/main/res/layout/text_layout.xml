@@ -4,6 +4,7 @@
     android:id="@+id/textView"
     style="@style/TextAppearance.AppCompat.Body1"
     android:layout_width="match_parent"
+    android:background="?selectableItemBackground"
     android:layout_height="wrap_content"
     android:padding="@dimen/padding8"
     tools:text="Genesis" />

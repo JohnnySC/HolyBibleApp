@@ -1,6 +1,6 @@
 package com.github.johnnysc.holybibleapp.presentation.books
 
-import android.content.Context
+import com.github.johnnysc.holybibleapp.core.PreferencesProvider
 import com.github.johnnysc.holybibleapp.core.Read
 import com.github.johnnysc.holybibleapp.core.Save
 
@@ -11,14 +11,14 @@ interface CollapsedIdsCache : Save<Int>, Read<Set<Int>> {
     fun start()
     fun finish()
 
-    class Base(context: Context) : CollapsedIdsCache {
-
-        private val sharedPreferences =
-            context.getSharedPreferences(ID_LIST_NAME, Context.MODE_PRIVATE)
+    abstract class Abstract(preferencesProvider: PreferencesProvider) : CollapsedIdsCache {
+        private val sharedPreferences by lazy {
+            preferencesProvider.provideSharedPreferences(getFileName())
+        }
         private val idSet = mutableSetOf<Int>()
 
         override fun read(): Set<Int> {
-            val set = sharedPreferences.getStringSet(IDS_KEY, emptySet()) ?: emptySet()
+            val set = sharedPreferences.getStringSet(getKey(), emptySet()) ?: emptySet()
             return set.mapTo(HashSet()) { it.toInt() }
         }
 
@@ -32,12 +32,34 @@ interface CollapsedIdsCache : Save<Int>, Read<Set<Int>> {
 
         override fun finish() {
             val set = idSet.mapTo(HashSet()) { it.toString() }
-            sharedPreferences.edit().putStringSet(IDS_KEY, set).apply()
+            sharedPreferences.edit().putStringSet(getKey(), set).apply()
         }
+
+        protected abstract fun getFileName(): String
+        protected abstract fun getKey(): String
+    }
+
+    class Base(preferencesProvider: PreferencesProvider) :
+        CollapsedIdsCache.Abstract(preferencesProvider) {
+
+        override fun getFileName() = ID_LIST_NAME
+        override fun getKey() = IDS_KEY
 
         private companion object {
             const val ID_LIST_NAME = "collapsedItemsIdList"
             const val IDS_KEY = "collapsedItemsIdsKey"
+        }
+    }
+
+    class Mock(preferencesProvider: PreferencesProvider) :
+        CollapsedIdsCache.Abstract(preferencesProvider) {
+
+        override fun getFileName() = ID_LIST_NAME
+        override fun getKey() = IDS_KEY
+
+        private companion object {
+            const val ID_LIST_NAME = "MockCollapsedItemsIdList"
+            const val IDS_KEY = "MockCollapsedItemsIdsKey"
         }
     }
 
