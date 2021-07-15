@@ -1,4 +1,4 @@
-package com.github.johnnysc.holybibleapp.presentation
+package com.github.johnnysc.holybibleapp.presentation.main
 
 import android.os.Bundle
 import android.view.LayoutInflater

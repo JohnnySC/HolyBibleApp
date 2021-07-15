@@ -5,14 +5,14 @@ package com.github.johnnysc.holybibleapp.presentation.books
  **/
 interface UiDataCache {
 
-    fun cache(list: List<BookUi>): BooksUi
+    fun cache(list: List<BookUi>): BooksUi.Base
     fun changeState(id: Int): List<BookUi>
     fun saveState()
 
     class Base(private val cacheId: CollapsedIdsCache) : UiDataCache {
         private val cachedList = ArrayList<BookUi>()
 
-        override fun cache(list: List<BookUi>): BooksUi {
+        override fun cache(list: List<BookUi>): BooksUi.Base {
             cachedList.clear()
             cachedList.addAll(list)
             var newList: List<BookUi> = ArrayList(list)

@@ -33,4 +33,14 @@ interface BooksRepository {
             BooksData.Fail(e)
         }
     }
+
+    class Mock(
+        private val cloudDataSource: BooksCloudDataSource,
+        private val booksCloudMapper: BooksCloudMapper,
+    ) : BooksRepository {
+        override suspend fun fetchBooks(): BooksData {
+            val books = cloudDataSource.fetchBooks()
+            return BooksData.Success(booksCloudMapper.map(books))
+        }
+    }
 }

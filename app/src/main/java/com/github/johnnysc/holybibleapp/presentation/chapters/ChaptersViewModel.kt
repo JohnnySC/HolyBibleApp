@@ -4,9 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.johnnysc.holybibleapp.presentation.Screens.Companion.CHAPTERS_SCREEN
 import com.github.johnnysc.holybibleapp.core.Read
-import com.github.johnnysc.holybibleapp.core.Save
 import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersInteractor
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +18,7 @@ class ChaptersViewModel(
     private val chaptersInteractor: ChaptersInteractor,
     private val chaptersCommunication: ChaptersCommunication,
     private val chaptersMapper: ChaptersDomainToUiMapper,
-    private val navigator: Save<Int>,
+    private val navigator: ChaptersNavigator,
     private val bookCache: Read<Pair<Int, String>>
 ) : ViewModel() {
 
@@ -40,7 +38,7 @@ class ChaptersViewModel(
     }
 
     fun init() {
-        navigator.save(CHAPTERS_SCREEN)
+        navigator.saveChaptersScreen()
         fetchChapters()
     }
 

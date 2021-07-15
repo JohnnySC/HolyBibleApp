@@ -1,6 +1,6 @@
 package com.github.johnnysc.holybibleapp.presentation.books
 
-import android.content.Context
+import com.github.johnnysc.holybibleapp.core.PreferencesProvider
 import com.github.johnnysc.holybibleapp.core.Read
 import com.github.johnnysc.holybibleapp.core.Save
 
@@ -9,9 +9,9 @@ import com.github.johnnysc.holybibleapp.core.Save
  **/
 interface BookCache : Save<Pair<Int, String>>, Read<Pair<Int, String>> {
 
-    class Base(context: Context) : BookCache {
+    class Base(preferencesProvider: PreferencesProvider) : BookCache {
         private val sharedPreferences =
-            context.getSharedPreferences(BOOK_ID_FILENAME, Context.MODE_PRIVATE)
+           preferencesProvider.provideSharedPreferences(BOOK_ID_FILENAME)
 
         override fun read() = Pair(
             sharedPreferences.getInt(BOOK_ID_KEY, 0),

@@ -1,15 +1,14 @@
-package com.github.johnnysc.holybibleapp.presentation
+package com.github.johnnysc.holybibleapp.presentation.main
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import com.github.johnnysc.holybibleapp.core.Read
 
 /**
  * @author Asatryan on 13.07.2021
  **/
 class MainViewModel(
-    private val navigator: Read<Int>,
+    private val navigator: MainNavigator,
     private val communication: NavigationCommunication
 ) : ViewModel() {
 
@@ -30,4 +29,6 @@ class MainViewModel(
         }
         return exit
     }
+
+    fun getFragment(id: Int) = navigator.getFragment(id)
 }
