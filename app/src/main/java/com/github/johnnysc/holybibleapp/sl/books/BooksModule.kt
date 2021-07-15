@@ -23,9 +23,9 @@ class BooksModule(
     private val useMocks: Boolean
 ) : BaseModule<BooksViewModel> {
 
-    override fun getViewModel() {
+    override fun getViewModel(): BooksViewModel {
         val uiDataCache = getBooksUiDataCache()
-        BooksViewModel(
+        return BooksViewModel(
             getBooksInteractor(),
             getBooksMapper(uiDataCache),
             getBooksCommunication(),
