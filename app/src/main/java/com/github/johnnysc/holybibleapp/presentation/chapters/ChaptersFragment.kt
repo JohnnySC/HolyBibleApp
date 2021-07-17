@@ -22,9 +22,13 @@ class ChaptersFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = ChaptersAdapter(object : Retry {
-            override fun tryAgain() = viewModel.fetchChapters()
-        })
+        val adapter = ChaptersAdapter(
+            object : Retry {
+                override fun tryAgain() = viewModel.fetchChapters()
+            },
+            object : ChaptersAdapter.ChapterClickListener {
+                override fun show(item: ChapterUi) = item.open(viewModel)
+            })
         viewModel.observeChapters(this, {
             adapter.update(it)
         })

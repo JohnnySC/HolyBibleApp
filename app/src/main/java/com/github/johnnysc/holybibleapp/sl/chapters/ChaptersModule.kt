@@ -29,7 +29,9 @@ class ChaptersModule(private val coreModule: CoreModule) : BaseModule<ChaptersVi
         getChaptersCommunication(),
         getChaptersMapper(),
         coreModule.navigator,
-        coreModule.bookCache
+        coreModule.bookCache,
+        coreModule.chapterCache,
+        coreModule.navigationCommunication
     )
 
     private fun getChaptersInteractor() = ChaptersInteractor.Base(

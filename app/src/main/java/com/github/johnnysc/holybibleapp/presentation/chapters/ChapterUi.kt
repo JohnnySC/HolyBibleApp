@@ -7,12 +7,14 @@ import com.github.johnnysc.holybibleapp.core.TextMapper
  * @author Asatryan on 11.07.2021
  **/
 sealed class ChapterUi : ComparableTextMapper<ChapterUi> {
+    open fun open(show: Show) = Unit
 
     class Base(
-        private val id: Int, //todo use to get verses
+        private val id: Int,
         private val text: String
     ) : ChapterUi() {
         override fun map(mapper: TextMapper) = mapper.map(text)
+        override fun open(show:Show) = show.show(id)
     }
 
     class Fail(
