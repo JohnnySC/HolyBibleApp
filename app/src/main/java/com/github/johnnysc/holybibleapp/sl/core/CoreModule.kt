@@ -34,7 +34,6 @@ class CoreModule : BaseModule<MainViewModel> {
     private lateinit var retrofit: Retrofit
 
     fun init(context: Context) {
-        Realm.init(context)
         val client = OkHttpClient.Builder()
             .connectTimeout(1, TimeUnit.MINUTES)
             .readTimeout(1, TimeUnit.MINUTES)
@@ -48,7 +47,7 @@ class CoreModule : BaseModule<MainViewModel> {
             .build()
 
         gson = Gson()
-        realmProvider = RealmProvider.Base()
+        realmProvider = RealmProvider.Base(context)
         resourceProvider = ResourceProvider.Base(context)
         bookCache = BookCache.Base(resourceProvider)
         chapterCache = ChapterCache.Base(resourceProvider)
