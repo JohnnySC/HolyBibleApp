@@ -7,6 +7,7 @@ import com.github.johnnysc.holybibleapp.presentation.main.MainViewModel
 import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
 import com.github.johnnysc.holybibleapp.presentation.main.Navigator
 import com.github.johnnysc.holybibleapp.presentation.books.BookCache
+import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterCache
 import com.google.gson.Gson
 import io.realm.Realm
 import okhttp3.OkHttpClient
@@ -29,6 +30,7 @@ class CoreModule : BaseModule<MainViewModel> {
     lateinit var navigator: Navigator
     lateinit var navigationCommunication: NavigationCommunication
     lateinit var bookCache: BookCache //todo move to common for 2 modules when added ChapterCache
+    lateinit var chapterCache: ChapterCache //todo move to common for 2 modules when added ChapterCache
     private lateinit var retrofit: Retrofit
 
     fun init(context: Context) {
@@ -49,11 +51,12 @@ class CoreModule : BaseModule<MainViewModel> {
         realmProvider = RealmProvider.Base()
         resourceProvider = ResourceProvider.Base(context)
         bookCache = BookCache.Base(resourceProvider)
+        chapterCache = ChapterCache.Base(resourceProvider)
         navigator = Navigator.Base(resourceProvider)
         navigationCommunication = NavigationCommunication.Base()
     }
 
-    fun <T> makeService(clazz:Class<T>):T = retrofit.create(clazz)
+    fun <T> makeService(clazz: Class<T>): T = retrofit.create(clazz)
 
     override fun getViewModel() = MainViewModel(navigator, navigationCommunication)
 }

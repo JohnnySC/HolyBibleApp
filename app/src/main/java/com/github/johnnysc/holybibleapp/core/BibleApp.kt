@@ -7,6 +7,8 @@ import com.github.johnnysc.holybibleapp.sl.books.BooksModule
 import com.github.johnnysc.holybibleapp.sl.chapters.ChaptersFactory
 import com.github.johnnysc.holybibleapp.sl.chapters.ChaptersModule
 import com.github.johnnysc.holybibleapp.sl.core.CoreModule
+import com.github.johnnysc.holybibleapp.sl.verses.VersesFactory
+import com.github.johnnysc.holybibleapp.sl.verses.VersesModule
 
 /**
  * @author Asatryan on 26.06.2021
@@ -23,4 +25,5 @@ class BibleApp : Application() {
     fun getMainViewModel() = coreModule.getViewModel()
     fun chaptersFactory() = ChaptersFactory(ChaptersModule(coreModule))
     fun booksFactory() = BooksFactory(BooksModule(coreModule, USE_MOCKS))
+    fun versesFactory() = VersesFactory(VersesModule(coreModule))
 }

@@ -7,11 +7,14 @@ import com.github.johnnysc.holybibleapp.presentation.books.BooksFragment
 import com.github.johnnysc.holybibleapp.presentation.books.BooksNavigator
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChaptersFragment
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChaptersNavigator
+import com.github.johnnysc.holybibleapp.presentation.verses.VersesFragment
+import com.github.johnnysc.holybibleapp.presentation.verses.VersesNavigator
 
 /**
  * @author Asatryan on 13.07.2021
  **/
-interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, ChaptersNavigator {
+interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, ChaptersNavigator,
+    VersesNavigator {
 
     class Base(preferencesProvider: PreferencesProvider) : Navigator {
 
@@ -20,7 +23,8 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
 
         private val screens = listOf(
             BooksFragment::class.java,
-            ChaptersFragment::class.java
+            ChaptersFragment::class.java,
+            VersesFragment::class.java
         )
 
         override fun save(data: Int) =
@@ -32,6 +36,7 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
 
         override fun saveBooksScreen() = save(BOOKS_SCREEN)
         override fun saveChaptersScreen() = save(CHAPTERS_SCREEN)
+        override fun saveVersesScreen() = save(VERSES_SCREEN)
 
         override fun nextScreen(navigationCommunication: NavigationCommunication) =
             navigationCommunication.map(read() + 1)
@@ -42,6 +47,7 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
 
             const val BOOKS_SCREEN = 0
             const val CHAPTERS_SCREEN = 1
+            const val VERSES_SCREEN = 2
         }
     }
 }
