@@ -6,6 +6,6 @@ import com.github.johnnysc.holybibleapp.domain.books.BookDomain
 /**
  * @author Asatryan on 03.07.2021
  **/
-interface BookDataToDomainMapper : Abstract.Mapper {
-    fun map(id: Int, name: String) : BookDomain
+interface BookDataToDomainMapper<T> : Abstract.Mapper {
+    fun map(id: Int, name: String) : T
 }

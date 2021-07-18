@@ -4,13 +4,14 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.*
+import com.github.johnnysc.holybibleapp.presentation.books.BookUi
 
 /**
  * @author Asatryan on 12.07.2021
  **/
 class ChaptersAdapter(
     private val retry: Retry,
-    private val clickListener: ChapterClickListener
+    private val clickListener: ClickListener<ChapterUi>
 ) :
     BaseAdapter<ChapterUi, BaseViewHolder<ChapterUi>>() {
 
@@ -30,19 +31,15 @@ class ChaptersAdapter(
 
         class Base(
             view: View,
-            private val clickListener: ChapterClickListener
+            private val clickListener: ClickListener<ChapterUi>
         ) : ChapterViewHolder(view) {
             private val textView = itemView.findViewById<CustomTextView>(R.id.textView)
             override fun bind(item: ChapterUi) {
                 item.map(textView)
                 itemView.setOnClickListener {
-                    clickListener.show(item)
+                    clickListener.click(item)
                 }
             }
         }
-    }
-
-    interface ChapterClickListener {
-        fun show(item: ChapterUi)
     }
 }

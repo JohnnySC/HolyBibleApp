@@ -8,8 +8,8 @@ import com.github.johnnysc.holybibleapp.data.chapters.ChaptersDataToDomainMapper
  * @author Asatryan on 11.07.2021
  **/
 class BaseChaptersDataToDomainMapper(
-    private val mapper: ChapterDataToDomainMapper
-) : ChaptersDataToDomainMapper() {
+    private val mapper: ChapterDataToDomainMapper<ChapterDomain>
+) : ChaptersDataToDomainMapper<ChaptersDomain>() {
 
     override fun map(data: List<ChapterData>) = ChaptersDomain.Success(data.map { chapterData ->
         chapterData.map(mapper)

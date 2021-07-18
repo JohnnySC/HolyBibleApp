@@ -9,7 +9,7 @@ import com.github.johnnysc.holybibleapp.data.verses.VerseData
  **/
 interface VersesCacheMapper : Abstract.Mapper.Data<List<VerseDb>, List<VerseData>> {
 
-    class Base(private val mapper: ToVerseMapper) : VersesCacheMapper {
+    class Base(private val mapper: ToVerseMapper<VerseData>) : VersesCacheMapper {
         override fun map(data: List<VerseDb>) = data.map { verseDb ->
             verseDb.map(mapper)
         }

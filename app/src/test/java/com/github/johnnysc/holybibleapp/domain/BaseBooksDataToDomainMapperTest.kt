@@ -3,6 +3,7 @@ package com.github.johnnysc.holybibleapp.domain
 import com.github.johnnysc.holybibleapp.core.ErrorType
 import com.github.johnnysc.holybibleapp.data.books.BookData
 import com.github.johnnysc.holybibleapp.data.books.BookDataToDomainMapper
+import com.github.johnnysc.holybibleapp.data.books.cache.BookDb
 import com.github.johnnysc.holybibleapp.domain.books.*
 import org.junit.Assert.*
 import org.junit.Test
@@ -16,7 +17,7 @@ import java.net.UnknownHostException
  */
 class BaseBooksDataToDomainMapperTest {
 
-    private val mapper = BaseBooksDataToDomainMapper(object : BookDataToDomainMapper {
+    private val mapper = BaseBooksDataToDomainMapper(object : BookDataToDomainMapper<BookDomain> {
         override fun map(id: Int, name: String) = BookDomain.Base(id, name)
     })
 
@@ -24,8 +25,8 @@ class BaseBooksDataToDomainMapperTest {
     fun test_success() {
         val actual = mapper.map(
             listOf(
-                BookData(1, "genesis", "ot"),
-                BookData(66, "Revelation", "nt")
+                BookData.Base(1, "genesis", "ot"),
+                BookData.Base(66, "Revelation", "nt")
             )
         )
 

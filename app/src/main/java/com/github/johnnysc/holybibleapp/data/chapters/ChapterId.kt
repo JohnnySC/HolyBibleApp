@@ -1,18 +1,17 @@
 package com.github.johnnysc.holybibleapp.data.chapters
 
-import com.github.johnnysc.holybibleapp.core.Abstract
 import com.github.johnnysc.holybibleapp.core.DbWrapper
+import com.github.johnnysc.holybibleapp.core.Limits
 import com.github.johnnysc.holybibleapp.data.chapters.cache.ChapterDb
-import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterUi
+import io.realm.RealmObject
 
 /**
  * @author Asatryan on 13.07.2021
  **/
-interface ChapterId : Abstract.Object<ChapterUi, ChapterIdToUiMapper> {
-    fun min(): Int
-    fun max(): Int
+interface ChapterId : Limits {
 
-    fun mapToDb(db: DbWrapper<ChapterDb>): ChapterDb
+    fun <T> map(mapper: ChapterIdToUiMapper<T>): T
+    fun <T : RealmObject> map(db: DbWrapper<T>): T
 
     class Base : ChapterId {
 
@@ -37,10 +36,9 @@ interface ChapterId : Abstract.Object<ChapterUi, ChapterIdToUiMapper> {
 
         override fun min() = MULTIPLY * bookId
         override fun max() = MULTIPLY * (bookId + 1)
+        override fun <T> map(mapper: ChapterIdToUiMapper<T>) = mapper.map(chapterIdReal)
 
-        override fun mapToDb(db: DbWrapper<ChapterDb>) = db.createObject(chapterIdGenerated)
-        override fun map(mapper: ChapterIdToUiMapper) =
-            mapper.map(chapterIdGenerated, chapterIdReal)
+        override fun <T : RealmObject> map(db: DbWrapper<T>) = db.createObject(chapterIdGenerated)
 
         private companion object {
             const val MULTIPLY = 1000

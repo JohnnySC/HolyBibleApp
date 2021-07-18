@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 class ChaptersViewModel(
     private val chaptersInteractor: ChaptersInteractor,
     private val chaptersCommunication: ChaptersCommunication,
-    private val chaptersMapper: ChaptersDomainToUiMapper,
+    private val chaptersMapper: ChaptersDomainToUiMapper<ChaptersUi>,
     private val navigator: ChaptersNavigator,
     private val bookCache: Read<Pair<Int, String>>,
     private val chapterCache: Save<Int>,
@@ -52,9 +52,4 @@ class ChaptersViewModel(
         chapterCache.save(id)
         navigator.nextScreen(navigationCommunication)
     }
-}
-
-interface Show {
-
-    fun show(id:Int)
 }

@@ -12,8 +12,8 @@ interface BooksInteractor {
 
     class Base(
         private val booksRepository: BooksRepository,
-        private val mapper: BooksDataToDomainMapper
+        private val mapper: BooksDataToDomainMapper<BooksDomain>
     ) : BooksInteractor {
-        override suspend fun fetchBooks() = booksRepository.fetchBooks().map(mapper)
+        override suspend fun fetchBooks() = booksRepository.fetchData().map(mapper)
     }
 }

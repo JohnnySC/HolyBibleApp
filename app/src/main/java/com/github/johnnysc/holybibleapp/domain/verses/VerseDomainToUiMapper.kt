@@ -1,12 +1,9 @@
 package com.github.johnnysc.holybibleapp.domain.verses
 
-import com.github.johnnysc.holybibleapp.core.Abstract
-import com.github.johnnysc.holybibleapp.presentation.verses.VerseUi
-
 /**
  * @author Asatryan on 17.07.2021
  **/
-interface VerseDomainToUiMapper : Abstract.Mapper {
+interface VerseDomainToUiMapper<T> {
 
-    fun map(id: Int, text: String): VerseUi
+    fun map(id: Int, text: String): T
 }

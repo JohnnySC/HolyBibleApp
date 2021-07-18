@@ -1,8 +1,6 @@
 package com.github.johnnysc.holybibleapp.data.chapters.cache
 
-import com.github.johnnysc.holybibleapp.core.DbWrapper
-import com.github.johnnysc.holybibleapp.core.Save
-import com.github.johnnysc.holybibleapp.core.RealmProvider
+import com.github.johnnysc.holybibleapp.core.*
 import com.github.johnnysc.holybibleapp.data.chapters.ChapterData
 import com.github.johnnysc.holybibleapp.data.chapters.ChapterId
 import io.realm.Realm
@@ -10,20 +8,19 @@ import io.realm.Realm
 /**
  * @author Asatryan on 11.07.2021
  **/
-interface ChaptersCacheDataSource : Save<List<ChapterData>> {
+interface ChaptersCacheDataSource : CacheDataSource<ChapterData> {
 
-    fun fetchChapters(bookId: Int): List<ChapterDb>
+    fun fetchChapters(limits: Limits): List<ChapterDb>
 
     class Base(
         private val realmProvider: RealmProvider,
-        private val mapper: ChapterDataToDbMapper
+        private val mapper: ChapterDataToDbMapper<ChapterDb>
     ) : ChaptersCacheDataSource {
 
-        override fun fetchChapters(bookId: Int): List<ChapterDb> {
-            val chapterId = ChapterId.Base(bookId)
+        override fun fetchChapters(limits: Limits): List<ChapterDb> {
             realmProvider.provide().use { realm ->
                 val chapters = realm.where(ChapterDb::class.java)
-                    .between("id", chapterId.min(), chapterId.max())
+                    .between("id", limits.min(), limits.max())
                     .findAll()
                 return realm.copyFromRealm(chapters)
             }
@@ -33,7 +30,7 @@ interface ChaptersCacheDataSource : Save<List<ChapterData>> {
             realmProvider.provide().use { realm ->
                 realm.executeTransaction {
                     data.forEach { chapter ->
-                        chapter.mapBy(mapper, ChapterDbWrapper(realm))
+                        chapter.map(mapper, ChapterDbWrapper(realm))
                     }
                 }
             }

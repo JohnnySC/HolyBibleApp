@@ -10,12 +10,12 @@ import com.google.gson.reflect.TypeToken
  **/
 interface BooksCloudDataSource {
 
-    suspend fun fetchBooks(): List<BookCloud>
+    suspend fun fetchBooks(): List<BookCloud.Base>
 
     abstract class Abstract(private val gson: Gson) : BooksCloudDataSource {
-        override suspend fun fetchBooks(): List<BookCloud> = gson.fromJson(
+        override suspend fun fetchBooks(): List<BookCloud.Base> = gson.fromJson(
             getDataAsString(),
-            object : TypeToken<List<BookCloud>>() {}.type
+            object : TypeToken<List<BookCloud.Base>>() {}.type
         )
 
         protected abstract suspend fun getDataAsString(): String

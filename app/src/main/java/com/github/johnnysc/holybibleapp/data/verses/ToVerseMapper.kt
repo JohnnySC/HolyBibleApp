@@ -1,15 +1,13 @@
 package com.github.johnnysc.holybibleapp.data.verses
 
-import com.github.johnnysc.holybibleapp.core.Abstract
-
 /**
  * @author Asatryan on 17.07.2021
  **/
-interface ToVerseMapper : Abstract.Mapper {
+interface ToVerseMapper<T> {
 
-    fun map(id: Int, verseId: Int, text: String): VerseData
+    fun map(id: Int, verseId: Int, text: String): T
 
-    class Base : ToVerseMapper {
-        override fun map(id: Int, verseId: Int, text: String) = VerseData(id, verseId, text)
+    class Base : ToVerseMapper<VerseData> {
+        override fun map(id: Int, verseId: Int, text: String) = VerseData.Base(id, verseId, text)
     }
 }

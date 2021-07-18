@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.activityViewModels
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.BibleApp
+import com.github.johnnysc.holybibleapp.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 
@@ -30,8 +31,8 @@ class BooksFragment : BaseFragment() {
             object : BooksAdapter.CollapseListener {
                 override fun collapseOrExpand(id: Int) = viewModel.collapseOrExpand(id)
             },
-            object : BooksAdapter.BookListener {
-                override fun showBook(id: Int, name: String) = viewModel.showBook(id, name)
+            object : ClickListener<BookUi> {
+                override fun click(item: BookUi) = item.open(viewModel)
             })
         recyclerView?.adapter = adapter
         viewModel.observe(this, {

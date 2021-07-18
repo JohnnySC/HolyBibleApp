@@ -16,7 +16,7 @@ class VersesViewModel(
     private val navigator: VersesNavigator,
     private val interactor: VersesInteractor,
     private val communication: VersesCommunication,
-    private val mapper: VersesDomainToUiMapper,
+    private val mapper: VersesDomainToUiMapper<VersesUi>,
     private val bookCache: Read<Pair<Int, String>>,
     private val chapterCache: Read<Int>
 ) : ViewModel() {

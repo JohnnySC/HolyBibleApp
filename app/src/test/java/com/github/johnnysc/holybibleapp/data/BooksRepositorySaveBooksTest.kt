@@ -29,21 +29,21 @@ class BooksRepositorySaveBooksTest : BaseBooksRepositoryTest() {
             BooksCacheMapper.Base(TestToBookMapper())
         )
 
-        val actualCloud = repository.fetchBooks()
+        val actualCloud = repository.fetchData()
         val expectedCloud = BooksData.Success(
             listOf(
-                BookData(0, "name0", "ot"),
-                BookData(1, "name1", "nt")
+                BookData.Base(0, "name0", "ot"),
+                BookData.Base(1, "name1", "nt")
             )
         )
 
         assertEquals(expectedCloud, actualCloud)
 
-        val actualCache = repository.fetchBooks()
+        val actualCache = repository.fetchData()
         val expectedCache = BooksData.Success(
             listOf(
-                BookData(0, "name0 db", "ot db"),
-                BookData(1, "name1 db", "nt db")
+                BookData.Base(0, "name0 db", "ot db"),
+                BookData.Base(1, "name1 db", "nt db")
             )
         )
 
@@ -52,10 +52,10 @@ class BooksRepositorySaveBooksTest : BaseBooksRepositoryTest() {
 
     private inner class TestBooksCloudDataSource : BooksCloudDataSource {
 
-        override suspend fun fetchBooks(): List<BookCloud> {
+        override suspend fun fetchBooks(): List<BookCloud.Base> {
             return listOf(
-                BookCloud(0, "name0", "ot"),
-                BookCloud(1, "name1", "nt")
+                BookCloud.Base(0, "name0", "ot"),
+                BookCloud.Base(1, "name1", "nt")
             )
         }
     }
@@ -68,8 +68,14 @@ class BooksRepositorySaveBooksTest : BaseBooksRepositoryTest() {
 
         override fun save(data: List<BookData>) {
             data.map { book ->
-                list.add(book.mapBy(object : BookDataToDbMapper {
-                    override fun mapToDb(id: Int, name: String, testament:String, db: DbWrapper<BookDb>) = BookDb().apply {
+                list.add(book.map(object : BookDataToDbMapper<BookDb> {
+
+                    override fun mapToDb(
+                        id: Int,
+                        name: String,
+                        testament: String,
+                        db: DbWrapper<BookDb>
+                    ) = BookDb().apply {
                         this.id = id
                         this.name = "$name db"
                         this.testament = "$testament db"

@@ -8,11 +8,11 @@ import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterUi
 /**
  * @author Asatryan on 13.07.2021
  **/
-interface ChapterIdToUiMapper : Abstract.Mapper {
-    fun map(generatedId: Int, realId: Int): ChapterUi
+interface ChapterIdToUiMapper<T> {
+    fun map(realId: Int): T
 
-    class Base(private val resourceProvider: ResourceProvider) : ChapterIdToUiMapper {
-        override fun map(generatedId: Int, realId: Int) =
+    class Base(private val resourceProvider: ResourceProvider) : ChapterIdToUiMapper<ChapterUi> {
+        override fun map(realId: Int) =
             ChapterUi.Base(realId, resourceProvider.getString(R.string.chapter_number, realId))
     }
 }

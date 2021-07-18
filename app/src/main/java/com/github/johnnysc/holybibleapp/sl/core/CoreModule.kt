@@ -29,8 +29,8 @@ class CoreModule : BaseModule<MainViewModel> {
     lateinit var realmProvider: RealmProvider
     lateinit var navigator: Navigator
     lateinit var navigationCommunication: NavigationCommunication
-    lateinit var bookCache: BookCache //todo move to common for 2 modules when added ChapterCache
-    lateinit var chapterCache: ChapterCache //todo move to common for 2 modules when added ChapterCache
+    lateinit var bookCache: BookCache
+    lateinit var chapterCache: ChapterCache //todo move to common for 2 modules
     private lateinit var retrofit: Retrofit
 
     fun init(context: Context) {

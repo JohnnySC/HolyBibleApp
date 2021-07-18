@@ -10,9 +10,9 @@ import com.github.johnnysc.holybibleapp.core.ResourceProvider
  * @author Asatryan on 11.07.2021
  **/
 class BaseChaptersDomainToUiMapper(
-    private val mapper: ChapterDomainToUiMapper,
+    private val mapper: ChapterDomainToUiMapper<ChapterUi>,
     resourceProvider: ResourceProvider
-) : ChaptersDomainToUiMapper(resourceProvider) {
+) : ChaptersDomainToUiMapper<ChaptersUi>(resourceProvider) {
 
     override fun map(data: List<ChapterDomain>) = ChaptersUi.Base(data.map { chapterDomain ->
         chapterDomain.map(mapper)

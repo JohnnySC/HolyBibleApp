@@ -12,10 +12,9 @@ interface VersesInteractor {
 
     class Base(
         private val repository: VersesRepository,
-        private val mapper: VersesDataToDomainMapper
+        private val mapper: VersesDataToDomainMapper<VersesDomain>
     ) : VersesInteractor {
 
-        override suspend fun fetchVerses() =
-            repository.fetchVerses().map(mapper)
+        override suspend fun fetchVerses() = repository.fetchData().map(mapper)
     }
 }

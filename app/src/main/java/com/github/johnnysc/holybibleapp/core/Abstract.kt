@@ -1,7 +1,6 @@
 package com.github.johnnysc.holybibleapp.core
 
 import com.github.johnnysc.holybibleapp.R
-import io.realm.RealmObject
 import retrofit2.HttpException
 import java.net.UnknownHostException
 
@@ -13,12 +12,11 @@ abstract class Abstract {
     interface Object<T, M : Mapper> {
 
         fun map(mapper: M): T
-
-        interface ToDb<T : RealmObject, M : Mapper> {
-
-            fun mapBy(mapper: M, db: DbWrapper<T>): T
-        }
     }
+
+    interface DataObject
+
+    interface CloudObject
 
     interface Mapper {
 

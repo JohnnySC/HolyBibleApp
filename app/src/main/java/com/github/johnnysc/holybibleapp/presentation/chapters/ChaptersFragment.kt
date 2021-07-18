@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.github.johnnysc.holybibleapp.core.BibleApp
+import com.github.johnnysc.holybibleapp.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 
@@ -26,8 +27,8 @@ class ChaptersFragment : BaseFragment() {
             object : Retry {
                 override fun tryAgain() = viewModel.fetchChapters()
             },
-            object : ChaptersAdapter.ChapterClickListener {
-                override fun show(item: ChapterUi) = item.open(viewModel)
+            object : ClickListener<ChapterUi> {
+                override fun click(item: ChapterUi) = item.open(viewModel)
             })
         viewModel.observeChapters(this, {
             adapter.update(it)

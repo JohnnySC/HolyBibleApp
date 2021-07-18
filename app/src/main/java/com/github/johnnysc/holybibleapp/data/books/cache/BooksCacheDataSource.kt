@@ -1,20 +1,17 @@
 package com.github.johnnysc.holybibleapp.data.books.cache
 
-import com.github.johnnysc.holybibleapp.core.DbWrapper
-import com.github.johnnysc.holybibleapp.core.Read
-import com.github.johnnysc.holybibleapp.core.RealmProvider
-import com.github.johnnysc.holybibleapp.core.Save
+import com.github.johnnysc.holybibleapp.core.*
 import com.github.johnnysc.holybibleapp.data.books.BookData
 import io.realm.Realm
 
 /**
  * @author Asatryan on 27.06.2021
  **/
-interface BooksCacheDataSource : Save<List<BookData>>, Read<List<BookDb>> {
+interface BooksCacheDataSource : Read<List<BookDb>>, CacheDataSource<BookData> {
 
     class Base(
         private val realmProvider: RealmProvider,
-        private val mapper: BookDataToDbMapper,
+        private val mapper: BookDataToDbMapper<BookDb>,
     ) : BooksCacheDataSource {
 
         override fun read(): List<BookDb> {
@@ -27,7 +24,7 @@ interface BooksCacheDataSource : Save<List<BookData>>, Read<List<BookDb>> {
         override fun save(data: List<BookData>) = realmProvider.provide().use { realm ->
             realm.executeTransaction {
                 data.forEach { book ->
-                    book.mapBy(mapper, BookDbWrapper(it))
+                    book.map(mapper, BookDbWrapper(it))
                 }
             }
         }

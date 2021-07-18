@@ -17,13 +17,13 @@ import kotlinx.coroutines.withContext
  **/
 class BooksViewModel(
     private val booksInteractor: BooksInteractor,
-    private val mapper: BooksDomainToUiMapper,
-    private val communication: BooksCommunication,
+    private val mapper:  BooksDomainToUiMapper<BooksUi>,
+    private val communication:  BooksCommunication,
     private val uiDataCache: UiDataCache,
     private val bookCache: Save<Pair<Int, String>>,
     private val navigator : BooksNavigator,
     private val navigationCommunication: NavigationCommunication
-) : ViewModel() {
+) : ViewModel(), ShowBook {
 
     fun fetchBooks() {
         communication.map(listOf(BookUi.Progress))
@@ -42,7 +42,7 @@ class BooksViewModel(
 
     fun collapseOrExpand(id: Int) = communication.map(uiDataCache.changeState(id))
 
-    fun showBook(id: Int, name:String) {
+    override fun show(id: Int, name: String) {
         bookCache.save(Pair(id, name))
         navigator.nextScreen(navigationCommunication)
     }

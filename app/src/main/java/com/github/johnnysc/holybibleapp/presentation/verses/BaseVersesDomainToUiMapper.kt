@@ -10,13 +10,13 @@ import com.github.johnnysc.holybibleapp.domain.verses.VersesDomainToUiMapper
  * @author Asatryan on 17.07.2021
  **/
 class BaseVersesDomainToUiMapper(
-    private val mapper: VerseDomainToUiMapper,
+    private val mapper: VerseDomainToUiMapper<VerseUi>,
     resourceProvider: ResourceProvider
-) : VersesDomainToUiMapper(resourceProvider) {
+) : VersesDomainToUiMapper<VersesUi>(resourceProvider) {
 
-    override fun map(data: List<VerseDomain>) = VersesUi(data.map { verse ->
+    override fun map(data: List<VerseDomain>) = VersesUi.Base(data.map { verse ->
         verse.map(mapper)
     })
 
-    override fun map(errorType: ErrorType) = VersesUi(listOf(VerseUi.Fail(errorMessage(errorType))))
+    override fun map(errorType: ErrorType) = VersesUi.Base(listOf(VerseUi.Fail(errorMessage(errorType))))
 }

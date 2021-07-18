@@ -1,13 +1,15 @@
 package com.github.johnnysc.holybibleapp.presentation.chapters
 
 import com.github.johnnysc.holybibleapp.core.ComparableTextMapper
+import com.github.johnnysc.holybibleapp.core.Open
 import com.github.johnnysc.holybibleapp.core.TextMapper
 
 /**
  * @author Asatryan on 11.07.2021
  **/
-sealed class ChapterUi : ComparableTextMapper<ChapterUi> {
-    open fun open(show: Show) = Unit
+sealed class ChapterUi : ComparableTextMapper<ChapterUi>, Open<Show> {
+
+    override fun open(show: Show) = Unit
 
     class Base(
         private val id: Int,
@@ -26,4 +28,9 @@ sealed class ChapterUi : ComparableTextMapper<ChapterUi> {
     object Progress : ChapterUi() {
         override fun map(mapper: TextMapper) = Unit
     }
+}
+
+interface Show {
+
+    fun show(id:Int)
 }

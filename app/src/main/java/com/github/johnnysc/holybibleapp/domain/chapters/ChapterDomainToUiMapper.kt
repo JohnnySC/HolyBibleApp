@@ -7,4 +7,4 @@ import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterUi
 /**
  * @author Asatryan on 11.07.2021
  **/
-interface ChapterDomainToUiMapper : Abstract.Mapper.Data<ChapterId, ChapterUi>
+interface ChapterDomainToUiMapper<T> : Abstract.Mapper.Data<ChapterId, T>

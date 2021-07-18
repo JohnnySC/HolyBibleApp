@@ -1,17 +1,17 @@
 package com.github.johnnysc.holybibleapp.data.chapters.cache
 
-import com.github.johnnysc.holybibleapp.core.Abstract
 import com.github.johnnysc.holybibleapp.core.DbWrapper
 import com.github.johnnysc.holybibleapp.data.chapters.ChapterId
+import io.realm.RealmObject
 
 /**
  * @author Asatryan on 11.07.2021
  **/
-interface ChapterDataToDbMapper : Abstract.Mapper {
+interface ChapterDataToDbMapper<T : RealmObject> {
 
-    fun mapToDb(chapterId: ChapterId, db: DbWrapper<ChapterDb>): ChapterDb
+    fun mapTo(chapterId: ChapterId, db: DbWrapper<T>): T
 
-    class Base : ChapterDataToDbMapper {
-        override fun mapToDb(chapterId: ChapterId, db: DbWrapper<ChapterDb>) = chapterId.mapToDb(db)
+    class Base : ChapterDataToDbMapper<ChapterDb> {
+        override fun mapTo(chapterId: ChapterId, db: DbWrapper<ChapterDb>) = chapterId.map(db)
     }
 }

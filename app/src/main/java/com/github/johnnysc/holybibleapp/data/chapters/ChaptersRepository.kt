@@ -1,38 +1,39 @@
 package com.github.johnnysc.holybibleapp.data.chapters
 
 import com.github.johnnysc.holybibleapp.core.Read
+import com.github.johnnysc.holybibleapp.core.Repository
+import com.github.johnnysc.holybibleapp.data.chapters.cache.ChapterDb
 import com.github.johnnysc.holybibleapp.data.chapters.cache.ChaptersCacheDataSource
 import com.github.johnnysc.holybibleapp.data.chapters.cache.ChaptersCacheMapper
+import com.github.johnnysc.holybibleapp.data.chapters.cloud.ChapterCloud
 import com.github.johnnysc.holybibleapp.data.chapters.cloud.ChaptersCloudDataSource
 import com.github.johnnysc.holybibleapp.data.chapters.cloud.ChaptersCloudMapper
 
 /**
  * @author Asatryan on 11.07.2021
  **/
-interface ChaptersRepository  {
-
-    suspend fun fetchChapters() : ChaptersData
+interface ChaptersRepository : Repository<ChaptersData> {
 
     class Base(
         private val cloudDataSource: ChaptersCloudDataSource,
         private val cacheDataSource: ChaptersCacheDataSource,
-        private val cloudMapper: ChaptersCloudMapper,
-        private val cacheMapper: ChaptersCacheMapper,
+        cloudMapper: ChaptersCloudMapper,
+        cacheMapper: ChaptersCacheMapper,
         private val bookIdContainer: Read<Pair<Int, String>>
-    ) : ChaptersRepository {
-        override suspend fun fetchChapters() = try { //todo make base repository
-            val bookId = bookIdContainer.read().first
-            val chaptersCacheList = cacheDataSource.fetchChapters(bookId)
-            if (chaptersCacheList.isEmpty()) {
-                val chaptersCloudList = cloudDataSource.fetchChapters(bookId)
-                val chapters = cloudMapper.map(chaptersCloudList, bookId)
-                cacheDataSource.save(chapters)
-                ChaptersData.Success(chapters)
-            } else {
-                ChaptersData.Success(cacheMapper.map(chaptersCacheList))
-            }
-        } catch (e: Exception) {
-            ChaptersData.Fail(e)
+    ) :
+        Repository.Base<ChapterDb, ChapterCloud, ChapterData, ChaptersData>(
+            cacheDataSource,
+            cloudMapper,
+            cacheMapper
+        ), ChaptersRepository {
+
+        private val bookId by lazy {
+            bookIdContainer.read().first
         }
+
+        override suspend fun fetchCloudData() = cloudDataSource.fetchChapters(bookId)
+        override fun getCachedDataList() = cacheDataSource.fetchChapters(ChapterId.Base(bookId))
+        override fun returnSuccess(list: List<ChapterData>) = ChaptersData.Success(list)
+        override fun returnFail(e: Exception) = ChaptersData.Fail(e)
     }
 }

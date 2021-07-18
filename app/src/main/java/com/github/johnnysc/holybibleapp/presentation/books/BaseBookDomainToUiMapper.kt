@@ -9,7 +9,7 @@ import com.github.johnnysc.holybibleapp.core.ResourceProvider
  * @author Asatryan on 03.07.2021
  **/
 class BaseBookDomainToUiMapper(private val resourceProvider: ResourceProvider) :
-    BookDomainToUiMapper {
+    BookDomainToUiMapper<BookUi> {
     override fun map(id: Int, name: String) = when {
         TestamentType.NEW.matches(id) -> BookUi.Testament(
             id,

@@ -49,7 +49,7 @@ class BooksModule(
                 BooksCloudMapper.Base(toBookMapper)
             )
         else
-            BooksRepository.Base(
+          return  BooksRepository.Base(
                 getBooksCloudDataSource(),
                 BooksCacheDataSource.Base(coreModule.realmProvider, BookDataToDbMapper.Base()),
                 BooksCloudMapper.Base(toBookMapper),

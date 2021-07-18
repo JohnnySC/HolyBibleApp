@@ -1,21 +1,23 @@
 package com.github.johnnysc.holybibleapp.data.chapters
 
-import com.github.johnnysc.holybibleapp.core.Abstract
 import com.github.johnnysc.holybibleapp.core.Read
 
 /**
  * @author Asatryan on 11.07.2021
  **/
-interface ToChapterMapper : Abstract.Mapper.Data<Int, ChapterData> {
+interface ToChapterMapper<T> {
 
-    abstract class Base(private val bookCache: Read<Pair<Int, String>>) : ToChapterMapper {
-        override fun map(data: Int): ChapterData {
+    fun map(id: Int): T
+
+    abstract class Base(private val bookCache: Read<Pair<Int, String>>) :
+        ToChapterMapper<ChapterData> {
+        override fun map(id: Int): ChapterData {
             val realId = realId()
-            return ChapterData(
+            return ChapterData.Base(
                 ChapterId.Base(
                     bookCache.read().first,
-                    if (realId) data else 0,
-                    if (realId) 0 else data
+                    if (realId) id else 0,
+                    if (realId) 0 else id
                 )
             )
         }

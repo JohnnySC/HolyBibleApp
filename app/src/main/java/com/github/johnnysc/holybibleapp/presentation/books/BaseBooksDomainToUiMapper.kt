@@ -11,9 +11,9 @@ import com.github.johnnysc.holybibleapp.core.ResourceProvider
  **/
 class BaseBooksDomainToUiMapper(
     resourceProvider: ResourceProvider,
-    private val bookMapper: BookDomainToUiMapper,
+    private val bookMapper: BookDomainToUiMapper<BookUi>,
     private val uiDataCache: UiDataCache
-) : BooksDomainToUiMapper(resourceProvider) {
+) : BooksDomainToUiMapper<BooksUi>(resourceProvider) {
 
     override fun map(data: List<BookDomain>) = uiDataCache.cache(data.map {
         it.map(bookMapper)

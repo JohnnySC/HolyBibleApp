@@ -58,3 +58,7 @@ abstract class BaseViewHolder<E : ComparableTextMapper<E>>(view: View) :
         }
     }
 }
+
+interface ClickListener<T> {
+    fun click(item: T)
+}

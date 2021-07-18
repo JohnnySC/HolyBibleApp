@@ -30,7 +30,7 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
             BooksCacheMapper.Base(TestToBookMapper())
         )
 
-        val actual = repository.fetchBooks()
+        val actual = repository.fetchData()
         val expected = BooksData.Fail(unknownHostException)
 
         assertEquals(expected, actual)
@@ -47,12 +47,12 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
             BooksCacheMapper.Base(TestToBookMapper())
         )
 
-        val actual = repository.fetchBooks()
+        val actual = repository.fetchData()
         val expected = BooksData.Success(
             listOf(
-                BookData(0, "name0", "ot"),
-                BookData(1, "name1", "ot"),
-                BookData(2, "name2", "ot"),
+                BookData.Base(0, "name0", "ot"),
+                BookData.Base(1, "name1", "ot"),
+                BookData.Base(2, "name2", "ot"),
             )
         )
 
@@ -70,12 +70,12 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
             BooksCacheMapper.Base(TestToBookMapper())
         )
 
-        val actual = repository.fetchBooks()
+        val actual = repository.fetchData()
         val expected = BooksData.Success(
             listOf(
-                BookData(10, "name10", "nt"),
-                BookData(11, "name11", "nt"),
-                BookData(12, "name12", "nt"),
+                BookData.Base(10, "name10", "nt"),
+                BookData.Base(11, "name11", "nt"),
+                BookData.Base(12, "name12", "nt"),
             )
         )
         assertEquals(expected, actual)
@@ -92,12 +92,12 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
             BooksCacheMapper.Base(TestToBookMapper())
         )
 
-        val actual = repository.fetchBooks()
+        val actual = repository.fetchData()
         val expected = BooksData.Success(
             listOf(
-                BookData(10, "name10", "nt"),
-                BookData(11, "name11", "nt"),
-                BookData(12, "name12", "nt"),
+                BookData.Base(10, "name10", "nt"),
+                BookData.Base(11, "name11", "nt"),
+                BookData.Base(12, "name12", "nt"),
             )
         )
         assertEquals(expected, actual)
@@ -107,12 +107,12 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
         private val returnSuccess: Boolean
     ) : BooksCloudDataSource {
 
-        override suspend fun fetchBooks(): List<BookCloud> {
+        override suspend fun fetchBooks(): List<BookCloud.Base> {
             if (returnSuccess) {
                 return listOf(
-                    BookCloud(0, "name0", "ot"),
-                    BookCloud(1, "name1", "ot"),
-                    BookCloud(2, "name2", "ot"),
+                    BookCloud.Base(0, "name0", "ot"),
+                    BookCloud.Base(1, "name1", "ot"),
+                    BookCloud.Base(2, "name2", "ot"),
                 )
             } else {
                 throw unknownHostException

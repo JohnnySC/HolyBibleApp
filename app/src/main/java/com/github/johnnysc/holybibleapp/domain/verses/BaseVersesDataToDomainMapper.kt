@@ -8,8 +8,8 @@ import com.github.johnnysc.holybibleapp.data.verses.VersesDataToDomainMapper
  * @author Asatryan on 17.07.2021
  **/
 class BaseVersesDataToDomainMapper(
-    private val mapper: VerseDataToDomainMapper
-) : VersesDataToDomainMapper() {
+    private val mapper: VerseDataToDomainMapper<VerseDomain>
+) : VersesDataToDomainMapper<VersesDomain>() {
 
     override fun map(data: List<VerseData>) = VersesDomain.Success(data.map { verseData ->
         verseData.map(mapper)
