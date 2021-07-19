@@ -1,5 +1,9 @@
 Приложение которое разрабатывается в рамках онлайн стримов на Youtube
 
+Ссылка на приложение в Google Play Market
+
+https://play.google.com/store/apps/details?id=com.github.johnnysc.holybibleapp
+
 Суть : приложение Библия, получение данных с сервера и кеширование в локальной бд
 
 1. Контроль версий Git
