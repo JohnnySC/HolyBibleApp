@@ -3,7 +3,9 @@ package com.github.johnnysc.holybibleapp.core
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Animation
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.johnnysc.holybibleapp.R
@@ -42,14 +44,24 @@ abstract class BaseViewHolder<E : ComparableTextMapper<E>>(view: View) :
     }
 
     class FullscreenProgress<E : ComparableTextMapper<E>>(view: View) :
-        BaseViewHolder<E>(view)
+        BaseViewHolder<E>(view) {
+        private val imageView = itemView.findViewById<ImageView>(R.id.imageView)
+        override fun bind(item: E) {
+            val anim: Animation = CircleAnimation(imageView, 100f)
+            anim.duration = 3000
+            anim.repeatMode = Animation.RESTART
+            anim.repeatCount = Int.MAX_VALUE
+            anim.interpolator = AccelerateDecelerateInterpolator()
+            imageView.startAnimation(anim)
+        }
+    }
 
     class Fail<E : ComparableTextMapper<E>>(
         view: View,
         private val retry: Retry
     ) : BaseViewHolder<E>(view) {
         private val message = itemView.findViewById<CustomTextView>(R.id.messageTextView)
-        private val button = itemView.findViewById<Button>(R.id.tryAgainButton)
+        private val button = itemView.findViewById<View>(R.id.tryAgainButton)
         override fun bind(item: E) {
             item.map(message)
             button.setOnClickListener {

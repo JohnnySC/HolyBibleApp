@@ -2,9 +2,11 @@
 <com.github.johnnysc.holybibleapp.core.CustomTextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/textView"
-    style="@style/TextAppearance.AppCompat.Body1"
+    style="@style/TextAppearance.AppCompat.Title"
     android:layout_width="match_parent"
-    android:background="?selectableItemBackground"
     android:layout_height="wrap_content"
+    android:minHeight="@dimen/item_height"
+    android:background="?selectableItemBackground"
+    android:gravity="center_vertical"
     android:padding="@dimen/padding8"
     tools:text="Genesis" />

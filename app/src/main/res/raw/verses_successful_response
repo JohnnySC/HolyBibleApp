@@ -1,0 +1,112 @@
+[
+  {
+    "id": 1001001,
+    "book": {
+      "id": 1,
+      "name": "Genesis",
+      "testament": "OT"
+    },
+    "chapterId": 1,
+    "verseId": 1,
+    "verse": "Mock verse 1"
+  },
+  {
+    "id": 1001002,
+    "book": {
+      "id": 1,
+      "name": "Genesis",
+      "testament": "OT"
+    },
+    "chapterId": 1,
+    "verseId": 2,
+    "verse": "Mock verse 2"
+  },
+  {
+    "id": 1001003,
+    "book": {
+      "id": 1,
+      "name": "Genesis",
+      "testament": "OT"
+    },
+    "chapterId": 1,
+    "verseId": 3,
+    "verse": "Mock verse 3"
+  },
+  {
+    "id": 1001004,
+    "book": {
+      "id": 1,
+      "name": "Genesis",
+      "testament": "OT"
+    },
+    "chapterId": 1,
+    "verseId": 4,
+    "verse": "Mock verse 4"
+  },
+  {
+    "id": 1001005,
+    "book": {
+      "id": 1,
+      "name": "Genesis",
+      "testament": "OT"
+    },
+    "chapterId": 1,
+    "verseId": 5,
+    "verse": "Mock verse 5"
+  },
+  {
+    "id": 1001006,
+    "book": {
+      "id": 1,
+      "name": "Genesis",
+      "testament": "OT"
+    },
+    "chapterId": 1,
+    "verseId": 6,
+    "verse": "Mock verse 6"
+  },
+  {
+    "id": 1001007,
+    "book": {
+      "id": 1,
+      "name": "Genesis",
+      "testament": "OT"
+    },
+    "chapterId": 1,
+    "verseId": 7,
+    "verse": "Mock verse 7"
+  },
+  {
+    "id": 1001008,
+    "book": {
+      "id": 1,
+      "name": "Genesis",
+      "testament": "OT"
+    },
+    "chapterId": 1,
+    "verseId": 8,
+    "verse": "Mock verse 8"
+  },
+  {
+    "id": 1001009,
+    "book": {
+      "id": 1,
+      "name": "Genesis",
+      "testament": "OT"
+    },
+    "chapterId": 1,
+    "verseId": 9,
+    "verse": "Mock verse 9"
+  },
+  {
+    "id": 1001010,
+    "book": {
+      "id": 1,
+      "name": "Genesis",
+      "testament": "OT"
+    },
+    "chapterId": 1,
+    "verseId": 10,
+    "verse": "Mock verse 10"
+  }
+]

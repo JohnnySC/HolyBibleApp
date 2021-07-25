@@ -21,13 +21,13 @@ interface VersesRepository : Repository<VersesData> {
         cloudMapper: VersesCloudMapper,
         cacheMapper: VersesCacheMapper,
         private val chapterIdContainer: Read<Int>,
-        private val bookIdContainer: Read<Pair<Int, String>>
+        private val bookIdContainer: Read<Int>
     ) : Repository.Base<VerseDb, VerseCloud, VerseData, VersesData>(
         cacheDataSource,
         cloudMapper,
         cacheMapper
     ), VersesRepository {
-        private val bookId by lazy { bookIdContainer.read().first }
+        private val bookId by lazy { bookIdContainer.read() }
         private val chapterId by lazy { chapterIdContainer.read() }
 
         override suspend fun fetchCloudData() = cloudDataSource.fetchVerses(bookId, chapterId)

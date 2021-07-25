@@ -2,9 +2,6 @@ package com.github.johnnysc.holybibleapp.presentation.books
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.activityViewModels
-import com.github.johnnysc.holybibleapp.R
-import com.github.johnnysc.holybibleapp.core.BibleApp
 import com.github.johnnysc.holybibleapp.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
@@ -12,14 +9,10 @@ import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 /**
  * @author Asatryan on 13.07.2021
  **/
-class BooksFragment : BaseFragment() {
+class BooksFragment : BaseFragment<BooksViewModel>() {
 
-    private val viewModelFactory by lazy {
-        (requireActivity().application as BibleApp).booksFactory()
-    }
-    private val viewModel by activityViewModels<BooksViewModel> { viewModelFactory }
-
-    override fun getTitle() = getString(R.string.app_name)
+    override fun viewModelClass() = BooksViewModel::class.java
+    override fun showBackIcon() = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

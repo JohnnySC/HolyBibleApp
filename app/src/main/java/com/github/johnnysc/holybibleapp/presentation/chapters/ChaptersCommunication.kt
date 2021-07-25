@@ -5,7 +5,6 @@ import com.github.johnnysc.holybibleapp.core.Communication
 /**
  * @author Asatryan on 12.07.2021
  **/
-interface ChaptersCommunication : Communication<List<ChapterUi>> {
-
-    class Base : Communication.Base<List<ChapterUi>>(), ChaptersCommunication
+interface ChaptersCommunication : Communication<Pair<List<ChapterUi>, String>> {
+    class Base : Communication.Base<Pair<List<ChapterUi>, String>>(), ChaptersCommunication
 }

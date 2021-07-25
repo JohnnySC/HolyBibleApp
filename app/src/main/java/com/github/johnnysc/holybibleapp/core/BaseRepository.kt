@@ -37,5 +37,3 @@ interface Repository<E : Abstract.DataObject> {
         protected abstract fun returnFail(e: Exception): E
     }
 }
-
-interface CacheDataSource<D : Abstract.DataObject> : Save<List<D>>

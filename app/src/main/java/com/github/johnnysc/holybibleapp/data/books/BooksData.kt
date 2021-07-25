@@ -11,6 +11,8 @@ sealed class BooksData : Abstract.DataObject {
 
     data class Success(private val books: List<BookData>) : BooksData() {
         override fun <T> map(mapper: BooksDataToDomainMapper<T>) = mapper.map(books)
+
+        fun getById(id: Int) = books.find { it.find(id) }!! //fixme I don't like this!!
     }
 
     data class Fail(private val e: Exception) : BooksData() {

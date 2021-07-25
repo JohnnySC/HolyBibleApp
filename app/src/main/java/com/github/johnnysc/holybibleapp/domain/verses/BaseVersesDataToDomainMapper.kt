@@ -11,9 +11,9 @@ class BaseVersesDataToDomainMapper(
     private val mapper: VerseDataToDomainMapper<VerseDomain>
 ) : VersesDataToDomainMapper<VersesDomain>() {
 
-    override fun map(data: List<VerseData>) = VersesDomain.Success(data.map { verseData ->
-        verseData.map(mapper)
-    })
+    override fun map(data: Pair<List<VerseData>, String>) = VersesDomain.Success(
+        data.first.map { verseData -> verseData.map(mapper) }, data.second
+    )
 
     override fun map(e: Exception) = VersesDomain.Fail(errorType(e))
 }

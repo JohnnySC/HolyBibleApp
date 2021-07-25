@@ -32,33 +32,41 @@ class BooksModule(
             uiDataCache,
             coreModule.bookCache,
             coreModule.navigator,
-            coreModule.navigationCommunication
+            coreModule.navigationCommunication,
+            coreModule.resourceProvider
         )
     }
 
+    private var repository: BooksRepository? = null
+    fun repository(): BooksRepository {
+        if (repository == null)
+            repository = getBooksRepository()
+        return repository!!
+    }
+
     private fun getBooksInteractor() = BooksInteractor.Base(
-        getBooksRepository(),
+        repository(),
         BaseBooksDataToDomainMapper(BaseBookDataToDomainMapper())
     )
 
     private fun getBooksRepository(): BooksRepository {
         val toBookMapper = ToBookMapper.Base()
-        return if (useMocks)
-            BooksRepository.Mock(
-                getMockBooksCloudDataSource(),
-                BooksCloudMapper.Base(toBookMapper)
-            )
-        else
-          return  BooksRepository.Base(
+        return BooksRepository.Base(
+            if (useMocks)
+                getMockBooksCloudDataSource()
+            else
                 getBooksCloudDataSource(),
-                BooksCacheDataSource.Base(coreModule.realmProvider, BookDataToDbMapper.Base()),
-                BooksCloudMapper.Base(toBookMapper),
-                BooksCacheMapper.Base(toBookMapper)
-            )
+            BooksCacheDataSource.Base(coreModule.realmProvider, BookDataToDbMapper.Base()),
+            BooksCloudMapper.Base(toBookMapper),
+            BooksCacheMapper.Base(toBookMapper)
+        )
     }
 
-    private fun getBooksCloudDataSource() =
-        BooksCloudDataSource.Base(getBooksService(), coreModule.gson)
+    private fun getBooksCloudDataSource() = BooksCloudDataSource.Base(
+        coreModule.language,
+        BooksCloudDataSource.English(getBooksService(), coreModule.gson),
+        BooksCloudDataSource.Russian(coreModule.resourceProvider, coreModule.gson)
+    )
 
     private fun getMockBooksCloudDataSource() =
         BooksCloudDataSource.Mock(coreModule.resourceProvider, coreModule.gson)

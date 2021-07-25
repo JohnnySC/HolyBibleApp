@@ -19,18 +19,13 @@ interface ChaptersRepository : Repository<ChaptersData> {
         private val cacheDataSource: ChaptersCacheDataSource,
         cloudMapper: ChaptersCloudMapper,
         cacheMapper: ChaptersCacheMapper,
-        private val bookIdContainer: Read<Pair<Int, String>>
-    ) :
-        Repository.Base<ChapterDb, ChapterCloud, ChapterData, ChaptersData>(
-            cacheDataSource,
-            cloudMapper,
-            cacheMapper
-        ), ChaptersRepository {
-
-        private val bookId by lazy {
-            bookIdContainer.read().first
-        }
-
+        private val bookIdContainer: Read<Int>
+    ) : Repository.Base<ChapterDb, ChapterCloud, ChapterData, ChaptersData>(
+        cacheDataSource,
+        cloudMapper,
+        cacheMapper
+    ), ChaptersRepository {
+        private val bookId by lazy { bookIdContainer.read() }
         override suspend fun fetchCloudData() = cloudDataSource.fetchChapters(bookId)
         override fun getCachedDataList() = cacheDataSource.fetchChapters(ChapterId.Base(bookId))
         override fun returnSuccess(list: List<ChapterData>) = ChaptersData.Success(list)

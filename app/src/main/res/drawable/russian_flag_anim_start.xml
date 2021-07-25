@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="100dp"
+    android:viewportWidth="200"
+    android:viewportHeight="100">
+
+    <path
+        android:fillColor="@color/purple_700"
+        android:pathData="M 0 0 H 200 V 100 H 0 V 0" />
+
+    <path
+        android:name="russian_white"
+        android:strokeColor="#ffffff"
+        android:pathData="M 0 17 L 0 17"
+        android:strokeWidth="34" />
+
+    <path
+        android:name="russian_red"
+        android:strokeColor="#bf0000"
+        android:pathData="M 200 83 L 200 83"
+        android:strokeWidth="34" />
+
+    <path
+        android:pathData="M 0 0 H 200 V 100 H 0 Z"
+        android:strokeWidth="5"
+        android:strokeColor="#000000" />
+</vector>

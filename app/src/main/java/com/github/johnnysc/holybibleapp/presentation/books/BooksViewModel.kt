@@ -2,12 +2,15 @@ package com.github.johnnysc.holybibleapp.presentation.books
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.johnnysc.holybibleapp.R
+import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
 import com.github.johnnysc.holybibleapp.core.Save
+import com.github.johnnysc.holybibleapp.core.Show
 import com.github.johnnysc.holybibleapp.domain.books.BooksDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.books.BooksInteractor
+import com.github.johnnysc.holybibleapp.presentation.main.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -17,13 +20,16 @@ import kotlinx.coroutines.withContext
  **/
 class BooksViewModel(
     private val booksInteractor: BooksInteractor,
-    private val mapper:  BooksDomainToUiMapper<BooksUi>,
-    private val communication:  BooksCommunication,
+    private val mapper: BooksDomainToUiMapper<BooksUi>,
+    private val communication: BooksCommunication,
     private val uiDataCache: UiDataCache,
-    private val bookCache: Save<Pair<Int, String>>,
-    private val navigator : BooksNavigator,
-    private val navigationCommunication: NavigationCommunication
-) : ViewModel(), ShowBook {
+    private val bookCache: Save<Int>,
+    private val navigator: BooksNavigator,
+    private val navigationCommunication: NavigationCommunication,
+    resourceProvider: ResourceProvider
+) : BaseViewModel(resourceProvider), Show {
+
+    override fun getTitleResId() = R.string.app_name
 
     fun fetchBooks() {
         communication.map(listOf(BookUi.Progress))
@@ -42,8 +48,8 @@ class BooksViewModel(
 
     fun collapseOrExpand(id: Int) = communication.map(uiDataCache.changeState(id))
 
-    override fun show(id: Int, name: String) {
-        bookCache.save(Pair(id, name))
+    override fun open(id: Int) {
+        bookCache.save(id)
         navigator.nextScreen(navigationCommunication)
     }
 

@@ -14,9 +14,10 @@ class BaseVersesDomainToUiMapper(
     resourceProvider: ResourceProvider
 ) : VersesDomainToUiMapper<VersesUi>(resourceProvider) {
 
-    override fun map(data: List<VerseDomain>) = VersesUi.Base(data.map { verse ->
-        verse.map(mapper)
-    })
+    override fun map(data: Pair<List<VerseDomain>, String>) = VersesUi.Base(
+        data.first.map { verse -> verse.map(mapper) }, data.second)
 
-    override fun map(errorType: ErrorType) = VersesUi.Base(listOf(VerseUi.Fail(errorMessage(errorType))))
+    override fun map(errorType: ErrorType) = errorMessage(errorType).let {
+        VersesUi.Base(listOf(VerseUi.Fail(it)), it)
+    }
 }

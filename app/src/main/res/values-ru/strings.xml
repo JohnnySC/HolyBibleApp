@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Библия</string>
+    <string name="service_unavailable_message">Сервис недоступен</string>
+    <string name="no_connection_message">Нет интернет соединения</string>
+    <string name="something_went_wrong">Что-то пошло не так</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="new_testament">Новый Завет</string>
+    <string name="old_testament">Ветхий завет</string>
+    <string name="chapter_number">Глава %d</string>
+    <string name="choose_language">Выберите язык</string>
+    <string name="english">Английский</string>
+    <string name="russian">Русский</string>
+    <string name="book_and_chapter">%s Гл.%d</string>
+    <string name="loading">Загрузка…</string>
+</resources>

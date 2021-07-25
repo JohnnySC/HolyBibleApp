@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/russian_flag_anim_start">
+
+    <target
+        android:name="russian_red"
+        android:animation="@anim/russian_red_anim" />
+
+    <target
+        android:name="russian_white"
+        android:animation="@anim/russian_white_anim" />
+
+</animated-vector>

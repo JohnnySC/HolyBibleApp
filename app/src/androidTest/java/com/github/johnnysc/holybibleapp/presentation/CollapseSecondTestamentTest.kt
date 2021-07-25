@@ -10,9 +10,9 @@ class CollapseSecondTestamentTest : BaseTest() {
     @Test
     fun test() {
         BooksPage().run {
-            firstBookNewTestament.checkVisible()
+            firstBookNewTestamentEnglish.checkVisible()
             tap(newTestamentPositionIfFirstExpanded)
-            firstBookNewTestament.checkDoesntExist()
+            firstBookNewTestamentEnglish.checkDoesntExist()
         }
     }
 

@@ -30,19 +30,35 @@ abstract class BaseTest {
     val activityTestRule = ActivityScenarioRule(MainActivity::class.java)
 
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var navigationPreferences: SharedPreferences
+    private lateinit var languagesPreferences: SharedPreferences
     private lateinit var appContext: Context
 
     @Before
     fun setup() {
         appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        sharedPreferences =
-            appContext.getSharedPreferences("MockCollapsedItemsIdList", Context.MODE_PRIVATE)
+        sharedPreferences = sharedPreferences("MockCollapsedItemsIdList")
+        navigationPreferences = sharedPreferences("mockNavigation")
+        languagesPreferences = sharedPreferences("mockLanguagesFileName")
         clear()
     }
 
+    private fun sharedPreferences(name: String) =
+        appContext.getSharedPreferences(name, Context.MODE_PRIVATE)
+
     @After
     fun clear() {
-        sharedPreferences.edit().putStringSet("MockCollapsedItemsIdsKey", emptySet()).apply()
+        sharedPreferences.clear()
+        navigationPreferences.clear()
+        languagesPreferences.clear()
+    }
+
+    protected fun goBack() {
+        uiDevice().pressBack()
+    }
+
+    protected fun checkAppNotShown(text: String = appName()) {
+        uiDevice().findObject(UiSelector().text(text)).waitUntilGone(100L)
     }
 
     protected fun String.checkVisible() {
@@ -53,27 +69,47 @@ abstract class BaseTest {
         onView(RecyclerViewMatcher(R.id.recyclerView).atPosition(position)).perform(click())
     }
 
+    protected fun Int.performTap() {
+        onView(withId(this)).perform(click())
+    }
+
     /**
      * todo find a better method
      * Not doing well so far, use in debug mode with breakpoint at last line
      * Some interrupting screen when tap on app at desktop
      */
     protected fun killAppAndReturn() {
-        val appName = appContext.getString(appContext.applicationInfo.labelRes)
-        with(UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())) {
+        with(uiDevice()) {
             pressRecentApps()
             findObject(UiSelector().textStartsWith("очистить")).click()
-            findObject(UiSelector().text(appName)).click()
+            findObject(UiSelector().text(appName())).click()
             pressRecentApps()
-            findObject(UiSelector().text(appName)).click()
+            findObject(UiSelector().text(appName())).click()
         }
     }
 
-    protected fun checkItemText(position:Int, text:String) {
-        onView(RecyclerViewMatcher(R.id.recyclerView).atPosition(position)).check(matches(withText(text)))
+    private fun appName() = appContext.getString(appContext.applicationInfo.labelRes)
+
+    private fun uiDevice() = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+    protected fun checkItemText(position: Int, text: String) {
+        onView(RecyclerViewMatcher(R.id.recyclerView).atPosition(position)).check(
+            matches(withText(text))
+        )
     }
 
     protected fun String.checkDoesntExist() {
         onView(withText(this)).check(doesNotExist())
+    }
+
+    protected infix fun Int.isChecked(checked: Boolean) {
+        if (checked)
+            onView(withId(this)).check(matches(isChecked()))
+        else
+            onView(withId(this)).check(matches(isNotChecked()))
+    }
+
+    private fun SharedPreferences.clear() {
+        edit().clear().apply()
     }
 }

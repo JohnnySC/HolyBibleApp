@@ -12,8 +12,9 @@ class MainViewModel(
     private val communication: NavigationCommunication
 ) : ViewModel() {
 
-    fun init() {
-        communication.map(navigator.read())
+    fun init(firstOpening: Boolean) {
+        if (firstOpening)
+            communication.map(navigator.read())
     }
 
     fun observe(owner: LifecycleOwner, observer: Observer<Int>) {
@@ -21,14 +22,12 @@ class MainViewModel(
     }
 
     fun navigateBack(): Boolean {
-        val currentScreen = navigator.read()
-        val exit = currentScreen == 0
-        if (!exit) {
-            val newScreen = currentScreen - 1
-            communication.map(newScreen)
-        }
-        return exit
+        val canNavigateBack = navigator.canGoBack()
+        if (canNavigateBack)
+            navigator.navigateBack(communication)
+        return !canNavigateBack
     }
 
     fun getFragment(id: Int) = navigator.getFragment(id)
+    fun showLanguagesScreen() = navigator.showLanguagesFragment(communication)
 }

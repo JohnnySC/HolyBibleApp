@@ -22,6 +22,20 @@ class CustomTextView : androidx.appcompat.widget.AppCompatTextView, TextMapper {
 
 interface TextMapper : Abstract.Mapper.Data<String, Unit>
 
+class CustomRadioButton : androidx.appcompat.widget.AppCompatRadioButton, TextMapper {
+    //region constructors
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
+    //endregion
+
+    override fun map(data: String) = setText(data)
+}
+
 class CollapseView : androidx.appcompat.widget.AppCompatImageView, CollapseMapper {
     //region constructors
     constructor(context: Context) : super(context)

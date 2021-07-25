@@ -14,10 +14,11 @@ class BaseChaptersDomainToUiMapper(
     resourceProvider: ResourceProvider
 ) : ChaptersDomainToUiMapper<ChaptersUi>(resourceProvider) {
 
-    override fun map(data: List<ChapterDomain>) = ChaptersUi.Base(data.map { chapterDomain ->
-        chapterDomain.map(mapper)
-    })
+    override fun map(data: Pair<List<ChapterDomain>, String>) = ChaptersUi.Base(
+        data.first.map { chapterDomain -> chapterDomain.map(mapper) }, data.second
+    )
 
-    override fun map(errorType: ErrorType) =
-        ChaptersUi.Base(listOf(ChapterUi.Fail(errorMessage(errorType))))
+    override fun map(errorType: ErrorType) = errorMessage(errorType).let { error ->
+        ChaptersUi.Base(listOf(ChapterUi.Fail(error)), error)
+    }
 }

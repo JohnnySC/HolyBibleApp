@@ -17,38 +17,55 @@ import com.github.johnnysc.holybibleapp.presentation.chapters.BaseChapterDomainT
 import com.github.johnnysc.holybibleapp.presentation.chapters.BaseChaptersDomainToUiMapper
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChaptersCommunication
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChaptersViewModel
+import com.github.johnnysc.holybibleapp.sl.books.BooksModule
 import com.github.johnnysc.holybibleapp.sl.core.BaseModule
 
 /**
  * @author Asatryan on 15.07.2021
  **/
-class ChaptersModule(private val coreModule: CoreModule) : BaseModule<ChaptersViewModel> {
+class ChaptersModule(
+    private val coreModule: CoreModule,
+    private val booksModule: BooksModule,
+    private val useMocks: Boolean
+) : BaseModule<ChaptersViewModel> {
 
     override fun getViewModel() = ChaptersViewModel(
         getChaptersInteractor(),
         getChaptersCommunication(),
         getChaptersMapper(),
         coreModule.navigator,
-        coreModule.bookCache,
         coreModule.chapterCache,
-        coreModule.navigationCommunication
+        coreModule.navigationCommunication,
+        coreModule.resourceProvider
     )
 
     private fun getChaptersInteractor() = ChaptersInteractor.Base(
         getChaptersRepository(),
-        BaseChaptersDataToDomainMapper(BaseChapterDataToDomainMapper())
+        BaseChaptersDataToDomainMapper(BaseChapterDataToDomainMapper()),
+        booksModule.repository(),
+        coreModule.bookCache
     )
 
     private fun getChaptersRepository() = ChaptersRepository.Base(
-        ChaptersCloudDataSource.Base(
-            coreModule.makeService(ChaptersService::class.java),
-            coreModule.gson
-        ),
+        if (useMocks)
+            ChaptersCloudDataSource.Mock(coreModule.resourceProvider, coreModule.gson)
+        else
+            ChaptersCloudDataSource.Base(
+                coreModule.language,
+                ChaptersCloudDataSource.English(
+                    coreModule.makeService(ChaptersService::class.java),
+                    coreModule.gson
+                ),
+                ChaptersCloudDataSource.Russian(coreModule.resourceProvider, coreModule.gson)
+            ),
         ChaptersCacheDataSource.Base(coreModule.realmProvider, ChapterDataToDbMapper.Base()),
-        ChaptersCloudMapper.Base(ToChapterMapper.Cloud(coreModule.bookCache)),
+        getCloudMapper(),
         ChaptersCacheMapper.Base(ToChapterMapper.Db(coreModule.bookCache)),
         coreModule.bookCache
     )
+
+    private fun getCloudMapper() =
+        ChaptersCloudMapper.Base(ToChapterMapper.Cloud(coreModule.bookCache))
 
     private fun getChaptersCommunication() = ChaptersCommunication.Base()
 

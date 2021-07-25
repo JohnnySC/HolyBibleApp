@@ -29,14 +29,4 @@ interface BooksRepository : Repository<BooksData> {
         override fun returnSuccess(list: List<BookData>) = BooksData.Success(list)
         override fun returnFail(e: Exception) = BooksData.Fail(e)
     }
-
-    class Mock(
-        private val cloudDataSource: BooksCloudDataSource,
-        private val booksCloudMapper: BooksCloudMapper,
-    ) : BooksRepository {
-        override suspend fun fetchData(): BooksData {
-            val books = cloudDataSource.fetchBooks()
-            return BooksData.Success(booksCloudMapper.map(books))
-        }
-    }
 }

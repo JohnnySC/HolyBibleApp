@@ -8,8 +8,8 @@ import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunicatio
 import com.github.johnnysc.holybibleapp.presentation.main.Navigator
 import com.github.johnnysc.holybibleapp.presentation.books.BookCache
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterCache
+import com.github.johnnysc.holybibleapp.presentation.languages.Language
 import com.google.gson.Gson
-import io.realm.Realm
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author Asatryan on 15.07.2021
  **/
-class CoreModule : BaseModule<MainViewModel> {
+class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
 
     private companion object {
         const val BASE_URL = "https://bible-go-api.rkeplin.com/v1/"
@@ -31,6 +31,7 @@ class CoreModule : BaseModule<MainViewModel> {
     lateinit var navigationCommunication: NavigationCommunication
     lateinit var bookCache: BookCache
     lateinit var chapterCache: ChapterCache //todo move to common for 2 modules
+    lateinit var language: Language
     private lateinit var retrofit: Retrofit
 
     fun init(context: Context) {
@@ -47,11 +48,28 @@ class CoreModule : BaseModule<MainViewModel> {
             .build()
 
         gson = Gson()
-        realmProvider = RealmProvider.Base(context)
         resourceProvider = ResourceProvider.Base(context)
+
+        language = if (useMocks)
+            Language.Mock(resourceProvider)
+        else
+            Language.Base(resourceProvider)
+
+        if (language.isChosenRussian())
+            resourceProvider.chooseRussian()
+        else if (language.isChosenEnglish())
+            resourceProvider.chooseEnglish()
+
+        realmProvider = if (useMocks)
+            RealmProvider.Mock(context, language)
+        else
+            RealmProvider.Base(context, language)
         bookCache = BookCache.Base(resourceProvider)
         chapterCache = ChapterCache.Base(resourceProvider)
-        navigator = Navigator.Base(resourceProvider)
+        navigator = if (useMocks)
+            Navigator.Mock(resourceProvider)
+        else
+            Navigator.Base(resourceProvider)
         navigationCommunication = NavigationCommunication.Base()
     }
 

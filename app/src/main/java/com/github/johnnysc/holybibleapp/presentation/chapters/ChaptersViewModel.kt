@@ -2,12 +2,13 @@ package com.github.johnnysc.holybibleapp.presentation.chapters
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.johnnysc.holybibleapp.core.Read
+import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.core.Save
+import com.github.johnnysc.holybibleapp.core.Show
 import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersInteractor
+import com.github.johnnysc.holybibleapp.presentation.main.BaseViewModel
 import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,17 +22,17 @@ class ChaptersViewModel(
     private val chaptersCommunication: ChaptersCommunication,
     private val chaptersMapper: ChaptersDomainToUiMapper<ChaptersUi>,
     private val navigator: ChaptersNavigator,
-    private val bookCache: Read<Pair<Int, String>>,
     private val chapterCache: Save<Int>,
-    private val navigationCommunication: NavigationCommunication
-) : ViewModel(), Show {
+    private val navigationCommunication: NavigationCommunication,
+    resourceProvider: ResourceProvider
+) : BaseViewModel(resourceProvider), Show {
 
-    fun observeChapters(owner: LifecycleOwner, observer: Observer<List<ChapterUi>>) {
+    fun observeChapters(owner: LifecycleOwner, observer: Observer<Pair<List<ChapterUi>, String>>) {
         chaptersCommunication.observe(owner, observer)
     }
 
     fun fetchChapters() {
-        chaptersCommunication.map(listOf(ChapterUi.Progress))
+        chaptersCommunication.map(Pair(listOf(ChapterUi.Progress), getTitle()))
         viewModelScope.launch(Dispatchers.IO) {
             val chapters = chaptersInteractor.fetchChapters()
             val chaptersUi = chapters.map(chaptersMapper)
@@ -46,9 +47,7 @@ class ChaptersViewModel(
         fetchChapters()
     }
 
-    fun getBookName() = bookCache.read().second
-
-    override fun show(id: Int) {
+    override fun open(id: Int) {
         chapterCache.save(id)
         navigator.nextScreen(navigationCommunication)
     }

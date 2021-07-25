@@ -2,7 +2,6 @@ package com.github.johnnysc.holybibleapp.presentation.books
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.*
 
@@ -61,8 +60,4 @@ class BooksAdapter(
     interface CollapseListener {
         fun collapseOrExpand(id: Int)
     }
-}
-
-interface ShowBook {
-    fun show(id: Int, name: String)
 }

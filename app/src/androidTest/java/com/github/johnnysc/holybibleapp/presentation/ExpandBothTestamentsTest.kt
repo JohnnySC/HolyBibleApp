@@ -10,44 +10,44 @@ class ExpandBothTestamentsTest : BaseTest() {
     @Test
     fun test_expand_first_then_second() {
         BooksPage().run {
-            firstBookOldTestament.checkVisible()
+            firstBookOldTestamentEnglish.checkVisible()
             tap(oldTestamentPosition)
-            firstBookOldTestament.checkDoesntExist()
+            firstBookOldTestamentEnglish.checkDoesntExist()
 
-            firstBookNewTestament.checkVisible()
+            firstBookNewTestamentEnglish.checkVisible()
             tap(newTestamentPositionIfFirstCollapsed)
-            firstBookNewTestament.checkDoesntExist()
+            firstBookNewTestamentEnglish.checkDoesntExist()
 
 
-            firstBookOldTestament.checkDoesntExist()
+            firstBookOldTestamentEnglish.checkDoesntExist()
             tap(oldTestamentPosition)
-            firstBookOldTestament.checkVisible()
+            firstBookOldTestamentEnglish.checkVisible()
 
-            firstBookNewTestament.checkDoesntExist()
+            firstBookNewTestamentEnglish.checkDoesntExist()
             tap(newTestamentPositionIfFirstExpanded)
-            firstBookNewTestament.checkVisible()
+            firstBookNewTestamentEnglish.checkVisible()
         }
     }
 
     @Test
     fun test_expand_second_then_first() {
         BooksPage().run {
-            firstBookNewTestament.checkVisible()
+            firstBookNewTestamentEnglish.checkVisible()
             tap(newTestamentPositionIfFirstExpanded)
-            firstBookNewTestament.checkDoesntExist()
+            firstBookNewTestamentEnglish.checkDoesntExist()
 
-            firstBookOldTestament.checkVisible()
+            firstBookOldTestamentEnglish.checkVisible()
             tap(oldTestamentPosition)
-            firstBookOldTestament.checkDoesntExist()
+            firstBookOldTestamentEnglish.checkDoesntExist()
 
 
-            firstBookNewTestament.checkDoesntExist()
+            firstBookNewTestamentEnglish.checkDoesntExist()
             tap(newTestamentPositionIfFirstCollapsed)
-            firstBookNewTestament.checkVisible()
+            firstBookNewTestamentEnglish.checkVisible()
 
-            firstBookOldTestament.checkDoesntExist()
+            firstBookOldTestamentEnglish.checkDoesntExist()
             tap(oldTestamentPosition)
-            firstBookOldTestament.checkVisible()
+            firstBookOldTestamentEnglish.checkVisible()
         }
     }
 }

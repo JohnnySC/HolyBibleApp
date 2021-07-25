@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/english_anim_start">
+
+    <target
+        android:name="red_line_vertical"
+        android:animation="@anim/english_red_vertical" />
+
+    <target
+        android:name="red_line_horizontal"
+        android:animation="@anim/english_red_horizontal" />
+
+    <target
+        android:name="white_line"
+        android:animation="@anim/english_white_anim"/>
+</animated-vector>

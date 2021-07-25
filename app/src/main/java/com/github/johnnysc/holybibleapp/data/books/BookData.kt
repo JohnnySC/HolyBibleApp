@@ -12,6 +12,9 @@ interface BookData : Matcher<TestamentTemp>, Save<TestamentTemp>, Abstract.DataO
     fun <T> map(mapper: BookDataToDomainMapper<T>): T
     fun <T : RealmObject> map(mapper: BookDataToDbMapper<T>, db: DbWrapper<T>): T
 
+    fun find(id: Int): Boolean
+    fun name() : String//todo this is a getter, fix it
+
     data class Base(
         private val id: Int,
         private val name: String,
@@ -22,6 +25,8 @@ interface BookData : Matcher<TestamentTemp>, Save<TestamentTemp>, Abstract.DataO
         override fun <E : RealmObject> map(mapper: BookDataToDbMapper<E>, db: DbWrapper<E>) =
             mapper.mapToDb(id, name, testament, db)
 
+        override fun find(id: Int) = this.id == id
+        override fun name() = name
         override fun matches(arg: TestamentTemp) = arg.matches(testament)
         override fun save(data: TestamentTemp) = data.save(testament)
     }

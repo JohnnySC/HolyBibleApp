@@ -16,12 +16,12 @@ class SavingCollapsedTest : BaseTest() {
     fun test() {
         BooksPage().run {
             tap(oldTestamentPosition)
-            firstBookOldTestament.checkDoesntExist()
+            firstBookOldTestamentEnglish.checkDoesntExist()
 
             //todo find a better method
             killAppAndReturn()
 
-            firstBookOldTestament.checkDoesntExist()
+            firstBookOldTestamentEnglish.checkDoesntExist()
         }
     }
 }

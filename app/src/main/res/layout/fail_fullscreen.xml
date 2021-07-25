@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:orientation="vertical">
 
     <com.github.johnnysc.holybibleapp.core.CustomTextView
         android:id="@+id/messageTextView"
@@ -12,10 +13,13 @@
         android:layout_height="wrap_content"
         tools:text="@string/no_connection_message" />
 
-    <Button
-        android:text="@string/try_again"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/tryAgainButton"
+        app:rippleColor="@color/purple_700"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_refresh_black_24"
+        app:tint="@color/white"
+        android:contentDescription="@string/try_again" />
 
 </LinearLayout>

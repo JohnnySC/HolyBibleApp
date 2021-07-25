@@ -2,8 +2,7 @@ package com.github.johnnysc.holybibleapp.presentation.chapters
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
-import com.github.johnnysc.holybibleapp.core.BibleApp
+import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
@@ -11,14 +10,9 @@ import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 /**
  * @author Asatryan on 13.07.2021
  **/
-class ChaptersFragment : BaseFragment() {
+class ChaptersFragment : BaseFragment<ChaptersViewModel>() {
 
-    private val viewModelFactory by lazy {
-        (requireActivity().application as BibleApp).chaptersFactory()
-    }
-    private val viewModel by viewModels<ChaptersViewModel> { viewModelFactory }
-
-    override fun getTitle() = viewModel.getBookName()
+    override fun viewModelClass() = ChaptersViewModel::class.java
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,8 +24,9 @@ class ChaptersFragment : BaseFragment() {
             object : ClickListener<ChapterUi> {
                 override fun click(item: ChapterUi) = item.open(viewModel)
             })
-        viewModel.observeChapters(this, {
-            adapter.update(it)
+        viewModel.observeChapters(this, { (chapters, title) ->
+            adapter.update(chapters)
+            updateTitle(title)
         })
         recyclerView?.adapter = adapter
 

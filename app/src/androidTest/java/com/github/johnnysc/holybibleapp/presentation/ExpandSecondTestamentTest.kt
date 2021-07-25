@@ -10,12 +10,12 @@ class ExpandSecondTestamentTest : BaseTest() {
     @Test
     fun test() {
         BooksPage().run {
-            firstBookNewTestament.checkVisible()
+            firstBookNewTestamentEnglish.checkVisible()
             tap(newTestamentPositionIfFirstExpanded)
-            firstBookNewTestament.checkDoesntExist()
+            firstBookNewTestamentEnglish.checkDoesntExist()
 
             tap(newTestamentPositionIfFirstExpanded)
-            firstBookOldTestament.checkVisible()
+            firstBookOldTestamentEnglish.checkVisible()
         }
     }
 }

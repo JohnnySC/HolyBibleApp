@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HolyBibleApp</string>
+    <string name="app_name">Holy Bible</string>
     <string name="service_unavailable_message">Service unavailable</string>
     <string name="no_connection_message">No connection</string>
     <string name="something_went_wrong">Something went wrong</string>
@@ -7,4 +7,9 @@
     <string name="new_testament">New Testament</string>
     <string name="old_testament">Old Testament</string>
     <string name="chapter_number">Chapter %d</string>
+    <string name="choose_language">Choose language</string>
+    <string name="english">English</string>
+    <string name="russian">Russian</string>
+    <string name="book_and_chapter">%s Ch.%d</string>
+    <string name="loading">Loading…</string>
 </resources>

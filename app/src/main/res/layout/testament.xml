@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:orientation="horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/purple_200"
-    android:layout_height="wrap_content">
+    android:background="@color/purple_700"
+    android:layout_height="@dimen/item_height">
 
     <com.github.johnnysc.holybibleapp.core.CustomTextView
         android:id="@+id/textView"
