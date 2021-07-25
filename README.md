@@ -44,4 +44,6 @@ https://www.youtube.com/playlist?list=PLQRyeBV1rkk2xIL3ViHAEZ0h08wMOfutO
 
 11.release/1.0
 
+12.release/1.1
+
 //todo add next steps
