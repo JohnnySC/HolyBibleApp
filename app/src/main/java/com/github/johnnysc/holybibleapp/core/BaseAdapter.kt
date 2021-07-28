@@ -9,20 +9,21 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.johnnysc.holybibleapp.R
+import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterUi
 
 /**
  * @author Asatryan on 12.07.2021
  **/
 abstract class BaseAdapter<E : ComparableTextMapper<E>, T : BaseViewHolder<E>> :
-    RecyclerView.Adapter<T>() {
+    RecyclerView.Adapter<T>(), ListMapper<E> {
 
     protected val list = ArrayList<E>()
 
-    fun update(new: List<E>) {
-        val diffCallback = DiffUtilCallback(list, new)
+    override fun map(data: List<E>) {
+        val diffCallback = DiffUtilCallback(list, data)
         val result = DiffUtil.calculateDiff(diffCallback)
         list.clear()
-        list.addAll(new)
+        list.addAll(data)
         result.dispatchUpdatesTo(this)
     }
 

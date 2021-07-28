@@ -45,9 +45,7 @@ interface BooksCloudDataSource {
                 text,
                 object : TypeToken<RussianTranslation>() {}.type
             )
-            return translation.contentAsList().map {
-                it.toBookCloud()
-            }
+            return translation.contentAsList()
         }
     }
 

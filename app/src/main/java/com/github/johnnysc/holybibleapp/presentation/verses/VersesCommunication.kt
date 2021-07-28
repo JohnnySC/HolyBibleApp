@@ -6,6 +6,6 @@ import com.github.johnnysc.holybibleapp.core.Communication
 /**
  * @author Asatryan on 17.07.2021
  **/
-interface VersesCommunication : Communication<Pair<List<VerseUi>, String>>, Abstract.Mapper {
-    class Base : Communication.Base<Pair<List<VerseUi>, String>>(), VersesCommunication
+interface VersesCommunication : Communication<VersesUi>, Abstract.Mapper {
+    class Base : Communication.Base<VersesUi>(), VersesCommunication
 }

@@ -19,11 +19,10 @@ class VersesFragment : BaseFragment<VersesViewModel>() {
             override fun tryAgain() = viewModel.fetchVerses()
         })
 
-        viewModel.observeVerses(this, { (verses, title) ->
-            adapter.update(verses)
-            updateTitle(title)
+        viewModel.observeVerses(this, { ui ->
+            ui.map(adapter, title())
         })
-        recyclerView?.adapter = adapter
+        setAdapter(adapter)
 
         viewModel.init()
     }

@@ -9,8 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.BibleApp
+import com.github.johnnysc.holybibleapp.core.TextMapper
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TextMapper {
 
     private lateinit var viewModel: MainViewModel
 
@@ -57,6 +58,10 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (viewModel.navigateBack())
             super.onBackPressed()
+    }
+
+    override fun map(data: String) {
+        title = data
     }
 }
 

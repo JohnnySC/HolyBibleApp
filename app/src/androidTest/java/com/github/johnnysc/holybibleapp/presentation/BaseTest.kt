@@ -1,22 +1,25 @@
 package com.github.johnnysc.holybibleapp.presentation
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.*
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import com.github.johnnysc.holybibleapp.R
+import com.github.johnnysc.holybibleapp.core.RealmProvider
 import com.github.johnnysc.holybibleapp.core.RecyclerViewMatcher
+import com.github.johnnysc.holybibleapp.core.lazyActivityScenarioRule
+import com.github.johnnysc.holybibleapp.presentation.languages.ChosenLanguage
 import com.github.johnnysc.holybibleapp.presentation.main.MainActivity
 import org.junit.Before
-import org.junit.After
 import org.junit.Rule
 import org.junit.runner.RunWith
 
@@ -27,7 +30,7 @@ import org.junit.runner.RunWith
 @LargeTest
 abstract class BaseTest {
     @get:Rule
-    val activityTestRule = ActivityScenarioRule(MainActivity::class.java)
+    val activityTestRule = lazyActivityScenarioRule<MainActivity>(launchActivity = false)
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var navigationPreferences: SharedPreferences
@@ -35,23 +38,39 @@ abstract class BaseTest {
     private lateinit var appContext: Context
 
     @Before
-    fun setup() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
+    open fun setup() {
+        appContext = ApplicationProvider.getApplicationContext()
         sharedPreferences = sharedPreferences("MockCollapsedItemsIdList")
         navigationPreferences = sharedPreferences("mockNavigation")
         languagesPreferences = sharedPreferences("mockLanguagesFileName")
-        clear()
+        sharedPreferences.clear()
+        navigationPreferences.clear()
+        languagesPreferences.clear()
+        val realmProvider = RealmProvider.Base(appContext, object : ChosenLanguage {
+            override fun isChosenEnglish() = true
+            override fun isChosenRussian() = false
+        })
+        realmProvider.provide().use {
+            it.executeTransaction {
+                it.deleteAll()
+            }
+        }
+        doBeforeActivityStart()
+        activityTestRule.launch(Intent(appContext, MainActivity::class.java))
+    }
+
+    protected open fun doBeforeActivityStart() {}
+
+    protected fun selectLanguage(english:Boolean) {
+        languagesPreferences.edit().putInt("mockLanguagesKey", if (english) 0 else 1).apply()
+    }
+
+    protected fun startWithScreenId(id:Int) {
+        navigationPreferences.edit().putInt("mockScreenId", id).apply()
     }
 
     private fun sharedPreferences(name: String) =
         appContext.getSharedPreferences(name, Context.MODE_PRIVATE)
-
-    @After
-    fun clear() {
-        sharedPreferences.clear()
-        navigationPreferences.clear()
-        languagesPreferences.clear()
-    }
 
     protected fun goBack() {
         uiDevice().pressBack()
@@ -73,19 +92,8 @@ abstract class BaseTest {
         onView(withId(this)).perform(click())
     }
 
-    /**
-     * todo find a better method
-     * Not doing well so far, use in debug mode with breakpoint at last line
-     * Some interrupting screen when tap on app at desktop
-     */
     protected fun killAppAndReturn() {
-        with(uiDevice()) {
-            pressRecentApps()
-            findObject(UiSelector().textStartsWith("очистить")).click()
-            findObject(UiSelector().text(appName())).click()
-            pressRecentApps()
-            findObject(UiSelector().text(appName())).click()
-        }
+        activityTestRule.relaunch(Intent(appContext, MainActivity::class.java))
     }
 
     private fun appName() = appContext.getString(appContext.applicationInfo.labelRes)

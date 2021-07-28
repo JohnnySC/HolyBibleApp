@@ -1,5 +1,6 @@
-package com.github.johnnysc.holybibleapp.presentation
+package com.github.johnnysc.holybibleapp.presentation.books
 
+import com.github.johnnysc.holybibleapp.presentation.BaseTest
 import org.junit.Test
 
 /**
@@ -7,20 +8,19 @@ import org.junit.Test
  **/
 class SavingCollapsedTest : BaseTest() {
 
-    /**
-     * For now running with some instrumentation screen between
-     * so can be passed in debug mode with breakpoint at last line
-     * BaseTest#killAppAndRerun
-     */
+    override fun doBeforeActivityStart() {
+        super.doBeforeActivityStart()
+        selectLanguage(true)
+        startWithScreenId(0)
+    }
+
     @Test
     fun test() {
         BooksPage().run {
             tap(oldTestamentPosition)
             firstBookOldTestamentEnglish.checkDoesntExist()
 
-            //todo find a better method
             killAppAndReturn()
-
             firstBookOldTestamentEnglish.checkDoesntExist()
         }
     }

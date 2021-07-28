@@ -60,5 +60,8 @@ class BaseBooksDomainToUiMapperTest {
         override fun provideSharedPreferences(name: String): SharedPreferences {
             throw IllegalStateException("not used here")
         }
+
+        override fun chooseEnglish() = Unit
+        override fun chooseRussian() = Unit
     }
 }

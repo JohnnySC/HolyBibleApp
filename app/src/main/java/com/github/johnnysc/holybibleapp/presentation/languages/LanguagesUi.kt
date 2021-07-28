@@ -10,9 +10,15 @@ class LanguagesUi(
     private val englishTitle: String,
     private val russianTitle: String
 ) {
-    fun showEnglishTitle(textMapper: TextMapper) = textMapper.map(englishTitle)
-    fun showRussianTitle(textMapper: TextMapper) = textMapper.map(russianTitle)
-    fun handleChoice(russian: () -> Unit, english: () -> Unit, none: () -> Unit) {
+    fun show(
+        englishMapper: TextMapper,
+        russianMapper: TextMapper,
+        russian: () -> Unit,
+        english: () -> Unit,
+        none: () -> Unit
+    ) {
+        englishMapper.map(englishTitle)
+        russianMapper.map(russianTitle)
         when (choice) {
             LanguageChoice.ENGLISH -> english()
             LanguageChoice.RUSSIAN -> russian()

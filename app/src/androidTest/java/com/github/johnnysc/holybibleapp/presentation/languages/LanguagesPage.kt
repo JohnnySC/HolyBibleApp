@@ -10,5 +10,6 @@ class LanguagesPage {
     val english = R.id.englishRadioButton
     val russian = R.id.russianRadioButton
 
-    val title = "Выберите язык"
+    val titleEnglish = "Choose language"
+    val titleRussian = "Выберите язык"
 }
