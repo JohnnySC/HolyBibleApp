@@ -2,7 +2,6 @@ package com.github.johnnysc.holybibleapp.presentation.chapters
 
 import android.os.Bundle
 import android.view.View
-import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
@@ -24,11 +23,11 @@ class ChaptersFragment : BaseFragment<ChaptersViewModel>() {
             object : ClickListener<ChapterUi> {
                 override fun click(item: ChapterUi) = item.open(viewModel)
             })
-        viewModel.observeChapters(this, { (chapters, title) ->
-            adapter.update(chapters)
-            updateTitle(title)
+        viewModel.observeChapters(this, { ui ->
+            ui.map(adapter, title())
+            scrollTo()
         })
-        recyclerView?.adapter = adapter
+        setAdapter(adapter)
 
         viewModel.init()
     }

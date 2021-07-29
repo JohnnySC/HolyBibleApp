@@ -37,10 +37,10 @@ class VersesModule(
     private fun getInteractor() = VersesInteractor.Base(
         getRepository(),
         BaseVersesDataToDomainMapper(BaseVerseDataToDomainMapper()),
-        coreModule.resourceProvider,
         coreModule.chapterCache,
         booksModule.repository(),
         coreModule.bookCache,
+        coreModule.scrollPositionCache
     )
 
     private fun getRepository(): VersesRepository {

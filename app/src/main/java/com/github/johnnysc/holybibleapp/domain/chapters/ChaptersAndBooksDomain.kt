@@ -3,6 +3,7 @@ package com.github.johnnysc.holybibleapp.domain.chapters
 import com.github.johnnysc.holybibleapp.core.Abstract
 import com.github.johnnysc.holybibleapp.core.ErrorType
 import com.github.johnnysc.holybibleapp.core.Read
+import com.github.johnnysc.holybibleapp.core.TextMapper
 import com.github.johnnysc.holybibleapp.data.books.BookData
 import com.github.johnnysc.holybibleapp.data.books.BooksData
 import com.github.johnnysc.holybibleapp.data.books.BooksDataToDomainMapper
@@ -19,11 +20,17 @@ class ChaptersAndBooksDomain(
     private val bookId: Read<Int>
 ) : Abstract.Object<ChaptersDomain, ChaptersDataToDomainMapper<ChaptersDomain>> {
 
+    private val empty by lazy {
+        object : Abstract.Object<Unit, TextMapper> {
+            override fun map(mapper: TextMapper) = Unit
+        }
+    }
+
     override fun map(mapper: ChaptersDataToDomainMapper<ChaptersDomain>) = when {
         books is BooksData.Success && chapters is ChaptersData.Success ->
-            chapters.map(mapper, books.getById(bookId.read()).name())
+            chapters.map(mapper, books.getById(bookId.read()))
 
-        chapters is ChaptersData.Fail -> chapters.map(mapper, "")
+        chapters is ChaptersData.Fail -> chapters.map(mapper, empty)
 
         else -> {
             var errorType: ErrorType = ErrorType.GENERIC_ERROR

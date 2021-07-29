@@ -40,7 +40,7 @@ class LanguagesViewModel(
             else -> LanguageChoice.NONE
         }
         communication.map(
-            LanguagesUi(
+            LanguagesUi.Base(
                 choice,
                 resourceProvider.getString(R.string.english),
                 resourceProvider.getString(R.string.russian)

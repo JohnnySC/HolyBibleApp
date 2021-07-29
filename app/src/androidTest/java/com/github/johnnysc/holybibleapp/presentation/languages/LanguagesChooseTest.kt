@@ -1,7 +1,7 @@
 package com.github.johnnysc.holybibleapp.presentation.languages
 
 import com.github.johnnysc.holybibleapp.presentation.BaseTest
-import com.github.johnnysc.holybibleapp.presentation.BooksPage
+import com.github.johnnysc.holybibleapp.presentation.books.BooksPage
 import org.junit.Test
 
 /**
@@ -10,29 +10,35 @@ import org.junit.Test
 class LanguagesChooseTest : BaseTest() {
 
     @Test
-    fun test_nothing_checked_at_start() {
+    fun testcase_id04() {
         LanguagesPage().run {
-            title.checkVisible()
+            titleEnglish.checkVisible()
+            english isChecked false
+            russian isChecked false
+        }
+        killAppAndReturn()
+        LanguagesPage().run {
+            titleEnglish.checkVisible()
             english isChecked false
             russian isChecked false
         }
     }
 
     @Test
-    fun test_exit() {
+    fun test_exit_at_start() {
         LanguagesPage().run {
-            title.checkVisible()
+            titleEnglish.checkVisible()
 
             goBack()
 
-            checkAppNotShown(title)
+            checkAppNotShown(titleEnglish)
         }
     }
 
     @Test
     fun testcase_id01() {
         LanguagesPage().run {
-            title.checkVisible()
+            titleEnglish.checkVisible()
             english isChecked false
             russian isChecked false
 
@@ -40,24 +46,24 @@ class LanguagesChooseTest : BaseTest() {
         }
 
         BooksPage().run {
-            title.checkVisible()
+            titleEnglish.checkVisible()
         }
     }
 
     @Test
     fun testcase_id02() {
         LanguagesPage().run {
-            title.checkVisible()
+            titleEnglish.checkVisible()
             english isChecked false
             russian isChecked false
 
             english.performTap()
         }
 
-        killAppAndReturn()
-
         BooksPage().run {
-            title.checkVisible()
+            titleEnglish.checkVisible()
+            killAppAndReturn()
+            titleEnglish.checkVisible()
         }
     }
 }

@@ -27,9 +27,10 @@ class BooksFragment : BaseFragment<BooksViewModel>() {
             object : ClickListener<BookUi> {
                 override fun click(item: BookUi) = item.open(viewModel)
             })
-        recyclerView?.adapter = adapter
+        setAdapter(adapter)
         viewModel.observe(this, {
-            adapter.update(it)
+            it.map(adapter)
+            scrollTo()
         })
         viewModel.init()
     }

@@ -22,17 +22,17 @@ class VersesViewModel(
 ) : BaseViewModel(resourceProvider) {
 
     fun fetchVerses() {
-        communication.map(Pair(listOf(VerseUi.Progress), getTitle()))
+        communication.map(VersesUi.Base(listOf(VerseUi.Progress), getTitle()))
         viewModelScope.launch(Dispatchers.IO) {
             val list = interactor.fetchVerses()
-            val uiList = list.map(mapper)
+            val ui = list.map(mapper)
             withContext(Dispatchers.Main) {
-                uiList.map(communication)
+                communication.map(ui)
             }
         }
     }
 
-    fun observeVerses(owner: LifecycleOwner, observer: Observer<Pair<List<VerseUi>, String>>) {
+    fun observeVerses(owner: LifecycleOwner, observer: Observer<VersesUi>) {
         communication.observe(owner, observer)
     }
 
@@ -40,4 +40,7 @@ class VersesViewModel(
         navigator.saveVersesScreen()
         fetchVerses()
     }
+
+    override fun scrollPosition() = interactor.scrollPosition()
+    override fun saveScrollPosition(position: Int) = interactor.saveScrollPosition(position)
 }

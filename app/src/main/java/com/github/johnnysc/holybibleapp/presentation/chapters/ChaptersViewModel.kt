@@ -3,9 +3,7 @@ package com.github.johnnysc.holybibleapp.presentation.chapters
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
-import com.github.johnnysc.holybibleapp.core.ResourceProvider
-import com.github.johnnysc.holybibleapp.core.Save
-import com.github.johnnysc.holybibleapp.core.Show
+import com.github.johnnysc.holybibleapp.core.*
 import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersInteractor
 import com.github.johnnysc.holybibleapp.presentation.main.BaseViewModel
@@ -27,17 +25,23 @@ class ChaptersViewModel(
     resourceProvider: ResourceProvider
 ) : BaseViewModel(resourceProvider), Show {
 
-    fun observeChapters(owner: LifecycleOwner, observer: Observer<Pair<List<ChapterUi>, String>>) {
+    fun observeChapters(owner: LifecycleOwner, observer: Observer<ChaptersUi>) {
         chaptersCommunication.observe(owner, observer)
     }
 
     fun fetchChapters() {
-        chaptersCommunication.map(Pair(listOf(ChapterUi.Progress), getTitle()))
+        chaptersCommunication.map(
+            ChaptersUi.Base(
+                listOf(ChapterUi.Progress),
+                object : Abstract.Object<Unit, TextMapper> {
+                    override fun map(mapper: TextMapper) = mapper.map(getTitle())
+                })
+        )
         viewModelScope.launch(Dispatchers.IO) {
             val chapters = chaptersInteractor.fetchChapters()
             val chaptersUi = chapters.map(chaptersMapper)
             withContext(Dispatchers.Main) {
-                chaptersUi.map(chaptersCommunication)
+                chaptersCommunication.map(chaptersUi)
             }
         }
     }
@@ -51,4 +55,8 @@ class ChaptersViewModel(
         chapterCache.save(id)
         navigator.nextScreen(navigationCommunication)
     }
+
+    override fun scrollPosition() = chaptersInteractor.scrollPosition()
+    override fun saveScrollPosition(position: Int) =
+        chaptersInteractor.saveScrollPosition(position)
 }

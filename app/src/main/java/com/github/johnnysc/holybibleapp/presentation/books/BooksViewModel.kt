@@ -32,21 +32,21 @@ class BooksViewModel(
     override fun getTitleResId() = R.string.app_name
 
     fun fetchBooks() {
-        communication.map(listOf(BookUi.Progress))
+        communication.map(BooksUi.Base(listOf(BookUi.Progress)))
         viewModelScope.launch(Dispatchers.IO) {
             val resultDomain = booksInteractor.fetchBooks()
             val resultUi = resultDomain.map(mapper)
             withContext(Dispatchers.Main) {
-                resultUi.map(communication)
+                communication.map(resultUi)
             }
         }
     }
 
-    fun observe(owner: LifecycleOwner, observer: Observer<List<BookUi>>) {
+    fun observe(owner: LifecycleOwner, observer: Observer<BooksUi>) {
         communication.observe(owner, observer)
     }
 
-    fun collapseOrExpand(id: Int) = communication.map(uiDataCache.changeState(id))
+    fun collapseOrExpand(id: Int) = communication.map(BooksUi.Base(uiDataCache.changeState(id)))
 
     override fun open(id: Int) {
         bookCache.save(id)
@@ -54,6 +54,9 @@ class BooksViewModel(
     }
 
     fun save() = uiDataCache.saveState()
+
+    override fun saveScrollPosition(position: Int) = booksInteractor.saveScrollPosition(position)
+    override fun scrollPosition() = booksInteractor.scrollPosition()
 
     fun init() {
         navigator.saveBooksScreen()

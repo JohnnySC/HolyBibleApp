@@ -12,10 +12,10 @@ import com.google.gson.reflect.TypeToken
  **/
 interface ChaptersCloudDataSource {
 
-    suspend fun fetchChapters(bookId: Int): List<ChapterCloud.Base>
+    suspend fun fetchChapters(bookId: Int): List<ChapterCloud>
 
     abstract class Abstract(private val gson: Gson) : ChaptersCloudDataSource {
-        override suspend fun fetchChapters(bookId: Int): List<ChapterCloud.Base> = gson.fromJson(
+        override suspend fun fetchChapters(bookId: Int): List<ChapterCloud> = gson.fromJson(
             getDataAsString(bookId),
             object : TypeToken<List<ChapterCloud.Base>>() {}.type
         )
@@ -48,7 +48,7 @@ interface ChaptersCloudDataSource {
         private val resourceReader: RawResourceReader,
         private val gson: Gson
     ) : ChaptersCloudDataSource {
-        override suspend fun fetchChapters(bookId: Int): List<ChapterCloud.Base> {
+        override suspend fun fetchChapters(bookId: Int): List<ChapterCloud> {
             val text = resourceReader.readText(R.raw.synodal)
             val response = gson.fromJson<RussianTranslation>(
                 text,
@@ -58,9 +58,7 @@ interface ChaptersCloudDataSource {
             val book = response.contentAsList().find {
                 it.matches(bookId)
             }!!
-            return (1..book.chaptersSize()).map {
-                ChapterCloud.Base(it)
-            }
+            return book.contentAsList()
         }
     }
 

@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.*
-import com.github.johnnysc.holybibleapp.presentation.books.BookUi
 
 /**
  * @author Asatryan on 12.07.2021
@@ -12,8 +11,7 @@ import com.github.johnnysc.holybibleapp.presentation.books.BookUi
 class ChaptersAdapter(
     private val retry: Retry,
     private val clickListener: ClickListener<ChapterUi>
-) :
-    BaseAdapter<ChapterUi, BaseViewHolder<ChapterUi>>() {
+) : BaseAdapter<ChapterUi, BaseViewHolder<ChapterUi>>() {
 
     override fun getItemViewType(position: Int) = when (list[position]) {
         is ChapterUi.Base -> 0

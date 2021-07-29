@@ -2,6 +2,8 @@ package com.github.johnnysc.holybibleapp.data.books.cloud
 
 import com.github.johnnysc.holybibleapp.core.Content
 import com.github.johnnysc.holybibleapp.core.Matcher
+import com.github.johnnysc.holybibleapp.data.books.ToBookMapper
+import com.github.johnnysc.holybibleapp.data.chapters.cloud.ChapterCloud
 import com.github.johnnysc.holybibleapp.data.chapters.cloud.ChapterRu
 import com.google.gson.annotations.SerializedName
 
@@ -10,7 +12,7 @@ import com.google.gson.annotations.SerializedName
  **/
 data class RussianTranslation(
     @SerializedName("version") private val allData: Map<String, BookRu>
-) : Content<BookRu> {
+) : Content<BookCloud> {
     override fun contentAsList() = allData.map { it.value }
 }
 
@@ -18,17 +20,17 @@ data class BookRu(
     @SerializedName("book_name") private val name: String,
     @SerializedName("book") private val content: Map<String, ChapterRu>,
     @SerializedName("book_nr") private val number: Int
-) : Matcher<Int>, Content<ChapterRu> {
+) : BookCloud, Matcher<Int>, Content<ChapterCloud> {
 
-    fun toBookCloud() = BookCloud.Base( //todo remove this method and use mapper to BookData
-        number,
-        name,
-        if (number < NEW_TESTAMENT_POSITION) OLD_TESTAMENT else NEW_TESTAMENT
-    )
+    override fun <T> map(mapper: ToBookMapper<T>): T {
+        return mapper.map(
+            number,
+            name,
+            if (number < NEW_TESTAMENT_POSITION) OLD_TESTAMENT else NEW_TESTAMENT
+        )
+    }
 
     override fun matches(arg: Int) = number == arg
-
-    fun chaptersSize() = content.size
 
     override fun contentAsList() = content.map { it.value }
 

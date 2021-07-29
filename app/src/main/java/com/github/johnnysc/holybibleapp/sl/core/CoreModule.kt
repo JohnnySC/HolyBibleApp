@@ -3,6 +3,7 @@ package com.github.johnnysc.holybibleapp.sl.core
 import android.content.Context
 import com.github.johnnysc.holybibleapp.core.RealmProvider
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
+import com.github.johnnysc.holybibleapp.core.ScrollPositionCache
 import com.github.johnnysc.holybibleapp.presentation.main.MainViewModel
 import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
 import com.github.johnnysc.holybibleapp.presentation.main.Navigator
@@ -24,6 +25,7 @@ class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
         const val BASE_URL = "https://bible-go-api.rkeplin.com/v1/"
     }
 
+    lateinit var scrollPositionCache: ScrollPositionCache
     lateinit var resourceProvider: ResourceProvider
     lateinit var gson: Gson
     lateinit var realmProvider: RealmProvider
@@ -71,6 +73,11 @@ class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
         else
             Navigator.Base(resourceProvider)
         navigationCommunication = NavigationCommunication.Base()
+
+        scrollPositionCache = if (useMocks)
+            ScrollPositionCache.Mock(resourceProvider)
+        else
+            ScrollPositionCache.Base(resourceProvider)
     }
 
     fun <T> makeService(clazz: Class<T>): T = retrofit.create(clazz)

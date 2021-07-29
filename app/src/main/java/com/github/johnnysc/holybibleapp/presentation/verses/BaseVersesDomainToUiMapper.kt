@@ -1,5 +1,7 @@
 package com.github.johnnysc.holybibleapp.presentation.verses
 
+import com.github.johnnysc.holybibleapp.R
+import com.github.johnnysc.holybibleapp.core.BuildString
 import com.github.johnnysc.holybibleapp.core.ErrorType
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.domain.verses.VerseDomain
@@ -11,11 +13,14 @@ import com.github.johnnysc.holybibleapp.domain.verses.VersesDomainToUiMapper
  **/
 class BaseVersesDomainToUiMapper(
     private val mapper: VerseDomainToUiMapper<VerseUi>,
-    resourceProvider: ResourceProvider
+    private val resourceProvider: ResourceProvider
 ) : VersesDomainToUiMapper<VersesUi>(resourceProvider) {
 
-    override fun map(data: Pair<List<VerseDomain>, String>) = VersesUi.Base(
-        data.first.map { verse -> verse.map(mapper) }, data.second)
+    override fun map(data: Triple<List<VerseDomain>, BuildString, Int>) =
+        VersesUi.Base(
+            data.first.map { verse -> verse.map(mapper) },
+            data.second.build(resourceProvider, R.string.book_and_chapter, data.third)
+        )
 
     override fun map(errorType: ErrorType) = errorMessage(errorType).let {
         VersesUi.Base(listOf(VerseUi.Fail(it)), it)

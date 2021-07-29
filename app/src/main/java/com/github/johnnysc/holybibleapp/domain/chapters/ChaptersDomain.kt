@@ -1,6 +1,8 @@
 package com.github.johnnysc.holybibleapp.domain.chapters
 
+import com.github.johnnysc.holybibleapp.core.Abstract
 import com.github.johnnysc.holybibleapp.core.ErrorType
+import com.github.johnnysc.holybibleapp.core.TextMapper
 
 /**
  * @author Asatryan on 11.07.2021
@@ -11,7 +13,7 @@ sealed class ChaptersDomain {
 
     data class Success(
         private val chapters: List<ChapterDomain>,
-        private val bookName: String
+        private val bookName: Abstract.Object<Unit, TextMapper>
     ) : ChaptersDomain() {
         override fun <T> map(mapper: ChaptersDomainToUiMapper<T>) =
             mapper.map(Pair(chapters, bookName))
