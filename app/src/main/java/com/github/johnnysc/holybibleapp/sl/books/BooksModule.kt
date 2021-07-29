@@ -46,7 +46,8 @@ class BooksModule(
 
     private fun getBooksInteractor() = BooksInteractor.Base(
         repository(),
-        BaseBooksDataToDomainMapper(BaseBookDataToDomainMapper())
+        BaseBooksDataToDomainMapper(BaseBookDataToDomainMapper()),
+        coreModule.scrollPositionCache
     )
 
     private fun getBooksRepository(): BooksRepository {
@@ -68,8 +69,13 @@ class BooksModule(
         BooksCloudDataSource.Russian(coreModule.resourceProvider, coreModule.gson)
     )
 
-    private fun getMockBooksCloudDataSource() =
+    private fun getMockBooksCloudDataSource() = if (coreModule.language.isChosenRussian())
+        getRussianBookCloudDataSource()
+    else
         BooksCloudDataSource.Mock(coreModule.resourceProvider, coreModule.gson)
+
+    private fun getRussianBookCloudDataSource() =
+        BooksCloudDataSource.Russian(coreModule.resourceProvider, coreModule.gson)
 
     private fun getBooksService() = coreModule.makeService(BooksService::class.java)
 
@@ -87,5 +93,4 @@ class BooksModule(
     )
 
     private fun getBooksCommunication() = BooksCommunication.Base()
-
 }

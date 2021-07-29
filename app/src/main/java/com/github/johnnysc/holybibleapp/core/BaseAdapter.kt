@@ -9,7 +9,6 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.github.johnnysc.holybibleapp.R
-import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterUi
 
 /**
  * @author Asatryan on 12.07.2021

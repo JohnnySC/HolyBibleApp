@@ -55,4 +55,8 @@ class ChaptersViewModel(
         chapterCache.save(id)
         navigator.nextScreen(navigationCommunication)
     }
+
+    override fun scrollPosition() = chaptersInteractor.scrollPosition()
+    override fun saveScrollPosition(position: Int) =
+        chaptersInteractor.saveScrollPosition(position)
 }

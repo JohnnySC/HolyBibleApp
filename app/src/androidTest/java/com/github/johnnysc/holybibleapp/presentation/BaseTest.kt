@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso.*
-import androidx.test.espresso.action.ViewActions.*
-import androidx.test.espresso.assertion.ViewAssertions.*
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeUp
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.filters.LargeTest
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
@@ -19,6 +21,7 @@ import com.github.johnnysc.holybibleapp.core.RecyclerViewMatcher
 import com.github.johnnysc.holybibleapp.core.lazyActivityScenarioRule
 import com.github.johnnysc.holybibleapp.presentation.languages.ChosenLanguage
 import com.github.johnnysc.holybibleapp.presentation.main.MainActivity
+import org.hamcrest.core.IsNot.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -35,6 +38,7 @@ abstract class BaseTest {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var navigationPreferences: SharedPreferences
     private lateinit var languagesPreferences: SharedPreferences
+    private lateinit var scrollPositionPreferences: SharedPreferences
     private lateinit var appContext: Context
 
     @Before
@@ -43,6 +47,8 @@ abstract class BaseTest {
         sharedPreferences = sharedPreferences("MockCollapsedItemsIdList")
         navigationPreferences = sharedPreferences("mockNavigation")
         languagesPreferences = sharedPreferences("mockLanguagesFileName")
+        scrollPositionPreferences = sharedPreferences("MockScrollPosition")
+        scrollPositionPreferences.clear()
         sharedPreferences.clear()
         navigationPreferences.clear()
         languagesPreferences.clear()
@@ -61,11 +67,11 @@ abstract class BaseTest {
 
     protected open fun doBeforeActivityStart() {}
 
-    protected fun selectLanguage(english:Boolean) {
+    protected fun selectLanguage(english: Boolean) {
         languagesPreferences.edit().putInt("mockLanguagesKey", if (english) 0 else 1).apply()
     }
 
-    protected fun startWithScreenId(id:Int) {
+    protected fun startWithScreenId(id: Int) {
         navigationPreferences.edit().putInt("mockScreenId", id).apply()
     }
 
@@ -86,6 +92,10 @@ abstract class BaseTest {
 
     protected fun tap(position: Int) {
         onView(RecyclerViewMatcher(R.id.recyclerView).atPosition(position)).perform(click())
+    }
+
+    protected fun scrollUp() {
+        onView(withId(R.id.recyclerView)).perform(swipeUp())
     }
 
     protected fun Int.performTap() {

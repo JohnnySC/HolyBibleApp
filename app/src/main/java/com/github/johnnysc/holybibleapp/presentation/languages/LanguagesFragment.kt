@@ -52,7 +52,7 @@ class LanguagesFragment : BaseFragment<LanguagesViewModel>() {
         russianRadioButton.setOnClickListener(chooseRussian)
 
         viewModel.observeLanguage(this, {
-            it.show(
+            it.map(
                 englishRadioButton,
                 russianRadioButton,
                 ::russianChosen,

@@ -13,4 +13,5 @@ class BooksPage {
     val newTestamentPositionIfFirstCollapsed = 1
     val firstBookOldTestamentEnglish = "Genesis"
     val firstBookNewTestamentEnglish = "Matthew"
+    val firstBookOldTestamentRussian = "Бытие"
 }

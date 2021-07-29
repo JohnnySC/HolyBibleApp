@@ -1,6 +1,5 @@
 package com.github.johnnysc.holybibleapp.presentation.languages
 
-import androidx.test.uiautomator.UiDevice
 import com.github.johnnysc.holybibleapp.presentation.BaseTest
 import com.github.johnnysc.holybibleapp.presentation.MainPage
 import com.github.johnnysc.holybibleapp.presentation.books.BooksPage

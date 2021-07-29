@@ -30,6 +30,7 @@ class BooksFragment : BaseFragment<BooksViewModel>() {
         setAdapter(adapter)
         viewModel.observe(this, {
             it.map(adapter)
+            scrollTo()
         })
         viewModel.init()
     }

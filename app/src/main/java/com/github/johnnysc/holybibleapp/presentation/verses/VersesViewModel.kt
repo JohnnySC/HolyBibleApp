@@ -40,4 +40,7 @@ class VersesViewModel(
         navigator.saveVersesScreen()
         fetchVerses()
     }
+
+    override fun scrollPosition() = interactor.scrollPosition()
+    override fun saveScrollPosition(position: Int) = interactor.saveScrollPosition(position)
 }
