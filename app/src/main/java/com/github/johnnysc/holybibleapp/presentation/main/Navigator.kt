@@ -8,9 +8,9 @@ import com.github.johnnysc.holybibleapp.presentation.books.BooksNavigator
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChaptersFragment
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChaptersNavigator
 import com.github.johnnysc.holybibleapp.presentation.languages.LanguagesFragment
+import com.github.johnnysc.holybibleapp.presentation.languages.LanguagesNavigator
 import com.github.johnnysc.holybibleapp.presentation.verses.VersesFragment
 import com.github.johnnysc.holybibleapp.presentation.verses.VersesNavigator
-import com.github.johnnysc.holybibleapp.presentation.languages.LanguagesNavigator
 
 /**
  * @author Asatryan on 13.07.2021
@@ -20,11 +20,11 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
 
     abstract class Abstract(preferencesProvider: PreferencesProvider) : Navigator {
         private val sharedPreferences by lazy {
-            preferencesProvider.provideSharedPreferences(getFileName())
+            preferencesProvider.provideSharedPreferences(fileName())
         }
 
-        protected abstract fun getFileName(): String
-        protected abstract fun getCurrentScreenKey(): String
+        protected abstract fun fileName(): String
+        protected abstract fun currentScreenKey(): String
 
         private val screens = listOf(
             BooksFragment::class.java,
@@ -37,12 +37,12 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
 
         override fun save(data: Int) {
             languagesChosen = false
-            sharedPreferences.edit().putInt(getCurrentScreenKey(), data).apply()
+            sharedPreferences.edit().putInt(currentScreenKey(), data).apply()
         }
 
-        override fun read() = sharedPreferences.getInt(getCurrentScreenKey(), LANGUAGE_SCREEN)
+        override fun read() = sharedPreferences.getInt(currentScreenKey(), LANGUAGE_SCREEN)
 
-        override fun getFragment(id: Int): BaseFragment<*> {
+        override fun fragment(id: Int): BaseFragment<*> {
             val finalId = if (id == LANGUAGE_SCREEN)
                 screens.indexOf(LanguagesFragment::class.java)
             else
@@ -98,8 +98,8 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
 
     class Base(preferencesProvider: PreferencesProvider) : Navigator.Abstract(preferencesProvider) {
 
-        override fun getFileName() = NAVIGATOR_FILE_NAME
-        override fun getCurrentScreenKey() = CURRENT_SCREEN_KEY
+        override fun fileName() = NAVIGATOR_FILE_NAME
+        override fun currentScreenKey() = CURRENT_SCREEN_KEY
 
         private companion object {
             const val NAVIGATOR_FILE_NAME = "navigation"
@@ -108,8 +108,8 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
     }
 
     class Mock(preferencesProvider: PreferencesProvider) : Navigator.Abstract(preferencesProvider) {
-        override fun getFileName() = NAVIGATOR_FILE_NAME
-        override fun getCurrentScreenKey() = CURRENT_SCREEN_KEY
+        override fun fileName() = NAVIGATOR_FILE_NAME
+        override fun currentScreenKey() = CURRENT_SCREEN_KEY
 
         private companion object {
             const val NAVIGATOR_FILE_NAME = "mockNavigation"

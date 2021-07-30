@@ -14,12 +14,12 @@ import java.util.*
  **/
 interface ResourceProvider : RawResourceReader, PreferencesProvider, ChooseLanguages {
 
-    fun getString(@StringRes id: Int): String
-    fun getString(@StringRes id: Int, vararg args: Any): String
+    fun string(@StringRes id: Int): String
+    fun string(@StringRes id: Int, vararg args: Any): String
 
     class Base(private var context: Context) : ResourceProvider {
-        override fun getString(id: Int) = context.getString(id)
-        override fun getString(id: Int, vararg args: Any) = context.getString(id, *args)
+        override fun string(id: Int) = context.getString(id)
+        override fun string(id: Int, vararg args: Any) = context.getString(id, *args)
 
         override fun readText(id: Int) = context.resources.openRawResource(id).bufferedReader()
             .use(BufferedReader::readText)

@@ -2,6 +2,7 @@ package com.github.johnnysc.holybibleapp.presentation.verses
 
 import android.os.Bundle
 import android.view.View
+import com.github.johnnysc.holybibleapp.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 
@@ -15,9 +16,14 @@ class VersesFragment : BaseFragment<VersesViewModel>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = VersesAdapter(object : Retry {
-            override fun tryAgain() = viewModel.fetchVerses()
-        })
+        val adapter = VersesAdapter(
+            object : Retry {
+                override fun tryAgain() = viewModel.fetchVerses()
+            },
+            object : ClickListener<VerseUi> {
+                override fun click(item: VerseUi) = viewModel.showNextChapterVerses()
+            }
+        )
 
         viewModel.observeVerses(this, { ui ->
             ui.map(adapter, title())

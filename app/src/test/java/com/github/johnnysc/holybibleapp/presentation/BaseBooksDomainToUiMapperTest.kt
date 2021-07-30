@@ -2,16 +2,15 @@ package com.github.johnnysc.holybibleapp.presentation
 
 import android.content.SharedPreferences
 import com.github.johnnysc.holybibleapp.R
-import com.github.johnnysc.holybibleapp.domain.books.BookDomainToUiMapper
 import com.github.johnnysc.holybibleapp.core.ErrorType
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
+import com.github.johnnysc.holybibleapp.domain.books.BookDomainToUiMapper
 import com.github.johnnysc.holybibleapp.presentation.books.BaseBooksDomainToUiMapper
 import com.github.johnnysc.holybibleapp.presentation.books.BookUi
 import com.github.johnnysc.holybibleapp.presentation.books.BooksUi
 import com.github.johnnysc.holybibleapp.presentation.books.UiDataCache
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.lang.IllegalStateException
 
 /**
  * Test for [BaseBooksDomainToUiMapper]
@@ -45,14 +44,14 @@ class BaseBooksDomainToUiMapperTest {
     }
 
     private inner class TestResourceProvider : ResourceProvider {
-        override fun getString(id: Int) = when (id) {
+        override fun string(id: Int) = when (id) {
             R.string.no_connection_message -> "noConnection"
             R.string.service_unavailable_message -> "serviceUnavailable"
             else -> "somethingWentWrong"
         }
 
-        override fun getString(id: Int, vararg args: Any): String {
-            return getString(id)
+        override fun string(id: Int, vararg args: Any): String {
+            return string(id)
         }
 
         override fun readText(id: Int) = "not used here"

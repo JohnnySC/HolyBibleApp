@@ -18,7 +18,7 @@ class LanguagesViewModel(
     private val resourceProvider: ResourceProvider
 ) : BaseViewModel(resourceProvider) {
 
-    override fun getTitleResId() = R.string.choose_language
+    override fun titleResId() = R.string.choose_language
 
     fun observeLanguage(owner: LifecycleOwner, observer: Observer<LanguagesUi>) =
         communication.observe(owner, observer)
@@ -42,8 +42,8 @@ class LanguagesViewModel(
         communication.map(
             LanguagesUi.Base(
                 choice,
-                resourceProvider.getString(R.string.english),
-                resourceProvider.getString(R.string.russian)
+                resourceProvider.string(R.string.english),
+                resourceProvider.string(R.string.russian)
             )
         )
     }

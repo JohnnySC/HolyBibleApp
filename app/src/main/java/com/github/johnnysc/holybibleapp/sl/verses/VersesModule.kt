@@ -1,5 +1,7 @@
 package com.github.johnnysc.holybibleapp.sl.verses
 
+import com.github.johnnysc.holybibleapp.data.books.BooksRepository
+import com.github.johnnysc.holybibleapp.data.chapters.ChaptersRepository
 import com.github.johnnysc.holybibleapp.data.verses.ToVerseMapper
 import com.github.johnnysc.holybibleapp.data.verses.VersesRepository
 import com.github.johnnysc.holybibleapp.data.verses.cache.VerseDataToDbMapper
@@ -8,12 +10,13 @@ import com.github.johnnysc.holybibleapp.data.verses.cache.VersesCacheMapper
 import com.github.johnnysc.holybibleapp.data.verses.cloud.VersesCloudDataSource
 import com.github.johnnysc.holybibleapp.data.verses.cloud.VersesCloudMapper
 import com.github.johnnysc.holybibleapp.data.verses.cloud.VersesService
-import com.github.johnnysc.holybibleapp.domain.verses.*
+import com.github.johnnysc.holybibleapp.domain.verses.BaseVerseDataToDomainMapper
+import com.github.johnnysc.holybibleapp.domain.verses.BaseVersesDataToDomainMapper
+import com.github.johnnysc.holybibleapp.domain.verses.VersesInteractor
 import com.github.johnnysc.holybibleapp.presentation.verses.BaseVerseDomainToUiMapper
 import com.github.johnnysc.holybibleapp.presentation.verses.BaseVersesDomainToUiMapper
 import com.github.johnnysc.holybibleapp.presentation.verses.VersesCommunication
 import com.github.johnnysc.holybibleapp.presentation.verses.VersesViewModel
-import com.github.johnnysc.holybibleapp.sl.books.BooksModule
 import com.github.johnnysc.holybibleapp.sl.core.BaseModule
 import com.github.johnnysc.holybibleapp.sl.core.CoreModule
 
@@ -22,46 +25,67 @@ import com.github.johnnysc.holybibleapp.sl.core.CoreModule
  **/
 class VersesModule(
     private val coreModule: CoreModule,
-    private val booksModule: BooksModule,
+    private val booksRepository: BooksRepository,
+    private val chaptersRepository: ChaptersRepository,
     private val useMocks: Boolean
 ) : BaseModule<VersesViewModel> {
 
-    override fun getViewModel() = VersesViewModel(
+    override fun viewModel() = VersesViewModel(
         coreModule.navigator,
-        getInteractor(),
-        VersesCommunication.Base(),
-        BaseVersesDomainToUiMapper(BaseVerseDomainToUiMapper(), coreModule.resourceProvider),
+        interactor(),
+        communications(),
+        mapper(),
         coreModule.resourceProvider
     )
 
-    private fun getInteractor() = VersesInteractor.Base(
-        getRepository(),
+    private fun communications() = VersesCommunication.Base()
+
+    private fun mapper() =
+        BaseVersesDomainToUiMapper(
+            BaseVerseDomainToUiMapper(coreModule.resourceProvider),
+            coreModule.resourceProvider
+        )
+
+    private fun interactor() = VersesInteractor.Base(
+        repository(),
         BaseVersesDataToDomainMapper(BaseVerseDataToDomainMapper()),
-        coreModule.chapterCache,
-        booksModule.repository(),
+        booksRepository,
         coreModule.bookCache,
+        coreModule.scrollPositionCache,
+        chaptersRepository,
+        coreModule.chapterCache,
         coreModule.scrollPositionCache
     )
 
-    private fun getRepository(): VersesRepository {
+    private fun repository(): VersesRepository {
         val mapper = ToVerseMapper.Base()
         return VersesRepository.Base(
-            if (useMocks)
-                VersesCloudDataSource.Mock(coreModule.resourceProvider, coreModule.gson)
-            else
-                VersesCloudDataSource.Base(
-                    coreModule.language,
-                    VersesCloudDataSource.English(
-                        coreModule.makeService(VersesService::class.java),
-                        coreModule.gson
-                    ),
-                    VersesCloudDataSource.Russian(coreModule.resourceProvider, coreModule.gson)
-                ),
-            VersesCacheDataSource.Base(coreModule.realmProvider, VerseDataToDbMapper.Base()),
+            cloudDataSource(),
+            cacheDataSource(),
             VersesCloudMapper.Base(mapper),
             VersesCacheMapper.Base(mapper),
             coreModule.chapterCache,
             coreModule.bookCache
         )
     }
+
+    private fun cacheDataSource() =
+        VersesCacheDataSource.Base(coreModule.realmProvider, VerseDataToDbMapper.Base())
+
+    private fun cloudDataSource() = if (useMocks)
+        VersesCloudDataSource.Mock()
+    else
+        VersesCloudDataSource.Base(
+            coreModule.language,
+            english(),
+            russian()
+        )
+
+    private fun russian() =
+        VersesCloudDataSource.Russian(coreModule.resourceProvider, coreModule.gson)
+
+    private fun english() = VersesCloudDataSource.English(
+        coreModule.makeService(VersesService::class.java),
+        coreModule.gson
+    )
 }

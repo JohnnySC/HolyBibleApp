@@ -7,31 +7,25 @@ import com.github.johnnysc.holybibleapp.presentation.chapters.ChaptersViewModel
 import com.github.johnnysc.holybibleapp.presentation.languages.LanguagesViewModel
 import com.github.johnnysc.holybibleapp.presentation.main.MainViewModel
 import com.github.johnnysc.holybibleapp.presentation.verses.VersesViewModel
-import com.github.johnnysc.holybibleapp.sl.books.BooksModule
-import com.github.johnnysc.holybibleapp.sl.chapters.ChaptersModule
-import com.github.johnnysc.holybibleapp.sl.languages.LanguagesModule
-import com.github.johnnysc.holybibleapp.sl.verses.VersesModule
-import java.lang.IllegalStateException
 
 /**
  * @author Asatryan on 15.07.2021
  **/
 class ViewModelsFactory(
-    private val coreModule: CoreModule,
-    private val booksModule: BooksModule,
-    private val chaptersModule: ChaptersModule,
-    private val versesModule: VersesModule,
-    private val languagesModule: LanguagesModule
+    private val dependencyContainer: DependencyContainer
 ) : ViewModelProvider.Factory {
+
+    private val map = HashMap<Class<*>, Feature>().apply {
+        put(MainViewModel::class.java, Feature.MAIN)
+        put(BooksViewModel::class.java, Feature.BOOKS)
+        put(ChaptersViewModel::class.java, Feature.CHAPTERS)
+        put(VersesViewModel::class.java, Feature.VERSES)
+        put(LanguagesViewModel::class.java, Feature.LANGUAGES)
+    }
+
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        val module = when {
-            modelClass.isAssignableFrom(MainViewModel::class.java) -> coreModule
-            modelClass.isAssignableFrom(BooksViewModel::class.java) -> booksModule
-            modelClass.isAssignableFrom(ChaptersViewModel::class.java) -> chaptersModule
-            modelClass.isAssignableFrom(VersesViewModel::class.java) -> versesModule
-            modelClass.isAssignableFrom(LanguagesViewModel::class.java) -> languagesModule
-            else -> throw IllegalStateException("unknown viewModelClass $modelClass")
-        }
-        return module.getViewModel() as T
+        val feature =
+            map[modelClass] ?: throw IllegalStateException("unknown viewModel $modelClass")
+        return dependencyContainer.module(feature).viewModel() as T
     }
 }

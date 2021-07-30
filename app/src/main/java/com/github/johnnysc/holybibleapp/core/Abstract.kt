@@ -42,7 +42,7 @@ abstract class Abstract {
             abstract class Base<S, T>(private val resourceProvider: ResourceProvider) :
                 DomainToUi<S, T> {
 
-                protected fun errorMessage(errorType: ErrorType) = resourceProvider.getString(
+                protected fun errorMessage(errorType: ErrorType) = resourceProvider.string(
                     when (errorType) {
                         ErrorType.NO_CONNECTION -> R.string.no_connection_message
                         ErrorType.SERVICE_UNAVAILABLE -> R.string.service_unavailable_message

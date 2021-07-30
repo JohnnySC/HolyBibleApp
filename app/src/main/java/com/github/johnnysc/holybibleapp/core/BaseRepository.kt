@@ -18,7 +18,7 @@ interface Repository<E : Abstract.DataObject> {
     ) : Repository<E> {
 
         override suspend fun fetchData(): E = try {
-            val cachedList = getCachedDataList()
+            val cachedList = cachedDataList()
             if (cachedList.isEmpty()) {
                 val cloudList = fetchCloudData()
                 val list = cloudMapper.map(cloudList)
@@ -32,7 +32,7 @@ interface Repository<E : Abstract.DataObject> {
         }
 
         protected abstract suspend fun fetchCloudData(): List<C>
-        protected abstract fun getCachedDataList(): List<T>
+        protected abstract fun cachedDataList(): List<T>
         protected abstract fun returnSuccess(list: List<D>): E
         protected abstract fun returnFail(e: Exception): E
     }

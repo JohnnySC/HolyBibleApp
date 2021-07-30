@@ -3,7 +3,7 @@ package com.github.johnnysc.holybibleapp.presentation
 import com.github.johnnysc.holybibleapp.presentation.books.BookUi
 import com.github.johnnysc.holybibleapp.presentation.books.CollapsedIdsCache
 import com.github.johnnysc.holybibleapp.presentation.books.UiDataCache
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**

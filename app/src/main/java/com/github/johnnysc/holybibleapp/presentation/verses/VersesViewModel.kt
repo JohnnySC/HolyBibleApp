@@ -1,12 +1,13 @@
 package com.github.johnnysc.holybibleapp.presentation.verses
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
-import kotlinx.coroutines.Dispatchers
-
 import com.github.johnnysc.holybibleapp.domain.verses.VersesDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.verses.VersesInteractor
 import com.github.johnnysc.holybibleapp.presentation.main.BaseViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -22,7 +23,7 @@ class VersesViewModel(
 ) : BaseViewModel(resourceProvider) {
 
     fun fetchVerses() {
-        communication.map(VersesUi.Base(listOf(VerseUi.Progress), getTitle()))
+        communication.map(VersesUi.Base(listOf(VerseUi.Progress), title()))
         viewModelScope.launch(Dispatchers.IO) {
             val list = interactor.fetchVerses()
             val ui = list.map(mapper)
@@ -43,4 +44,9 @@ class VersesViewModel(
 
     override fun scrollPosition() = interactor.scrollPosition()
     override fun saveScrollPosition(position: Int) = interactor.saveScrollPosition(position)
+
+    fun showNextChapterVerses() {
+        interactor.showNextChapter()
+        fetchVerses()
+    }
 }

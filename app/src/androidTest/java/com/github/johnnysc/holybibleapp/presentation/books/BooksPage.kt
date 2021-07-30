@@ -14,4 +14,7 @@ class BooksPage {
     val firstBookOldTestamentEnglish = "Genesis"
     val firstBookNewTestamentEnglish = "Matthew"
     val firstBookOldTestamentRussian = "Бытие"
+
+    val fewChaptersBookRussian = "Руфь"
+    val fewChaptersBookPosition = 8
 }

@@ -7,7 +7,7 @@ import com.github.johnnysc.holybibleapp.core.Read
  **/
 interface MainNavigator : Read<Int>, NavigateBack {
 
-    fun getFragment(id: Int): BaseFragment<*>
+    fun fragment(id: Int): BaseFragment<*>
     fun showLanguagesFragment(communication: NavigationCommunication)
 }
 

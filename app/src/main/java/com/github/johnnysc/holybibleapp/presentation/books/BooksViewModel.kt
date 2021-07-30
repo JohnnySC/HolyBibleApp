@@ -5,12 +5,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
-import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
 import com.github.johnnysc.holybibleapp.core.Save
 import com.github.johnnysc.holybibleapp.core.Show
 import com.github.johnnysc.holybibleapp.domain.books.BooksDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.books.BooksInteractor
 import com.github.johnnysc.holybibleapp.presentation.main.BaseViewModel
+import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -26,10 +26,13 @@ class BooksViewModel(
     private val bookCache: Save<Int>,
     private val navigator: BooksNavigator,
     private val navigationCommunication: NavigationCommunication,
-    resourceProvider: ResourceProvider
+    resourceProvider: ResourceProvider,
+    private val clearBooks: () -> Unit
 ) : BaseViewModel(resourceProvider), Show {
 
-    override fun getTitleResId() = R.string.app_name
+    private var clear: Boolean = true
+
+    override fun titleResId() = R.string.app_name
 
     fun fetchBooks() {
         communication.map(BooksUi.Base(listOf(BookUi.Progress)))
@@ -50,6 +53,7 @@ class BooksViewModel(
 
     override fun open(id: Int) {
         bookCache.save(id)
+        clear = false
         navigator.nextScreen(navigationCommunication)
     }
 
@@ -61,5 +65,10 @@ class BooksViewModel(
     fun init() {
         navigator.saveBooksScreen()
         fetchBooks()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        if (clear) clearBooks()
     }
 }

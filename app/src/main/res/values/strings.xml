@@ -12,4 +12,5 @@
     <string name="russian">Russian</string>
     <string name="book_and_chapter">%s Ch.%d</string>
     <string name="loading">Loading…</string>
+    <string name="next_chapter">Go to next chapter</string>
 </resources>

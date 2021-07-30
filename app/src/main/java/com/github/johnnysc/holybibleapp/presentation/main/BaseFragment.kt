@@ -31,7 +31,7 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment(), Matcher<String> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = (requireActivity() as MainActivity).getViewModel(viewModelClass(), this)
+        viewModel = (requireActivity() as MainActivity).viewModel(viewModelClass(), this)
     }
 
     override fun onCreateView(
@@ -51,7 +51,7 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment(), Matcher<String> {
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(
             showBackIcon()
         )
-        title().map(viewModel.getTitle())
+        title().map(viewModel.title())
         layoutManager = LinearLayoutManager(requireContext())
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView?.layoutManager = layoutManager

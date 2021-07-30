@@ -4,12 +4,12 @@ import android.content.Context
 import com.github.johnnysc.holybibleapp.core.RealmProvider
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.core.ScrollPositionCache
-import com.github.johnnysc.holybibleapp.presentation.main.MainViewModel
-import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
-import com.github.johnnysc.holybibleapp.presentation.main.Navigator
 import com.github.johnnysc.holybibleapp.presentation.books.BookCache
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterCache
 import com.github.johnnysc.holybibleapp.presentation.languages.Language
+import com.github.johnnysc.holybibleapp.presentation.main.MainViewModel
+import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
+import com.github.johnnysc.holybibleapp.presentation.main.Navigator
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -82,5 +82,5 @@ class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
 
     fun <T> makeService(clazz: Class<T>): T = retrofit.create(clazz)
 
-    override fun getViewModel() = MainViewModel(navigator, navigationCommunication)
+    override fun viewModel() = MainViewModel(navigator, navigationCommunication)
 }

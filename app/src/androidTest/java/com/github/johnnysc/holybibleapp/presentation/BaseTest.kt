@@ -18,10 +18,10 @@ import androidx.test.uiautomator.UiSelector
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.RealmProvider
 import com.github.johnnysc.holybibleapp.core.RecyclerViewMatcher
+import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.core.lazyActivityScenarioRule
 import com.github.johnnysc.holybibleapp.presentation.languages.ChosenLanguage
 import com.github.johnnysc.holybibleapp.presentation.main.MainActivity
-import org.hamcrest.core.IsNot.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.runner.RunWith
@@ -68,7 +68,12 @@ abstract class BaseTest {
     protected open fun doBeforeActivityStart() {}
 
     protected fun selectLanguage(english: Boolean) {
+        val resources = ResourceProvider.Base(appContext)
         languagesPreferences.edit().putInt("mockLanguagesKey", if (english) 0 else 1).apply()
+        if (english)
+            resources.chooseEnglish()
+        else
+            resources.chooseRussian()
     }
 
     protected fun startWithScreenId(id: Int) {
@@ -100,6 +105,10 @@ abstract class BaseTest {
 
     protected fun Int.performTap() {
         onView(withId(this)).perform(click())
+    }
+
+    protected fun String.performTap() {
+        onView(withText(this)).perform(click())
     }
 
     protected fun killAppAndReturn() {

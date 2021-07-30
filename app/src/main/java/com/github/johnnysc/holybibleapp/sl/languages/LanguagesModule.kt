@@ -13,7 +13,7 @@ class LanguagesModule(
     private val coreModule: CoreModule
 ) : BaseModule<LanguagesViewModel> {
 
-    override fun getViewModel() = LanguagesViewModel(
+    override fun viewModel() = LanguagesViewModel(
         LanguagesCommunication.Base(),
         Language.Change(coreModule.language, coreModule.realmProvider, coreModule.resourceProvider),
         coreModule.navigationCommunication,

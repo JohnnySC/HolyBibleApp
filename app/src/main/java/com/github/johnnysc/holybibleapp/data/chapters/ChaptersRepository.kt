@@ -27,7 +27,7 @@ interface ChaptersRepository : Repository<ChaptersData> {
     ), ChaptersRepository {
         private val bookId by lazy { bookIdContainer.read() }
         override suspend fun fetchCloudData() = cloudDataSource.fetchChapters(bookId)
-        override fun getCachedDataList() = cacheDataSource.fetchChapters(ChapterId.Base(bookId))
+        override fun cachedDataList() = cacheDataSource.fetchChapters(ChapterId.Base(bookId))
         override fun returnSuccess(list: List<ChapterData>) = ChaptersData.Success(list)
         override fun returnFail(e: Exception) = ChaptersData.Fail(e)
     }

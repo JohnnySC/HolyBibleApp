@@ -11,10 +11,10 @@ import com.github.johnnysc.holybibleapp.core.ResourceProvider
 abstract class BaseViewModel(private val resourceProvider: ResourceProvider) : ViewModel(),
     ScrollPosition {
 
-    fun getTitle(): String = resourceProvider.getString(getTitleResId())
+    fun title(): String = resourceProvider.string(titleResId())
 
     @StringRes
-    open fun getTitleResId(): Int = R.string.loading
+    open fun titleResId(): Int = R.string.loading
 }
 
 interface ScrollPosition {
