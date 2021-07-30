@@ -1,9 +1,9 @@
 package com.github.johnnysc.holybibleapp.presentation.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
@@ -15,18 +15,18 @@ class MainActivity : AppCompatActivity(), TextMapper {
 
     private lateinit var viewModel: MainViewModel
 
-    fun <T : ViewModel> getViewModel(model: Class<T>, owner: ViewModelStoreOwner) =
-        (application as BibleApp).getViewModel(model, owner)
+    fun <T : ViewModel> viewModel(model: Class<T>, owner: ViewModelStoreOwner) =
+        (application as BibleApp).viewModel(model, owner)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        viewModel = getViewModel(MainViewModel::class.java, this)
+        viewModel = viewModel(MainViewModel::class.java, this)
 
         viewModel.observe(this, {
-            navigate(viewModel.getFragment(it))
+            navigate(viewModel.fragment(it))
         })
         viewModel.init(savedInstanceState == null)
     }

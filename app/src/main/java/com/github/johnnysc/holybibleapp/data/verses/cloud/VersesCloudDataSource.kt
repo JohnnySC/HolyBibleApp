@@ -67,11 +67,20 @@ interface VersesCloudDataSource {
         }
     }
 
-    class Mock(
-        private val rawResourceReader: RawResourceReader,
-        gson: Gson
-    ) : VersesCloudDataSource.Abstract(gson) {
-        override suspend fun getDataAsString(bookId: Int, chapterId: Int) =
-            rawResourceReader.readText(R.raw.verses_successful_response)
+    class Mock : VersesCloudDataSource {
+        override suspend fun fetchVerses(bookId: Int, chapterId: Int): List<VerseCloud> {
+            val list = mutableListOf<VerseCloud>()
+            for (i in 0..10) {
+                list.add(
+                    VerseCloud.Base(
+                        1_000_000 * bookId + 1000 * chapterId + i,
+                        i,
+                        "Mock data $bookId $chapterId $i"
+                    )
+                )
+            }
+            return list
+        }
+
     }
 }

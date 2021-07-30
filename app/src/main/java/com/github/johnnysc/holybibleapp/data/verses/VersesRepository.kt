@@ -28,10 +28,11 @@ interface VersesRepository : Repository<VersesData> {
         cacheMapper
     ), VersesRepository {
         private val bookId by lazy { bookIdContainer.read() }
-        private val chapterId by lazy { chapterIdContainer.read() }
+        private val chapterId
+            get() = chapterIdContainer.read()
 
         override suspend fun fetchCloudData() = cloudDataSource.fetchVerses(bookId, chapterId)
-        override fun getCachedDataList() =
+        override fun cachedDataList() =
             cacheDataSource.fetchVerses(VersesLimits(bookId, chapterId))
 
         override fun returnSuccess(list: List<VerseData>) = VersesData.Success(list)

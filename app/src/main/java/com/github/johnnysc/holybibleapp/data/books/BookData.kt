@@ -31,7 +31,7 @@ interface BookData : Matcher<TestamentTemp>, Save<TestamentTemp>, Abstract.DataO
         override fun matches(arg: TestamentTemp) = arg.matches(testament)
         override fun save(data: TestamentTemp) = data.save(testament)
         override fun build(resourceProvider: ResourceProvider, id: Int, arg: Any) =
-            resourceProvider.getString(id, name, arg)
+            resourceProvider.string(id, name, arg)
     }
 
     class Empty : BookData {

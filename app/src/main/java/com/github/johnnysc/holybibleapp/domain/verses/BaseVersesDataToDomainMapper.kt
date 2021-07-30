@@ -12,9 +12,12 @@ class BaseVersesDataToDomainMapper(
     private val mapper: VerseDataToDomainMapper<VerseDomain>
 ) : VersesDataToDomainMapper<VersesDomain>() {
 
-    override fun map(data: Triple<List<VerseData>, BuildString, Int>) = VersesDomain.Success(
-        data.first.map { verseData -> verseData.map(mapper) }, data.second, data.third
-    )
+    override fun map(data: Triple<List<VerseData>, BuildString, Pair<Int, Boolean>>): VersesDomain.Success {
+        val list = ArrayList(data.first.map { verseData -> verseData.map(mapper) })
+        if (!data.third.second)
+            list.add(VerseDomain.Next)
+        return VersesDomain.Success(list, data.second, data.third.first)
+    }
 
     override fun map(e: Exception) = VersesDomain.Fail(errorType(e))
 }

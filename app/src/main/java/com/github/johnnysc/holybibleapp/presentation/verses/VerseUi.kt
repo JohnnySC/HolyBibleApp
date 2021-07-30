@@ -8,13 +8,13 @@ import com.github.johnnysc.holybibleapp.core.TextMapper
  **/
 sealed class VerseUi : ComparableTextMapper<VerseUi> {
 
-    class Base(private val text: String) : VerseUi() {
+    abstract class Abstract(private val text: String) : VerseUi() {
         override fun map(mapper: TextMapper) = mapper.map(text)
     }
 
-    class Fail(private val text: String) : VerseUi() {
-        override fun map(mapper: TextMapper) = mapper.map(text)
-    }
+    class Base(text: String) : Abstract(text)
+    class Fail(text: String) : Abstract(text)
+    class Next(text: String) : Abstract(text)
 
     object Progress : VerseUi() {
         override fun map(mapper: TextMapper) = Unit

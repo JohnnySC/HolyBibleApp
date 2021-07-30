@@ -1,7 +1,7 @@
 package com.github.johnnysc.holybibleapp.core
 
-import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertTrue
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.io.IOException
 import java.lang.Exception

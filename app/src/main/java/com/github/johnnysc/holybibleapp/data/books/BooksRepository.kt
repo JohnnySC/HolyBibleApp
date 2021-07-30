@@ -25,7 +25,7 @@ interface BooksRepository : Repository<BooksData> {
     ), BooksRepository {
 
         override suspend fun fetchCloudData() = cloudDataSource.fetchBooks()
-        override fun getCachedDataList() = cacheDataSource.read()
+        override fun cachedDataList() = cacheDataSource.read()
         override fun returnSuccess(list: List<BookData>) = BooksData.Success(list)
         override fun returnFail(e: Exception) = BooksData.Fail(e)
     }

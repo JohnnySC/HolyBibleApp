@@ -17,7 +17,25 @@ class CustomTextView : androidx.appcompat.widget.AppCompatTextView, TextMapper {
         defStyleAttr
     )
     //endregion
-    override fun map(data: String) = setText(data)
+    override fun map(data: String) {
+        text = data
+    }
+}
+
+class CustomButton : androidx.appcompat.widget.AppCompatButton, TextMapper {
+    //region constructors
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
+
+    //endregion
+    override fun map(data: String) {
+        text = data
+    }
 }
 
 interface TextMapper : Abstract.Mapper.Data<String, Unit>
@@ -33,7 +51,9 @@ class CustomRadioButton : androidx.appcompat.widget.AppCompatRadioButton, TextMa
     )
     //endregion
 
-    override fun map(data: String) = setText(data)
+    override fun map(data: String) {
+        text = data
+    }
 }
 
 class CollapseView : androidx.appcompat.widget.AppCompatImageView, CollapseMapper {

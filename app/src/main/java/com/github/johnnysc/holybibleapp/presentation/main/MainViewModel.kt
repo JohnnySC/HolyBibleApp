@@ -28,6 +28,6 @@ class MainViewModel(
         return !canNavigateBack
     }
 
-    fun getFragment(id: Int) = navigator.getFragment(id)
+    fun fragment(id: Int) = navigator.fragment(id)
     fun showLanguagesScreen() = navigator.showLanguagesFragment(communication)
 }

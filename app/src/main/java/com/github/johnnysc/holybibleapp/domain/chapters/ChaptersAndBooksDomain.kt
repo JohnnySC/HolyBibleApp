@@ -28,7 +28,7 @@ class ChaptersAndBooksDomain(
 
     override fun map(mapper: ChaptersDataToDomainMapper<ChaptersDomain>) = when {
         books is BooksData.Success && chapters is ChaptersData.Success ->
-            chapters.map(mapper, books.getById(bookId.read()))
+            chapters.map(mapper, books.byId(bookId.read()))
 
         chapters is ChaptersData.Fail -> chapters.map(mapper, empty)
 
