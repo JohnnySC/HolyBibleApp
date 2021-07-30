@@ -44,6 +44,9 @@ https://www.youtube.com/playlist?list=PLQRyeBV1rkk2xIL3ViHAEZ0h08wMOfutO
 
 11.release/1.0
 
-12.release/1.1
+12.feature/HB06_russian
 
+13.release/1.1
+
+14. feature/HB07_scrollposition
 //todo add next steps
