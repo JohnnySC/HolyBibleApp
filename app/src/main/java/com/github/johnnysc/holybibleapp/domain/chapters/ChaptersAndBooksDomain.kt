@@ -12,6 +12,7 @@ import com.github.johnnysc.holybibleapp.data.chapters.ChaptersDataToDomainMapper
 import com.github.johnnysc.holybibleapp.domain.books.BooksDomain
 
 /**
+ * todo unit test
  * @author Asatryan on 24.07.2021
  **/
 class ChaptersAndBooksDomain(

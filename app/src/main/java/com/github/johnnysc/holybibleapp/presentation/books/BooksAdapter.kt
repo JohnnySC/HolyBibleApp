@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.*
+import java.lang.IllegalStateException
 
 /**
  * @author Asatryan on 27.06.2021
@@ -26,7 +27,8 @@ class BooksAdapter(
         0 -> BooksViewHolder.Base(R.layout.text_layout.makeView(parent), bookListener)
         1 -> BaseViewHolder.Fail(R.layout.fail_fullscreen.makeView(parent), retry)
         2 -> BooksViewHolder.Testament(R.layout.testament.makeView(parent), collapseListener)
-        else -> BaseViewHolder.FullscreenProgress(R.layout.progress_fullscreen.makeView(parent))
+        3 -> BaseViewHolder.FullscreenProgress(R.layout.progress_fullscreen.makeView(parent))
+        else -> throw IllegalStateException("unknown viewType $viewType")
     }
 
     abstract class BooksViewHolder(view: View) : BaseViewHolder<BookUi>(view) {
