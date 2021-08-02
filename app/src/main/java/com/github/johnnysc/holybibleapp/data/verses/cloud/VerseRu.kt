@@ -17,7 +17,8 @@ data class VerseRuWrapper(
     private val id: Int,
     private val verse: String,
 ) : VerseCloud {
-    override fun <T> map(mapper: ToVerseMapper<T>): T {
-        return mapper.map(finalId, id, verse)
-    }
+    override fun <T> map(mapper: ToVerseMapper<T>, isFavorite: Boolean) =
+        mapper.map(finalId, id, verse, isFavorite)
+
+    override fun matches(arg: Int) = arg == finalId
 }

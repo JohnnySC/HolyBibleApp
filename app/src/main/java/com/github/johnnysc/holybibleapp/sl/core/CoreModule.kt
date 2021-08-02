@@ -32,7 +32,7 @@ class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
     lateinit var navigator: Navigator
     lateinit var navigationCommunication: NavigationCommunication
     lateinit var bookCache: BookCache
-    lateinit var chapterCache: ChapterCache //todo move to common for 2 modules
+    lateinit var chapterCache: ChapterCache //todo move to chapter repository
     lateinit var language: Language
     private lateinit var retrofit: Retrofit
 

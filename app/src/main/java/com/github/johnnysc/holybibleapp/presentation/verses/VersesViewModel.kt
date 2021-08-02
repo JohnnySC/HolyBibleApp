@@ -3,6 +3,7 @@ package com.github.johnnysc.holybibleapp.presentation.verses
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
+import com.github.johnnysc.holybibleapp.core.ChangeFavorite
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.domain.verses.VersesDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.verses.VersesInteractor
@@ -20,10 +21,10 @@ class VersesViewModel(
     private val communication: VersesCommunication,
     private val mapper: VersesDomainToUiMapper<VersesUi>,
     resourceProvider: ResourceProvider
-) : BaseViewModel(resourceProvider) {
+) : BaseViewModel(resourceProvider), ChangeFavorite<Int> {
 
     fun fetchVerses() {
-        communication.map(VersesUi.Base(listOf(VerseUi.Progress), title()))
+        communication.map(VersesUi.Base(ArrayList(listOf(VerseUi.Progress)), title()))
         viewModelScope.launch(Dispatchers.IO) {
             val list = interactor.fetchVerses()
             val ui = list.map(mapper)
@@ -48,5 +49,9 @@ class VersesViewModel(
     fun showNextChapterVerses() {
         interactor.showNextChapter()
         fetchVerses()
+    }
+
+    override fun changeFavorite(id: Int) {
+        super.changeFavorite(id, communication, interactor)
     }
 }

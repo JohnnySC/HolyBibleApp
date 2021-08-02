@@ -5,6 +5,7 @@ import com.github.johnnysc.holybibleapp.data.books.ToBookMapper
 import com.github.johnnysc.holybibleapp.data.books.cache.BookDataToDbMapper
 import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheDataSource
 import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheMapper
+import com.github.johnnysc.holybibleapp.data.books.cloud.BookRu
 import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudDataSource
 import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudMapper
 import com.github.johnnysc.holybibleapp.data.books.cloud.BooksService
@@ -17,6 +18,7 @@ import com.github.johnnysc.holybibleapp.sl.core.RepositoryContainer
 class BooksRepositoryContainer(
     private val coreModule: CoreModule,
     private val useMocks: Boolean,
+    private val booksRu: () -> List<BookRu>
 ) : RepositoryContainer<BooksRepository> {
 
     override fun repository(): BooksRepository {
@@ -34,17 +36,18 @@ class BooksRepositoryContainer(
 
     private fun booksCloudDataSource() = BooksCloudDataSource.Base(
         coreModule.language,
-        BooksCloudDataSource.English(booksService(), coreModule.gson),
-        BooksCloudDataSource.Russian(coreModule.resourceProvider, coreModule.gson)
+        english(),
+        russian()
     )
 
+    private fun english() = BooksCloudDataSource.English(booksService(), coreModule.gson)
+
     private fun mockBooksCloudDataSource() = if (coreModule.language.isChosenRussian())
-        russianBookCloudDataSource()
+        russian()
     else
         BooksCloudDataSource.Mock(coreModule.resourceProvider, coreModule.gson)
 
-    private fun russianBookCloudDataSource() =
-        BooksCloudDataSource.Russian(coreModule.resourceProvider, coreModule.gson)
+    private fun russian() = BooksCloudDataSource.Russian(booksRu)
 
     private fun booksService() = coreModule.makeService(BooksService::class.java)
 }

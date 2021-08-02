@@ -6,6 +6,7 @@ import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.presentation.main.BaseViewModel
 import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
+import com.github.johnnysc.holybibleapp.sl.core.ClearRussianBooks
 
 /**
  * @author Asatryan on 18.07.2021
@@ -15,7 +16,8 @@ class LanguagesViewModel(
     private val language: Language,
     private val navigationCommunication: NavigationCommunication,
     private val navigator: LanguagesNavigator,
-    private val resourceProvider: ResourceProvider
+    private val resourceProvider: ResourceProvider,
+    private val clearRussianBooks: ClearRussianBooks
 ) : BaseViewModel(resourceProvider) {
 
     override fun titleResId() = R.string.choose_language
@@ -24,6 +26,7 @@ class LanguagesViewModel(
         communication.observe(owner, observer)
 
     fun chooseEnglish() {
+        clearRussianBooks.clearBooksRu()
         language.chooseEnglish()
         navigate()
     }

@@ -4,13 +4,15 @@ import com.github.johnnysc.holybibleapp.presentation.languages.Language
 import com.github.johnnysc.holybibleapp.presentation.languages.LanguagesCommunication
 import com.github.johnnysc.holybibleapp.presentation.languages.LanguagesViewModel
 import com.github.johnnysc.holybibleapp.sl.core.BaseModule
+import com.github.johnnysc.holybibleapp.sl.core.ClearRussianBooks
 import com.github.johnnysc.holybibleapp.sl.core.CoreModule
 
 /**
  * @author Asatryan on 18.07.2021
  **/
 class LanguagesModule(
-    private val coreModule: CoreModule
+    private val coreModule: CoreModule,
+    private val clearRussianBooks: ClearRussianBooks
 ) : BaseModule<LanguagesViewModel> {
 
     override fun viewModel() = LanguagesViewModel(
@@ -18,6 +20,7 @@ class LanguagesModule(
         Language.Change(coreModule.language, coreModule.realmProvider, coreModule.resourceProvider),
         coreModule.navigationCommunication,
         coreModule.navigator,
-        coreModule.resourceProvider
+        coreModule.resourceProvider,
+        clearRussianBooks
     )
 }

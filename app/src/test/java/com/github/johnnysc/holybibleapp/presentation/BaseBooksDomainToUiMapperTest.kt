@@ -14,6 +14,7 @@ import org.junit.Test
 
 /**
  * Test for [BaseBooksDomainToUiMapper]
+ *
  * @author Asatryan on 04.07.2021
  */
 class BaseBooksDomainToUiMapperTest {
@@ -23,23 +24,23 @@ class BaseBooksDomainToUiMapperTest {
         val resourceProvider = TestResourceProvider()
         val mapper =
             BaseBooksDomainToUiMapper(resourceProvider, object : BookDomainToUiMapper<BookUi> {
-                override fun map(id: Int, name: String): BookUi {
+                override fun map(id: Int, name: String, isFavorite: Boolean): BookUi {
                     throw IllegalStateException("not used here")
                 }
             }, object : UiDataCache {
-                override fun cache(list: List<BookUi>) = BooksUi.Base(list)
-                override fun changeState(id: Int) = emptyList<BookUi>()
+                override fun cache(list: List<BookUi>) = ArrayList(list)
+                override fun changeState(id: Int) = ArrayList<BookUi>()
                 override fun saveState() = Unit
-
+                override fun changeFavorite(id: Int) = Unit
             })
         var actual = mapper.map(ErrorType.NO_CONNECTION)
-        var expected = BooksUi.Base(listOf(BookUi.Fail("noConnection")))
+        var expected = BooksUi.Base(mutableListOf(BookUi.Fail("noConnection")))
         assertEquals(expected, actual)
         actual = mapper.map(ErrorType.SERVICE_UNAVAILABLE)
-        expected = BooksUi.Base(listOf(BookUi.Fail("serviceUnavailable")))
+        expected = BooksUi.Base(mutableListOf(BookUi.Fail("serviceUnavailable")))
         assertEquals(expected, actual)
         actual = mapper.map(ErrorType.GENERIC_ERROR)
-        expected = BooksUi.Base(listOf(BookUi.Fail("somethingWentWrong")))
+        expected = BooksUi.Base(mutableListOf(BookUi.Fail("somethingWentWrong")))
         assertEquals(expected, actual)
     }
 

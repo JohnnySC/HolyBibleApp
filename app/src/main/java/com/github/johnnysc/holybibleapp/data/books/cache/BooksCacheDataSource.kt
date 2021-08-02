@@ -1,6 +1,9 @@
 package com.github.johnnysc.holybibleapp.data.books.cache
 
-import com.github.johnnysc.holybibleapp.core.*
+import com.github.johnnysc.holybibleapp.core.CacheDataSource
+import com.github.johnnysc.holybibleapp.core.DbWrapper
+import com.github.johnnysc.holybibleapp.core.Read
+import com.github.johnnysc.holybibleapp.core.RealmProvider
 import com.github.johnnysc.holybibleapp.data.books.BookData
 import io.realm.Realm
 
@@ -10,9 +13,9 @@ import io.realm.Realm
 interface BooksCacheDataSource : Read<List<BookDb>>, CacheDataSource<BookData> {
 
     class Base(
-        private val realmProvider: RealmProvider,
+        realmProvider: RealmProvider,
         private val mapper: BookDataToDbMapper<BookDb>,
-    ) : BooksCacheDataSource {
+    ) : CacheDataSource.Abstract<BookData>(realmProvider), BooksCacheDataSource {
 
         override fun read(): List<BookDb> {
             realmProvider.provide().use { realm ->

@@ -2,10 +2,11 @@ package com.github.johnnysc.holybibleapp.data.chapters.cloud
 
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.RawResourceReader
-import com.github.johnnysc.holybibleapp.data.books.cloud.RussianTranslation
+import com.github.johnnysc.holybibleapp.data.books.cloud.BookRu
 import com.github.johnnysc.holybibleapp.presentation.languages.ChosenLanguage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.lang.IllegalStateException
 
 /**
  * @author Asatryan on 11.07.2021
@@ -44,22 +45,10 @@ interface ChaptersCloudDataSource {
         override suspend fun getDataAsString(bookId: Int) = service.fetchChapters(bookId).string()
     }
 
-    class Russian(
-        private val resourceReader: RawResourceReader,
-        private val gson: Gson
-    ) : ChaptersCloudDataSource {
-        override suspend fun fetchChapters(bookId: Int): List<ChapterCloud> {
-            val text = resourceReader.readText(R.raw.synodal)
-            val response = gson.fromJson<RussianTranslation>(
-                text,
-                object : TypeToken<RussianTranslation>() {}.type
-            )
-
-            val book = response.contentAsList().find {
-                it.matches(bookId)
-            }!!
-            return book.contentAsList()
-        }
+    class Russian(private val booksRu: () -> List<BookRu>) : ChaptersCloudDataSource {
+        override suspend fun fetchChapters(bookId: Int) = booksRu().find {
+            it.matches(bookId)
+        }?.contentAsList() ?: throw IllegalStateException("bookId not found")
     }
 
     class Mock(

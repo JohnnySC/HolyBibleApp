@@ -15,8 +15,6 @@ data class ChapterRu(
 ) : ChapterCloud, Matcher<Int>, Content<Pair<Int, VerseRu>> {
     override fun matches(arg: Int) = number == arg
     override fun contentAsList() = content.map { (key, value) -> Pair(key.toInt(), value) }
-
-    override fun <T> map(mapper: ToChapterMapper<T>): T {
-        return mapper.map(number)
-    }
+    override fun <T> map(mapper: ToChapterMapper<T>, isFavorite: Boolean) =
+        mapper.map(number, isFavorite)
 }

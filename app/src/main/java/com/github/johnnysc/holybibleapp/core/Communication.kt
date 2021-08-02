@@ -12,11 +12,19 @@ interface Communication<T> {
     fun observe(owner: LifecycleOwner, observer: Observer<T>)
 
     abstract class Base<T : Any> : Communication<T> {
-        private val liveData = MutableLiveData<T>()
+        protected val liveData = MutableLiveData<T>()
         override fun map(data: T) {
             liveData.value = data
         }
+
         override fun observe(owner: LifecycleOwner, observer: Observer<T>) =
             liveData.observe(owner, observer)
+
+        abstract class Favorites<T : ChangeFavorite<Int>> : Base<T>(), ChangeFavorite<Int> {
+            override fun changeFavorite(id: Int) {
+                liveData.value?.changeFavorite(id)
+                liveData.value?.let { map(it) }
+            }
+        }
     }
 }

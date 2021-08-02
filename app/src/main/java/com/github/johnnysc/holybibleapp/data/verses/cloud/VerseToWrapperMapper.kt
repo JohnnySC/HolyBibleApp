@@ -1,6 +1,7 @@
 package com.github.johnnysc.holybibleapp.data.verses.cloud
 
 import com.github.johnnysc.holybibleapp.core.Abstract
+import com.github.johnnysc.holybibleapp.core.Multiply
 
 /**
  * @author Asatryan on 27.07.2021
@@ -15,12 +16,8 @@ interface VerseToWrapperMapper : Abstract.Mapper {
         private val id: Int
     ) : VerseToWrapperMapper {
         override fun map(text: String): VerseCloud {
-            val finalId = MULTIPLY * MULTIPLY * bookId + MULTIPLY * chapterId + id
+            val finalId = Multiply(2).map(bookId) + Multiply(1).map(chapterId) + id
             return VerseRuWrapper(finalId, id, text)
-        }
-
-        private companion object {
-            const val MULTIPLY = 1000
         }
     }
 }

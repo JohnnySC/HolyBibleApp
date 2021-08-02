@@ -18,11 +18,11 @@ class BaseVersesDomainToUiMapper(
 
     override fun map(data: Triple<List<VerseDomain>, BuildString, Int>) =
         VersesUi.Base(
-            data.first.map { verse -> verse.map(mapper) },
+            ArrayList(data.first.map { verse -> verse.map(mapper) }),
             data.second.build(resourceProvider, R.string.book_and_chapter, data.third)
         )
 
     override fun map(errorType: ErrorType) = errorMessage(errorType).let {
-        VersesUi.Base(listOf(VerseUi.Fail(it)), it)
+        VersesUi.Base(mutableListOf(VerseUi.Fail(it)), it)
     }
 }

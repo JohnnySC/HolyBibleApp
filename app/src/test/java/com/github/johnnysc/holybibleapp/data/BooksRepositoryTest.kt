@@ -1,6 +1,9 @@
 package com.github.johnnysc.holybibleapp.data
 
-import com.github.johnnysc.holybibleapp.data.books.*
+import com.github.johnnysc.holybibleapp.core.Limits
+import com.github.johnnysc.holybibleapp.data.books.BookData
+import com.github.johnnysc.holybibleapp.data.books.BooksData
+import com.github.johnnysc.holybibleapp.data.books.BooksRepository
 import com.github.johnnysc.holybibleapp.data.books.cache.BookDb
 import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheDataSource
 import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheMapper
@@ -8,7 +11,7 @@ import com.github.johnnysc.holybibleapp.data.books.cloud.BookCloud
 import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudDataSource
 import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudMapper
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.net.UnknownHostException
 
@@ -150,5 +153,8 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
         override fun save(data: List<BookData>) {
             // not used here
         }
+
+        override fun favorites(limits: Limits) = ArrayList<Int>()
+        override fun changeFavorite(id: Int) = Unit
     }
 }

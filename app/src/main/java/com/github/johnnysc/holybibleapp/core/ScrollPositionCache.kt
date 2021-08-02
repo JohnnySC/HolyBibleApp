@@ -1,36 +1,48 @@
 package com.github.johnnysc.holybibleapp.core
 
-import com.github.johnnysc.holybibleapp.data.books.BooksScrollPositionCache
-import com.github.johnnysc.holybibleapp.data.chapters.ChaptersScrollPositionCache
-import com.github.johnnysc.holybibleapp.data.verses.VersesScrollPositionCache
+import com.github.johnnysc.holybibleapp.sl.core.Feature
 
 /**
  * @author Asatryan on 28.07.2021
  **/
-interface ScrollPositionCache : BooksScrollPositionCache, ChaptersScrollPositionCache,
-    VersesScrollPositionCache {
+interface ScrollPositionCache {
+
+    fun saveScrollPosition(feature: Feature, position: Int)
+    fun scrollPosition(feature: Feature): Int
 
     abstract class Abstract(provider: PreferencesProvider) :
         ScrollPositionCache {
 
         private val sharedPreferences by lazy { provider.provideSharedPreferences(fileName()) }
 
-        override fun saveBooksScrollPosition(position: Int) {
-            save(BOOKS, position)
-            save(CHAPTERS, 0)
-            save(VERSES, 0)
+        override fun saveScrollPosition(feature: Feature, position: Int) {
+            when (feature) {
+                Feature.BOOKS -> saveBooksScrollPosition(position)
+                Feature.CHAPTERS -> saveChaptersScrollPosition(position)
+                Feature.VERSES -> saveVersesScrollPosition(position)
+                else -> throw IllegalStateException("unknown feature $feature")
+            }
         }
 
-        override fun saveChaptersScrollPosition(position: Int) {
-            save(CHAPTERS, position)
-            save(VERSES, 0)
+        override fun scrollPosition(feature: Feature) = when (feature) {
+            Feature.BOOKS,
+            Feature.CHAPTERS,
+            Feature.VERSES -> get(feature.name)
+            else -> throw IllegalStateException("unknown feature $feature")
         }
 
-        override fun saveVersesScrollPosition(position: Int) = save(VERSES, position)
+        private fun saveBooksScrollPosition(position: Int) {
+            save(Feature.BOOKS.name, position)
+            save(Feature.CHAPTERS.name, 0)
+            save(Feature.VERSES.name, 0)
+        }
 
-        override fun booksScrollPosition() = get(BOOKS)
-        override fun chaptersScrollPosition() = get(CHAPTERS)
-        override fun versesScrollPosition() = get(VERSES)
+        private fun saveChaptersScrollPosition(position: Int) {
+            save(Feature.CHAPTERS.name, position)
+            save(Feature.VERSES.name, 0)
+        }
+
+        private fun saveVersesScrollPosition(position: Int) = save(Feature.VERSES.name, position)
 
         protected abstract fun fileName(): String
         protected abstract fun keySuffix(): String
@@ -40,12 +52,6 @@ interface ScrollPositionCache : BooksScrollPositionCache, ChaptersScrollPosition
 
         private fun get(featureName: String) =
             sharedPreferences.getInt(featureName + keySuffix(), 0)
-
-        private companion object {
-            const val BOOKS = "BOOKS"
-            const val CHAPTERS = "CHAPTERS"
-            const val VERSES = "VERSES"
-        }
     }
 
     class Base(provider: PreferencesProvider) : Abstract(provider) {

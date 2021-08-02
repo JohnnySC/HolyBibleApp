@@ -10,6 +10,7 @@ import com.github.johnnysc.holybibleapp.data.books.ToBookMapper
 abstract class BaseBooksRepositoryTest {
 
     protected class TestToBookMapper : ToBookMapper<BookData> {
-        override fun map(id: Int, name: String, testament: String) = BookData.Base(id, name, testament)
+        override fun map(id: Int, name: String, testament: String, isFavorite: Boolean) =
+            BookData.Base(id, name, testament, isFavorite)
     }
 }

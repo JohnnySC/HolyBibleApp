@@ -4,6 +4,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.holybibleapp.R
+import com.github.johnnysc.holybibleapp.core.ChangeFavorite
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.core.Save
 import com.github.johnnysc.holybibleapp.core.Show
@@ -28,14 +29,14 @@ class BooksViewModel(
     private val navigationCommunication: NavigationCommunication,
     resourceProvider: ResourceProvider,
     private val clearBooks: () -> Unit
-) : BaseViewModel(resourceProvider), Show {
+) : BaseViewModel(resourceProvider), Show<Int>, ChangeFavorite<Int> {
 
     private var clear: Boolean = true
 
     override fun titleResId() = R.string.app_name
 
     fun fetchBooks() {
-        communication.map(BooksUi.Base(listOf(BookUi.Progress)))
+        communication.map(BooksUi.Base(mutableListOf(BookUi.Progress)))
         viewModelScope.launch(Dispatchers.IO) {
             val resultDomain = booksInteractor.fetchBooks()
             val resultUi = resultDomain.map(mapper)
@@ -49,7 +50,10 @@ class BooksViewModel(
         communication.observe(owner, observer)
     }
 
-    fun collapseOrExpand(id: Int) = communication.map(BooksUi.Base(uiDataCache.changeState(id)))
+    fun collapseOrExpand(id: Int) {
+        communication.map(BooksUi.Base(uiDataCache.changeState(id)))
+        save()
+    }
 
     override fun open(id: Int) {
         bookCache.save(id)
@@ -70,5 +74,9 @@ class BooksViewModel(
     override fun onCleared() {
         super.onCleared()
         if (clear) clearBooks()
+    }
+
+    override fun changeFavorite(id: Int) {
+        super.changeFavorite(id, communication, booksInteractor, uiDataCache)
     }
 }

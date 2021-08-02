@@ -17,11 +17,9 @@ class BaseVersesDataToDomainMapperTest {
     fun test_last_item() {
         val mapper = BaseVersesDataToDomainMapper(BaseVerseDataToDomainMapper())
         val buildString = object : BuildString {
-            override fun build(resourceProvider: ResourceProvider, id: Int, arg: Any): String {
-                return "mocked"
-            }
+            override fun build(resourceProvider: ResourceProvider, id: Int, arg: Any) = "mocked"
         }
-        val list = listOf(VerseDomain.Base(1001, "verse1"))
+        val list = listOf(VerseDomain.Base(1, 1001, "verse1"))
         val expected = VersesDomain.Success(list, buildString, 0)
         val actual = mapper.map(
             Triple(
@@ -42,7 +40,7 @@ class BaseVersesDataToDomainMapperTest {
             }
         }
         val list = listOf(
-            VerseDomain.Base(1001, "verse1"),
+            VerseDomain.Base(1, 1001, "verse1"),
             VerseDomain.Next
         )
         val expected = VersesDomain.Success(list, buildString, 0)

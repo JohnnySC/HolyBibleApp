@@ -10,7 +10,7 @@ import com.github.johnnysc.holybibleapp.domain.books.TestamentType
  **/
 class BaseBookDomainToUiMapper(private val resourceProvider: ResourceProvider) :
     BookDomainToUiMapper<BookUi> {
-    override fun map(id: Int, name: String) = when {
+    override fun map(id: Int, name: String, isFavorite: Boolean) = when {
         TestamentType.NEW.matches(id) -> BookUi.Testament(
             id,
             resourceProvider.string(R.string.new_testament)
@@ -19,6 +19,6 @@ class BaseBookDomainToUiMapper(private val resourceProvider: ResourceProvider) :
             id,
             resourceProvider.string(R.string.old_testament)
         )
-        else -> BookUi.Base(id, name)
+        else -> BookUi.Base(id, name, isFavorite)
     }
 }

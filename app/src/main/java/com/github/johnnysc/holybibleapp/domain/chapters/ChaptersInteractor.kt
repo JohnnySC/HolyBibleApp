@@ -1,16 +1,17 @@
 package com.github.johnnysc.holybibleapp.domain.chapters
 
+import com.github.johnnysc.holybibleapp.core.Interactor
 import com.github.johnnysc.holybibleapp.core.Read
+import com.github.johnnysc.holybibleapp.core.ScrollPositionCache
 import com.github.johnnysc.holybibleapp.data.books.BooksRepository
 import com.github.johnnysc.holybibleapp.data.chapters.ChaptersDataToDomainMapper
 import com.github.johnnysc.holybibleapp.data.chapters.ChaptersRepository
-import com.github.johnnysc.holybibleapp.data.chapters.ChaptersScrollPositionCache
-import com.github.johnnysc.holybibleapp.presentation.main.ScrollPosition
+import com.github.johnnysc.holybibleapp.sl.core.Feature
 
 /**
  * @author Asatryan on 12.07.2021
  **/
-interface ChaptersInteractor : ScrollPosition {
+interface ChaptersInteractor : Interactor {
 
     suspend fun fetchChapters(): ChaptersDomain
 
@@ -19,16 +20,12 @@ interface ChaptersInteractor : ScrollPosition {
         private val mapper: ChaptersDataToDomainMapper<ChaptersDomain>,
         private val booksRepository: BooksRepository,
         private val bookIdContainer: Read<Int>,
-        private val scrollPosition: ChaptersScrollPositionCache
-    ) : ChaptersInteractor {
+        scrollPosition: ScrollPositionCache
+    ) : Interactor.Abstract(repository, scrollPosition, Feature.CHAPTERS), ChaptersInteractor {
         override suspend fun fetchChapters() = ChaptersAndBooksDomain(
             repository.fetchData(),
             booksRepository.fetchData(),
             bookIdContainer
         ).map(mapper)
-
-        override fun scrollPosition() = scrollPosition.chaptersScrollPosition()
-        override fun saveScrollPosition(position: Int) =
-            scrollPosition.saveChaptersScrollPosition(position)
     }
 }

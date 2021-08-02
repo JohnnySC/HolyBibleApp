@@ -1,29 +1,32 @@
 package com.github.johnnysc.holybibleapp.presentation.books
 
+import com.github.johnnysc.holybibleapp.core.ChangeFavorite
+
+
 /**
  * @author Asatryan on 04.07.2021
  **/
-interface UiDataCache {
+interface UiDataCache : ChangeFavorite<Int> {
 
-    fun cache(list: List<BookUi>): BooksUi.Base
-    fun changeState(id: Int): List<BookUi>
+    fun cache(list: List<BookUi>): ArrayList<BookUi>
+    fun changeState(id: Int): ArrayList<BookUi>
     fun saveState()
 
     class Base(private val cacheId: CollapsedIdsCache) : UiDataCache {
         private val cachedList = ArrayList<BookUi>()
 
-        override fun cache(list: List<BookUi>): BooksUi.Base {
+        override fun cache(list: List<BookUi>): ArrayList<BookUi> {
             cachedList.clear()
             cachedList.addAll(list)
-            var newList: List<BookUi> = ArrayList(list)
+            var newList: ArrayList<BookUi> = ArrayList(list)
             val ids = cacheId.read()
             ids.forEach { id ->
                 newList = changeState(id)
             }
-            return BooksUi.Base(newList)
+            return newList
         }
 
-        override fun changeState(id: Int): List<BookUi> {
+        override fun changeState(id: Int): ArrayList<BookUi> {
             val newList = ArrayList<BookUi>()
             val item = cachedList.find {
                 it.matches(id)
@@ -57,6 +60,14 @@ interface UiDataCache {
                 it.saveId(cacheId)
             }
             cacheId.finish()
+        }
+
+        override fun changeFavorite(id: Int) {
+            val itemToChange = cachedList.find {
+                it.matches(id)
+            } ?: BookUi.Empty
+            val newItem = itemToChange.changeState()
+            cachedList[cachedList.indexOf(itemToChange)] = newItem
         }
     }
 }

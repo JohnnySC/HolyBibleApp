@@ -7,5 +7,5 @@ import com.github.johnnysc.holybibleapp.data.chapters.ChapterId
  * @author Asatryan on 11.07.2021
  **/
 class BaseChapterDataToDomainMapper : ChapterDataToDomainMapper<ChapterDomain> {
-    override fun map(data: ChapterId) = ChapterDomain.Base(data)
+    override fun map(data: Pair<ChapterId, Boolean>) = ChapterDomain.Base(data.first, data.second)
 }

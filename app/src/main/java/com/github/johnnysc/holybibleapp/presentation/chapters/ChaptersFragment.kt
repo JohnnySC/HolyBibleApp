@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.github.johnnysc.holybibleapp.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
+import com.github.johnnysc.holybibleapp.core.Show
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 
 /**
@@ -22,7 +23,11 @@ class ChaptersFragment : BaseFragment<ChaptersViewModel>() {
             },
             object : ClickListener<ChapterUi> {
                 override fun click(item: ChapterUi) = item.open(viewModel)
-            })
+            },
+            object : Show<Pair<Int, Int>> {
+                override fun open(id: Pair<Int, Int>) = viewModel.changeFavorite(id)
+            }
+        )
         viewModel.observeChapters(this, { ui ->
             ui.map(adapter, title())
             scrollTo()

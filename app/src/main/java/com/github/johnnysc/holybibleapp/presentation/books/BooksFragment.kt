@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.github.johnnysc.holybibleapp.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
+import com.github.johnnysc.holybibleapp.core.Show
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 
 /**
@@ -26,6 +27,9 @@ class BooksFragment : BaseFragment<BooksViewModel>() {
             },
             object : ClickListener<BookUi> {
                 override fun click(item: BookUi) = item.open(viewModel)
+            },
+            object : Show<Int> {
+                override fun open(id: Int) = viewModel.changeFavorite(id)
             })
         setAdapter(adapter)
         viewModel.observe(this, {

@@ -16,9 +16,12 @@ interface VerseData : Abstract.DataObject {
     data class Base(
         private val id: Int,
         private val verseId: Int,
-        private val text: String
+        private val text: String,
+        private val isFavorite: Boolean = false
     ) : VerseData {
-        override fun <T> map(mapper: VerseDataToDomainMapper<T>) = mapper.map(verseId, text)
+        override fun <T> map(mapper: VerseDataToDomainMapper<T>) =
+            mapper.map(id, verseId, text, isFavorite)
+
         override fun <T : RealmObject> map(mapper: VerseDataToDbMapper<T>, db: DbWrapper<T>) =
             mapper.map(id, verseId, text, db)
     }

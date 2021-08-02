@@ -2,9 +2,8 @@ package com.github.johnnysc.holybibleapp.data.chapters
 
 import com.github.johnnysc.holybibleapp.core.DbWrapper
 import io.realm.RealmObject
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
-import kotlin.math.exp
 
 /**
  * @author Asatryan on 17.07.2021
@@ -15,8 +14,8 @@ class ChapterIdTest {
     fun test_real_id() {
         val chapterId = ChapterId.Base(5, 6)
         val actual = chapterId.map(object : ChapterIdToUiMapper<Int> {
-            override fun map(realId: Int) = realId
-        })
+            override fun map(realId: Int, generatedId: Int, isFavorite: Boolean) = realId
+        }, false)
         val expected = 6
         assertEquals(expected, actual)
     }
@@ -25,8 +24,8 @@ class ChapterIdTest {
     fun test_real_id_by_generated() {
         val chapterId = ChapterId.Base(5, 0, 5006)
         val actual = chapterId.map(object : ChapterIdToUiMapper<Int> {
-            override fun map(realId: Int) = realId
-        })
+            override fun map(realId: Int, generatedId: Int, isFavorite: Boolean) = realId
+        }, false)
         val expected = 6
         assertEquals(expected, actual)
     }

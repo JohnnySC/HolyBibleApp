@@ -5,5 +5,5 @@ package com.github.johnnysc.holybibleapp.domain.verses
  **/
 interface VerseDomainToUiMapper<T> {
 
-    fun map(id: Int, text: String): T
+    fun map(id: Int, visibleId: Int, text: String, isFavorite: Boolean = false): T
 }

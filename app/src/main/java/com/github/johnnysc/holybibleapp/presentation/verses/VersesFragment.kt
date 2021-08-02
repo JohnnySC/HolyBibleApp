@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.github.johnnysc.holybibleapp.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
+import com.github.johnnysc.holybibleapp.core.Show
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 
 /**
@@ -22,6 +23,9 @@ class VersesFragment : BaseFragment<VersesViewModel>() {
             },
             object : ClickListener<VerseUi> {
                 override fun click(item: VerseUi) = viewModel.showNextChapterVerses()
+            },
+            object : Show<Int> {
+                override fun open(id: Int) = viewModel.changeFavorite(id)
             }
         )
 

@@ -26,15 +26,15 @@ class VersesAndBooksDomainTest {
     fun test_success() {
         val title = BookData.Base(10, "name", "OT")
         val versesDomain = listOf(
-            VerseDomain.Base(1001, "verse")
+            VerseDomain.Base(1001, 1, "verse")
         )
 
         val domain = VersesAndBooksDomain(
-            VersesData.Success(listOf(VerseData.Base(1, 1001, "verse"))),
+            VersesData.Success(listOf(VerseData.Base(1001, 1, "verse"))),
             BooksData.Success(
                 listOf(BookData.Base(10, "name", "OT"))
             ),
-            ChaptersData.Success(listOf(ChapterData.Base(ChapterId.Base(1, 1)))),
+            ChaptersData.Success(listOf(ChapterData.Base(ChapterId.Base(1, 1), false))),
             object : Read<Int> {
                 override fun read() = 10
             },
@@ -53,7 +53,7 @@ class VersesAndBooksDomainTest {
         val domain = VersesAndBooksDomain(
             VersesData.Fail(UnknownHostException()),
             BooksData.Success(listOf(BookData.Base(10, "name", "OT"))),
-            ChaptersData.Success(listOf(ChapterData.Base(ChapterId.Base(1, 1)))),
+            ChaptersData.Success(listOf(ChapterData.Base(ChapterId.Base(1, 1), false))),
             object : Read<Int> {
                 override fun read() = 10
             },
@@ -91,7 +91,7 @@ class VersesAndBooksDomainTest {
         val domain = VersesAndBooksDomain(
             VersesData.Success(listOf(VerseData.Base(1, 1001, "verse"))),
             BooksData.Fail(HttpException(Response.success(200, null as Int?))),
-            ChaptersData.Success(listOf(ChapterData.Base(ChapterId.Base(1, 1)))),
+            ChaptersData.Success(listOf(ChapterData.Base(ChapterId.Base(1, 1), false))),
             object : Read<Int> {
                 override fun read() = 10
             },

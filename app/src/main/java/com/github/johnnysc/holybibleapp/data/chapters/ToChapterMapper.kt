@@ -7,18 +7,18 @@ import com.github.johnnysc.holybibleapp.core.Read
  **/
 interface ToChapterMapper<T> {
 
-    fun map(id: Int): T
+    fun map(id: Int, isFavorite: Boolean = false): T
 
     abstract class Base(private val bookCache: Read<Int>) :
         ToChapterMapper<ChapterData> {
-        override fun map(id: Int): ChapterData {
-            val realId = realId()
-            return ChapterData.Base(
+        override fun map(id: Int, isFavorite: Boolean) = realId().let { realId ->
+            ChapterData.Base(
                 ChapterId.Base(
                     bookCache.read(),
                     if (realId) id else 0,
                     if (realId) 0 else id
-                )
+                ),
+                isFavorite
             )
         }
 

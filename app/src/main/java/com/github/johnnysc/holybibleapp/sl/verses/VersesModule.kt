@@ -1,6 +1,7 @@
 package com.github.johnnysc.holybibleapp.sl.verses
 
 import com.github.johnnysc.holybibleapp.data.books.BooksRepository
+import com.github.johnnysc.holybibleapp.data.books.cloud.BookRu
 import com.github.johnnysc.holybibleapp.data.chapters.ChaptersRepository
 import com.github.johnnysc.holybibleapp.data.verses.ToVerseMapper
 import com.github.johnnysc.holybibleapp.data.verses.VersesRepository
@@ -27,7 +28,8 @@ class VersesModule(
     private val coreModule: CoreModule,
     private val booksRepository: BooksRepository,
     private val chaptersRepository: ChaptersRepository,
-    private val useMocks: Boolean
+    private val useMocks: Boolean,
+    private val booksRu: () -> List<BookRu>
 ) : BaseModule<VersesViewModel> {
 
     override fun viewModel() = VersesViewModel(
@@ -54,7 +56,6 @@ class VersesModule(
         coreModule.scrollPositionCache,
         chaptersRepository,
         coreModule.chapterCache,
-        coreModule.scrollPositionCache
     )
 
     private fun repository(): VersesRepository {
@@ -81,8 +82,7 @@ class VersesModule(
             russian()
         )
 
-    private fun russian() =
-        VersesCloudDataSource.Russian(coreModule.resourceProvider, coreModule.gson)
+    private fun russian() = VersesCloudDataSource.Russian(booksRu)
 
     private fun english() = VersesCloudDataSource.English(
         coreModule.makeService(VersesService::class.java),

@@ -1,6 +1,9 @@
 package com.github.johnnysc.holybibleapp.data.verses.cache
 
-import com.github.johnnysc.holybibleapp.core.*
+import com.github.johnnysc.holybibleapp.core.CacheDataSource
+import com.github.johnnysc.holybibleapp.core.DbWrapper
+import com.github.johnnysc.holybibleapp.core.Limits
+import com.github.johnnysc.holybibleapp.core.RealmProvider
 import com.github.johnnysc.holybibleapp.data.verses.VerseData
 import io.realm.Realm
 
@@ -12,9 +15,9 @@ interface VersesCacheDataSource : CacheDataSource<VerseData> {
     fun fetchVerses(limits: Limits): List<VerseDb>
 
     class Base(
-        private val realmProvider: RealmProvider,
+        realmProvider: RealmProvider,
         private val mapper: VerseDataToDbMapper<VerseDb>
-    ) : VersesCacheDataSource {
+    ) : CacheDataSource.Abstract<VerseData>(realmProvider), VersesCacheDataSource {
         override fun fetchVerses(limits: Limits): List<VerseDb> {
             realmProvider.provide().use { realm ->
                 val verses = realm.where(VerseDb::class.java)

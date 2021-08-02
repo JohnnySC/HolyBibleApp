@@ -35,18 +35,8 @@ interface BooksCloudDataSource {
                 ).fetchBooks()
     }
 
-    class Russian(
-        private val resourceReader: RawResourceReader,
-        private val gson: Gson
-    ) : BooksCloudDataSource {
-        override suspend fun fetchBooks(): List<BookCloud> {
-            val text = resourceReader.readText(R.raw.synodal)
-            val translation = gson.fromJson<RussianTranslation>(
-                text,
-                object : TypeToken<RussianTranslation>() {}.type
-            )
-            return translation.contentAsList()
-        }
+    class Russian(private val booksRu: () -> List<BookRu>) : BooksCloudDataSource {
+        override suspend fun fetchBooks() = booksRu()
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")

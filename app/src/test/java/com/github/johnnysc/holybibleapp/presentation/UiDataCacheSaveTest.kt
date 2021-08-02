@@ -1,10 +1,9 @@
 package com.github.johnnysc.holybibleapp.presentation
 
 import com.github.johnnysc.holybibleapp.presentation.books.BookUi
-import com.github.johnnysc.holybibleapp.presentation.books.BooksUi
 import com.github.johnnysc.holybibleapp.presentation.books.CollapsedIdsCache
 import com.github.johnnysc.holybibleapp.presentation.books.UiDataCache
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
@@ -24,12 +23,13 @@ class UiDataCacheSaveTest {
                 BookUi.Base(1, "1"),
             )
         )
-        val expected = BooksUi.Base(
+        val expected = ArrayList(
             listOf(
                 BookUi.Testament(0, "0"),
                 BookUi.Base(1, "1"),
             )
         )
+
         assertEquals(expected, actual)
     }
 
@@ -47,7 +47,7 @@ class UiDataCacheSaveTest {
 
                 )
         )
-        val expected = BooksUi.Base(
+        val expected = ArrayList(
             listOf(
                 BookUi.Testament(0, "0", true),
                 BookUi.Testament(2, "2"),
@@ -69,9 +69,9 @@ class UiDataCacheSaveTest {
                 BookUi.Base(1, "1"),
                 BookUi.Testament(2, "2"),
                 BookUi.Base(3, "3"),
-                )
+            )
         )
-        val expected = BooksUi.Base(
+        val expected = ArrayList(
             listOf(
                 BookUi.Testament(0, "0", true),
                 BookUi.Testament(2, "2", true)

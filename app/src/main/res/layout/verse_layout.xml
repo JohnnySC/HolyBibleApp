@@ -1,12 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.johnnysc.holybibleapp.core.CustomTextView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.github.johnnysc.holybibleapp.core.SwipeRevealLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/textView"
-    style="@style/TextAppearance.AppCompat.Body1"
+    android:id="@+id/swipeRevealLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/item_height"
-    android:background="?selectableItemBackground"
-    android:gravity="center_vertical"
-    android:paddingHorizontal="@dimen/padding8"
-    tools:text="Genesis" />
+    android:background="@color/white"
+    app:dragEdge="right"
+    app:mode="normal">
+
+    <FrameLayout
+        android:id="@+id/changeFavoriteLayout"
+        android:layout_width="@dimen/item_height"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <com.github.johnnysc.holybibleapp.core.FavoriteView
+            android:id="@+id/changeFavoriteView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:ignore="ContentDescription"
+            android:src="@drawable/ic_star_full_black_24" />
+
+    </FrameLayout>
+
+    <com.github.johnnysc.holybibleapp.core.CustomFrameLayout
+        android:id="@+id/backgroundView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/item_height"
+        android:background="@color/white">
+
+        <com.github.johnnysc.holybibleapp.core.CustomTextView
+            android:id="@+id/textView"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?selectableItemBackground"
+            android:gravity="center_vertical"
+            android:minHeight="@dimen/item_height"
+            android:paddingHorizontal="@dimen/padding8"
+            tools:text="
+            Here is going to be a long text of a verse to be likely more than one line you know,
+            Here is going to be a long text of a verse to be likely more than one line you know,
+            Here is going to be a long text of a verse to be likely more than one line you know,
+            Here is going to be a long text of a verse to be likely more than one line you know,
+" />
+    </com.github.johnnysc.holybibleapp.core.CustomFrameLayout>
+
+</com.github.johnnysc.holybibleapp.core.SwipeRevealLayout>

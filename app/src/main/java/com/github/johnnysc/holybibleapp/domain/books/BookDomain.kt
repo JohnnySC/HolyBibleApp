@@ -9,9 +9,10 @@ sealed class BookDomain {
 
     data class Base(
         private val id: Int,
-        private val name: String
+        private val name: String,
+        private val isFavorite: Boolean = false
     ) : BookDomain() {
-        override fun <T> map(mapper: BookDomainToUiMapper<T>) = mapper.map(id, name)
+        override fun <T> map(mapper: BookDomainToUiMapper<T>) = mapper.map(id, name, isFavorite)
     }
 
     data class Testament(private val type: TestamentType) : BookDomain() {

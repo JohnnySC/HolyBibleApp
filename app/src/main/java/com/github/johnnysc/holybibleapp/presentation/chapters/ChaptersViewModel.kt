@@ -24,7 +24,7 @@ class ChaptersViewModel(
     private val navigationCommunication: NavigationCommunication,
     resourceProvider: ResourceProvider,
     private val clearChapters: () -> Unit
-) : BaseViewModel(resourceProvider), Show {
+) : BaseViewModel(resourceProvider), Show<Pair<Int, Int>>, ChangeFavorite<Pair<Int, Int>> {
 
     private var clear = true
     private val bookNameProgress = object : Abstract.Object<Unit, TextMapper> {
@@ -38,7 +38,7 @@ class ChaptersViewModel(
     fun fetchChapters() {
         chaptersCommunication.map(
             ChaptersUi.Base(
-                listOf(ChapterUi.Progress),
+                mutableListOf(ChapterUi.Progress),
                 bookNameProgress
             )
         )
@@ -56,8 +56,8 @@ class ChaptersViewModel(
         fetchChapters()
     }
 
-    override fun open(id: Int) {
-        chapterCache.save(id)
+    override fun open(id: Pair<Int, Int>): Unit = id.let { (visibleId, _) ->
+        chapterCache.save(visibleId)
         clear = false
         navigator.nextScreen(navigationCommunication)
     }
@@ -69,5 +69,9 @@ class ChaptersViewModel(
     override fun onCleared() {
         super.onCleared()
         if (clear) clearChapters()
+    }
+
+    override fun changeFavorite(id: Pair<Int, Int>): Unit = id.let { (_, generatedId) ->
+        super.changeFavorite(generatedId, chaptersCommunication, chaptersInteractor)
     }
 }

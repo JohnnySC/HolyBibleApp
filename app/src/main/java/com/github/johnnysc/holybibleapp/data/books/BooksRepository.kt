@@ -1,5 +1,6 @@
 package com.github.johnnysc.holybibleapp.data.books
 
+import com.github.johnnysc.holybibleapp.core.Limits
 import com.github.johnnysc.holybibleapp.core.Repository
 import com.github.johnnysc.holybibleapp.data.books.cache.BookDb
 import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheDataSource
@@ -28,5 +29,11 @@ interface BooksRepository : Repository<BooksData> {
         override fun cachedDataList() = cacheDataSource.read()
         override fun returnSuccess(list: List<BookData>) = BooksData.Success(list)
         override fun returnFail(e: Exception) = BooksData.Fail(e)
+        override fun limits(): Limits = BooksLimits()
+
+        private inner class BooksLimits : Limits {
+            override fun min() = 0
+            override fun max() = 67
+        }
     }
 }

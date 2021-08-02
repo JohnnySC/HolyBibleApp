@@ -1,5 +1,6 @@
 package com.github.johnnysc.holybibleapp.sl.core
 
+import com.github.johnnysc.holybibleapp.data.books.cloud.BookRu
 import com.github.johnnysc.holybibleapp.sl.books.BooksModule
 import com.github.johnnysc.holybibleapp.sl.books.BooksRepositoryContainer
 import com.github.johnnysc.holybibleapp.sl.chapters.ChaptersModule
@@ -19,12 +20,13 @@ interface DependencyContainer {
 
         private val commonRepositoryContainer = CommonRepositoryContainer(
             ::booksRepository,
-            ::chaptersRepository
+            ::chaptersRepository,
+            ::russianBooks
         )
 
         override fun module(feature: Feature) = when (feature) {
             Feature.MAIN -> coreModule
-            Feature.LANGUAGES -> LanguagesModule(coreModule)
+            Feature.LANGUAGES -> LanguagesModule(coreModule, commonRepositoryContainer)
             Feature.BOOKS -> BooksModule(
                 coreModule,
                 useMocks,
@@ -44,13 +46,17 @@ interface DependencyContainer {
                 commonRepositoryContainer.booksRepository(),
                 commonRepositoryContainer.chaptersRepository(),
                 useMocks
-            )
+            ) {
+                commonRepositoryContainer.booksRu()
+            }
         }
 
-        private fun booksRepository() =
-            BooksRepositoryContainer(coreModule, useMocks).repository()
+        private fun booksRepository(booksRu: () -> List<BookRu>) =
+            BooksRepositoryContainer(coreModule, useMocks, booksRu).repository()
 
-        private fun chaptersRepository() =
-            ChaptersRepositoryContainer(coreModule, useMocks).repository()
+        private fun chaptersRepository(booksRu: () -> List<BookRu>) =
+            ChaptersRepositoryContainer(coreModule, useMocks, booksRu).repository()
+
+        private fun russianBooks() = RussianBooksContainer(coreModule).booksRu()
     }
 }

@@ -1,19 +1,19 @@
 package com.github.johnnysc.holybibleapp.domain.verses
 
+import com.github.johnnysc.holybibleapp.core.Interactor
 import com.github.johnnysc.holybibleapp.core.Read
+import com.github.johnnysc.holybibleapp.core.ScrollPositionCache
 import com.github.johnnysc.holybibleapp.data.books.BooksRepository
 import com.github.johnnysc.holybibleapp.data.chapters.ChaptersRepository
-import com.github.johnnysc.holybibleapp.data.chapters.ChaptersScrollPositionCache
 import com.github.johnnysc.holybibleapp.data.verses.VersesDataToDomainMapper
 import com.github.johnnysc.holybibleapp.data.verses.VersesRepository
-import com.github.johnnysc.holybibleapp.data.verses.VersesScrollPositionCache
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterCache
-import com.github.johnnysc.holybibleapp.presentation.main.ScrollPosition
+import com.github.johnnysc.holybibleapp.sl.core.Feature
 
 /**
  * @author Asatryan on 17.07.2021
  **/
-interface VersesInteractor : ScrollPosition {
+interface VersesInteractor : Interactor {
 
     suspend fun fetchVerses(): VersesDomain
 
@@ -24,17 +24,14 @@ interface VersesInteractor : ScrollPosition {
         private val mapper: VersesDataToDomainMapper<VersesDomain>,
         private val booksRepository: BooksRepository,
         private val bookIdContainer: Read<Int>,
-        private val scrollPositionCache: VersesScrollPositionCache,
+        scrollPositionCache: ScrollPositionCache,
         private val chaptersRepository: ChaptersRepository,
-        private val chapterCache: ChapterCache, //todo move chapter cache and chapter number to repository
-        private val chapterScrollPositionCache: ChaptersScrollPositionCache
-    ) : VersesInteractor {
+        private val chapterCache: ChapterCache, //todo move to repository
+    ) : Interactor.Abstract(repository, scrollPositionCache, Feature.VERSES), VersesInteractor {
 
         override fun showNextChapter() {
             chapterCache.save(chapterCache.read() + 1)
-            chapterScrollPositionCache.saveChaptersScrollPosition(
-                chapterScrollPositionCache.chaptersScrollPosition() + 1
-            )
+            saveScrollPosition(scrollPosition() + 1)
         }
 
         override suspend fun fetchVerses() = VersesAndBooksDomain(
@@ -44,9 +41,5 @@ interface VersesInteractor : ScrollPosition {
             bookIdContainer,
             chapterCache
         ).map(mapper)
-
-        override fun scrollPosition() = scrollPositionCache.versesScrollPosition()
-        override fun saveScrollPosition(position: Int) =
-            scrollPositionCache.saveVersesScrollPosition(position)
     }
 }

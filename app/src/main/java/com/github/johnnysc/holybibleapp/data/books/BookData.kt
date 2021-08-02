@@ -18,9 +18,10 @@ interface BookData : Matcher<TestamentTemp>, Save<TestamentTemp>, Abstract.DataO
     data class Base(
         private val id: Int,
         private val name: String,
-        private val testament: String
+        private val testament: String,
+        private val isFavorite: Boolean = false
     ) : BookData {
-        override fun <T> map(mapper: BookDataToDomainMapper<T>) = mapper.map(id, name)
+        override fun <T> map(mapper: BookDataToDomainMapper<T>) = mapper.map(id, name, isFavorite)
 
         override fun <E : RealmObject> map(mapper: BookDataToDbMapper<E>, db: DbWrapper<E>) =
             mapper.mapToDb(id, name, testament, db)
@@ -35,7 +36,7 @@ interface BookData : Matcher<TestamentTemp>, Save<TestamentTemp>, Abstract.DataO
     }
 
     class Empty : BookData {
-        override fun <T> map(mapper: BookDataToDomainMapper<T>) = mapper.map(0, "")
+        override fun <T> map(mapper: BookDataToDomainMapper<T>) = mapper.map(0, "", false)
         override fun <T : RealmObject> map(mapper: BookDataToDbMapper<T>, db: DbWrapper<T>) =
             mapper.mapToDb(0, "", "", db)
 

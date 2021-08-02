@@ -30,12 +30,14 @@ interface VersesRepository : Repository<VersesData> {
         private val bookId by lazy { bookIdContainer.read() }
         private val chapterId
             get() = chapterIdContainer.read()
+        private val limits
+            get() = VersesLimits(bookId, chapterId)
 
         override suspend fun fetchCloudData() = cloudDataSource.fetchVerses(bookId, chapterId)
-        override fun cachedDataList() =
-            cacheDataSource.fetchVerses(VersesLimits(bookId, chapterId))
+        override fun cachedDataList() = cacheDataSource.fetchVerses(limits)
 
         override fun returnSuccess(list: List<VerseData>) = VersesData.Success(list)
         override fun returnFail(e: Exception) = VersesData.Fail(e)
+        override fun limits() = limits
     }
 }

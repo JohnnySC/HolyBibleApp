@@ -22,13 +22,12 @@ data class BookRu(
     @SerializedName("book_nr") private val number: Int
 ) : BookCloud, Matcher<Int>, Content<ChapterCloud> {
 
-    override fun <T> map(mapper: ToBookMapper<T>): T {
-        return mapper.map(
-            number,
-            name,
-            if (number < NEW_TESTAMENT_POSITION) OLD_TESTAMENT else NEW_TESTAMENT
-        )
-    }
+    override fun <T> map(mapper: ToBookMapper<T>, isFavorite: Boolean) = mapper.map(
+        number,
+        name,
+        if (number < NEW_TESTAMENT_POSITION) OLD_TESTAMENT else NEW_TESTAMENT,
+        isFavorite
+    )
 
     override fun matches(arg: Int) = number == arg
 
