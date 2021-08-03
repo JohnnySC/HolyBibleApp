@@ -10,7 +10,7 @@ import com.github.johnnysc.holybibleapp.core.*
  **/
 class BooksAdapter(
     private val retry: Retry,
-    private val collapseListener: CollapseListener,
+    private val collapseListener: ClickListener<BookUi>,
     private val bookListener: ClickListener<BookUi>,
     private val favoriteListener: Show<Int>,
 ) : BaseAdapter<BookUi, BaseViewHolder<BookUi>>() {
@@ -29,7 +29,7 @@ class BooksAdapter(
             bookListener,
             favoriteListener
         )
-        1 -> BaseViewHolder.Fail(R.layout.fail_fullscreen.makeView(parent), retry)
+        1 -> BooksViewHolder.Error(R.layout.fail_fullscreen.makeView(parent), retry)
         2 -> BooksViewHolder.Testament(R.layout.testament.makeView(parent), collapseListener)
         3 -> BaseViewHolder.FullscreenProgress(R.layout.progress_fullscreen.makeView(parent))
         else -> throw IllegalStateException("unknown viewType $viewType")
@@ -58,10 +58,10 @@ class BooksAdapter(
             override fun bind(item: BookUi) {
                 super.bind(item)
                 reveal.close(false)
-                item.mapFavorite(backgroundView)
-                item.mapFavorite(favoriteButton)
+                item.map(backgroundView)
+                item.map(favoriteButton)
                 favoriteLayout.setOnClickListener {
-                    item.open(favoriteListener)
+                    item.map(BookUiMapper.Display(favoriteListener))
                     reveal.close(true)
                 }
                 name.setOnClickListener {
@@ -70,19 +70,36 @@ class BooksAdapter(
             }
         }
 
-        class Testament(view: View, private val collapse: CollapseListener) : Info(view) {
+        class Testament(
+            view: View,
+            private val clickListener: ClickListener<BookUi>,
+        ) : Info(view) {
             private val collapseView = itemView.findViewById<CollapseView>(R.id.collapseView)
             override fun bind(item: BookUi) {
                 super.bind(item)
                 itemView.setOnClickListener {
-                    item.collapseOrExpand(collapse)
+                    clickListener.click(item)
                 }
-                item.showCollapsed(collapseView)
+                item.map(collapseView)
             }
+        }
+
+        class Error(view: View, retry: Retry, ) : Fail<BookUi>(view, retry) {
+            override fun mapErrorMessage(item: BookUi, textMapper: TextMapper) =
+                item.map(textMapper)
         }
     }
 
-    interface CollapseListener {
-        fun collapseOrExpand(id: Int)
+    override fun diffUtilCallback(
+        list: ArrayList<BookUi>,
+        data: List<BookUi>
+    ) = BooksDiffUtilCallback(list, data, BookUiMapper.Compare.Base())
+
+    inner class BooksDiffUtilCallback(
+        oldList: List<BookUi>,
+        newList: List<BookUi>,
+        same: BookUiMapper.Compare
+    ) : DiffUtilCallback<BookUi, BookUiMapper.Compare>(oldList, newList, same) {
+        override fun same(item: BookUi, same: BookUiMapper.Compare) = item.map(same)
     }
 }

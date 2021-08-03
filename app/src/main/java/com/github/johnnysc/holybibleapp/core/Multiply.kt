@@ -10,7 +10,8 @@ class Multiply(times: Int = 1) : Abstract.Mapper.Data<Int, Int> {
 
     override fun map(data: Int): Int {
         if (data == 0) return 0
-        val number = if (repeatCount == 3 && data > 2) 2 else data
+        val number =
+            if (repeatCount == 3 && data > 2) 2 else if (repeatCount == 3 && data < -2) -2 else data
         var result = number
         for (i in 0 until repeatCount) {
             result *= MULTIPLY

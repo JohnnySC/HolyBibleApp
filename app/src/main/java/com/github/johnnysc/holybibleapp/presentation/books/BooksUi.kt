@@ -16,9 +16,9 @@ sealed class BooksUi : ChangeFavorite<Int> {
 
         override fun changeFavorite(id: Int) {
             val itemToChange = books.find {
-                it.matches(id)
+                it.map(BookUiMapper.Id(id))
             } ?: BookUi.Empty
-            val newItem = itemToChange.changeState()
+            val newItem = itemToChange.map(BookUiMapper.ChangeBookState())
             books[books.indexOf(itemToChange)] = newItem
         }
     }

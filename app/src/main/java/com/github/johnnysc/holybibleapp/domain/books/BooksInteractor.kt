@@ -17,7 +17,7 @@ interface BooksInteractor : Interactor {
         private val booksRepository: BooksRepository,
         private val mapper: BooksDataToDomainMapper<BooksDomain>,
         scrollPosition: ScrollPositionCache
-    ) : Interactor.Abstract(booksRepository, scrollPosition, Feature.BOOKS), BooksInteractor {
+    ) : Interactor.Abstract(booksRepository, scrollPosition), BooksInteractor {
         override suspend fun fetchBooks() = booksRepository.fetchData().map(mapper)
     }
 }

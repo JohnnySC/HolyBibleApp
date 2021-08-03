@@ -24,9 +24,9 @@ sealed class ChaptersUi : ChangeFavorite<Int> {
 
         override fun changeFavorite(id: Int) {
             val itemToChange = chapters.find {
-                it.matches(id)
+                it.map(ChapterUiMapper.Id(id))
             } ?: ChapterUi.Empty
-            val newItem = itemToChange.changeState()
+            val newItem = itemToChange.map(ChapterUiMapper.ChangeState())
             chapters[chapters.indexOf(itemToChange)] = newItem
         }
     }

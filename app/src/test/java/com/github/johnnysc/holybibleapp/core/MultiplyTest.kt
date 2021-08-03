@@ -32,7 +32,7 @@ class MultiplyTest {
     }
 
     @Test
-    fun test_too_many_times() {
+    fun test_int_max() {
         val actual = Multiply(8).map(3)
         val expected = 2_000_000_000
         assertEquals(expected, actual)
@@ -63,6 +63,13 @@ class MultiplyTest {
     fun test_rest() {
         val actual = Multiply().rest(5008)
         val expected = 8
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun test_int_min() {
+        val actual = Multiply(8).map(-9)
+        val expected = -2_000_000_000
         assertEquals(expected, actual)
     }
 }

@@ -3,7 +3,7 @@ package com.github.johnnysc.holybibleapp.presentation
 import com.github.johnnysc.holybibleapp.presentation.books.BookUi
 import com.github.johnnysc.holybibleapp.presentation.books.CollapsedIdsCache
 import com.github.johnnysc.holybibleapp.presentation.books.UiDataCache
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
@@ -26,7 +26,7 @@ class UiDataCacheTest {
         val dataCache = UiDataCache.Base(CollapsedIdsCache.Empty())
         dataCache.cache(source)
 
-        val actual = dataCache.changeState(-1)
+        val actual = dataCache.changeState(source[0])
         val expected = listOf(
             BookUi.Testament(-1, "old", true),
             BookUi.Testament(0, "new"),
@@ -41,7 +41,7 @@ class UiDataCacheTest {
         val dataCache = UiDataCache.Base(CollapsedIdsCache.Empty())
         dataCache.cache(source)
 
-        val actual = dataCache.changeState(0)
+        val actual = dataCache.changeState(source[3])
         val expected = listOf(
             BookUi.Testament(-1, "old"),
             BookUi.Base(1, "first"),
@@ -56,7 +56,7 @@ class UiDataCacheTest {
         val dataCache = UiDataCache.Base(CollapsedIdsCache.Empty())
         dataCache.cache(source)
 
-        var actual = dataCache.changeState(-1)
+        var actual = dataCache.changeState(source[0])
         var expected = listOf(
             BookUi.Testament(-1, "old", true),
             BookUi.Testament(0, "new"),
@@ -65,7 +65,7 @@ class UiDataCacheTest {
         )
         assertEquals(expected, actual)
 
-        actual = dataCache.changeState(-1)
+        actual = dataCache.changeState(BookUi.Testament(-1, "old", true))
         expected = listOf(
             BookUi.Testament(-1, "old"),
             BookUi.Base(1, "first"),
@@ -82,7 +82,7 @@ class UiDataCacheTest {
         val dataCache = UiDataCache.Base(CollapsedIdsCache.Empty())
         dataCache.cache(source)
 
-        var actual = dataCache.changeState(0)
+        var actual = dataCache.changeState(source[3])
         var expected = listOf(
             BookUi.Testament(-1, "old"),
             BookUi.Base(1, "first"),
@@ -91,7 +91,7 @@ class UiDataCacheTest {
         )
         assertEquals(expected, actual)
 
-        actual = dataCache.changeState(0)
+        actual = dataCache.changeState(BookUi.Testament(0, "new", true))
         expected = listOf(
             BookUi.Testament(-1, "old"),
             BookUi.Base(1, "first"),
@@ -108,7 +108,7 @@ class UiDataCacheTest {
         val dataCache = UiDataCache.Base(CollapsedIdsCache.Empty())
         dataCache.cache(source)
 
-        var actual = dataCache.changeState(-1)
+        var actual = dataCache.changeState(source[0])
         var expected = listOf(
             BookUi.Testament(-1, "old", true),
             BookUi.Testament(0, "new"),
@@ -117,7 +117,7 @@ class UiDataCacheTest {
         )
         assertEquals(expected, actual)
 
-        actual = dataCache.changeState(0)
+        actual = dataCache.changeState(source[3])
         expected = listOf(
             BookUi.Testament(-1, "old", true),
             BookUi.Testament(0, "new", true),
@@ -130,7 +130,7 @@ class UiDataCacheTest {
         val dataCache = UiDataCache.Base(CollapsedIdsCache.Empty())
         dataCache.cache(source)
 
-        var actual = dataCache.changeState(-1)
+        var actual = dataCache.changeState(source[0])
         var expected = listOf(
             BookUi.Testament(-1, "old", true),
             BookUi.Testament(0, "new"),
@@ -139,14 +139,14 @@ class UiDataCacheTest {
         )
         assertEquals(expected, actual)
 
-        actual = dataCache.changeState(0)
+        actual = dataCache.changeState(source[3])
         expected = listOf(
             BookUi.Testament(-1, "old", true),
             BookUi.Testament(0, "new", true),
         )
         assertEquals(expected, actual)
 
-        actual = dataCache.changeState(-1)
+        actual = dataCache.changeState(BookUi.Testament(-1, "old", true))
         expected = listOf(
             BookUi.Testament(-1, "old"),
             BookUi.Base(1, "first"),
@@ -161,7 +161,7 @@ class UiDataCacheTest {
         val dataCache = UiDataCache.Base(CollapsedIdsCache.Empty())
         dataCache.cache(source)
 
-        var actual = dataCache.changeState(0)
+        var actual = dataCache.changeState(source[3])
         var expected = listOf(
             BookUi.Testament(-1, "old"),
             BookUi.Base(1, "first"),
@@ -170,14 +170,14 @@ class UiDataCacheTest {
         )
         assertEquals(expected, actual)
 
-        actual = dataCache.changeState(-1)
+        actual = dataCache.changeState(source[0])
         expected = listOf(
             BookUi.Testament(-1, "old", true),
             BookUi.Testament(0, "new", true),
         )
         assertEquals(expected, actual)
 
-        actual = dataCache.changeState(0)
+        actual = dataCache.changeState(BookUi.Testament(0, "new", true))
         expected = listOf(
             BookUi.Testament(-1, "old", true),
             BookUi.Testament(0, "new"),
@@ -192,7 +192,7 @@ class UiDataCacheTest {
         val dataCache = UiDataCache.Base(CollapsedIdsCache.Empty())
         dataCache.cache(source)
 
-        var actual = dataCache.changeState(-1)
+        var actual = dataCache.changeState(source[0])
         var expected = listOf(
             BookUi.Testament(-1, "old", true),
             BookUi.Testament(0, "new"),
@@ -201,14 +201,14 @@ class UiDataCacheTest {
         )
         assertEquals(expected, actual)
 
-        actual = dataCache.changeState(0)
+        actual = dataCache.changeState(source[3])
         expected = listOf(
             BookUi.Testament(-1, "old", true),
             BookUi.Testament(0, "new", true),
         )
         assertEquals(expected, actual)
 
-        actual = dataCache.changeState(-1)
+        actual = dataCache.changeState(BookUi.Testament(-1, "old", true))
         expected = listOf(
             BookUi.Testament(-1, "old"),
             BookUi.Base(1, "first"),
@@ -217,7 +217,7 @@ class UiDataCacheTest {
         )
         assertEquals(expected, actual)
 
-        actual = dataCache.changeState(0)
+        actual = dataCache.changeState(BookUi.Testament(0, "new", true))
         expected = listOf(
             BookUi.Testament(-1, "old"),
             BookUi.Base(1, "first"),

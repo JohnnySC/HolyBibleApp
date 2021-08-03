@@ -27,11 +27,11 @@ interface VersesInteractor : Interactor {
         scrollPositionCache: ScrollPositionCache,
         private val chaptersRepository: ChaptersRepository,
         private val chapterCache: ChapterCache, //todo move to repository
-    ) : Interactor.Abstract(repository, scrollPositionCache, Feature.VERSES), VersesInteractor {
+    ) : Interactor.Abstract(repository, scrollPositionCache), VersesInteractor {
 
         override fun showNextChapter() {
             chapterCache.save(chapterCache.read() + 1)
-            saveScrollPosition(scrollPosition() + 1)
+            saveScrollPosition(Feature.CHAPTERS, scrollPosition(Feature.CHAPTERS) + 1)
         }
 
         override suspend fun fetchVerses() = VersesAndBooksDomain(

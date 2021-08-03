@@ -22,7 +22,7 @@ class ChaptersFragment : BaseFragment<ChaptersViewModel>() {
                 override fun tryAgain() = viewModel.fetchChapters()
             },
             object : ClickListener<ChapterUi> {
-                override fun click(item: ChapterUi) = item.open(viewModel)
+                override fun click(item: ChapterUi) = item.map(ChapterUiMapper.Display(viewModel))
             },
             object : Show<Pair<Int, Int>> {
                 override fun open(id: Pair<Int, Int>) = viewModel.changeFavorite(id)

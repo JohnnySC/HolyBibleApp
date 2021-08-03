@@ -21,7 +21,7 @@ interface ChaptersInteractor : Interactor {
         private val booksRepository: BooksRepository,
         private val bookIdContainer: Read<Int>,
         scrollPosition: ScrollPositionCache
-    ) : Interactor.Abstract(repository, scrollPosition, Feature.CHAPTERS), ChaptersInteractor {
+    ) : Interactor.Abstract(repository, scrollPosition), ChaptersInteractor {
         override suspend fun fetchChapters() = ChaptersAndBooksDomain(
             repository.fetchData(),
             booksRepository.fetchData(),

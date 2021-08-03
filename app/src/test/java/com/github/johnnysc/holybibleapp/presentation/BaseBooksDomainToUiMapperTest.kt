@@ -29,7 +29,7 @@ class BaseBooksDomainToUiMapperTest {
                 }
             }, object : UiDataCache {
                 override fun cache(list: List<BookUi>) = ArrayList(list)
-                override fun changeState(id: Int) = ArrayList<BookUi>()
+                override fun changeState(item: BookUi) = ArrayList<BookUi>()
                 override fun saveState() = Unit
                 override fun changeFavorite(id: Int) = Unit
             })

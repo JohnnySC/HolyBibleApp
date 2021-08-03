@@ -8,6 +8,7 @@ import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.domain.verses.VersesDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.verses.VersesInteractor
 import com.github.johnnysc.holybibleapp.presentation.main.BaseViewModel
+import com.github.johnnysc.holybibleapp.sl.core.Feature
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,8 +44,9 @@ class VersesViewModel(
         fetchVerses()
     }
 
-    override fun scrollPosition() = interactor.scrollPosition()
-    override fun saveScrollPosition(position: Int) = interactor.saveScrollPosition(position)
+    override fun scrollPosition() = interactor.scrollPosition(Feature.VERSES)
+    override fun saveScrollPosition(position: Int) =
+        interactor.saveScrollPosition(Feature.VERSES, position)
 
     fun showNextChapterVerses() {
         interactor.showNextChapter()

@@ -24,7 +24,7 @@ class VersesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         0 -> VerseViewHolder.Base(R.layout.verse_layout.makeView(parent), favoriteListener)
-        1 -> BaseViewHolder.Fail(R.layout.fail_fullscreen.makeView(parent), retry)
+        1 -> VerseViewHolder.Error(R.layout.fail_fullscreen.makeView(parent), retry)
         2 -> BaseViewHolder.FullscreenProgress(R.layout.progress_fullscreen.makeView(parent))
         3 -> VerseViewHolder.Next(R.layout.next_layout.makeView(parent), clickListener)
         else -> throw IllegalStateException("unknown viewType $viewType")
@@ -48,11 +48,11 @@ class VersesAdapter(
 
             override fun bind(item: VerseUi) {
                 reveal.close(false)
-                item.mapFavorite(backgroundView)
-                item.mapFavorite(favoriteButton)
+                item.map(backgroundView)
+                item.map(favoriteButton)
                 item.map(textView)
                 favoriteLayout.setOnClickListener {
-                    item.open(favoriteListener)
+                    item.map(VerseUiMapper.Display(favoriteListener))
                     reveal.close(true)
                 }
             }
@@ -68,5 +68,23 @@ class VersesAdapter(
                 }
             }
         }
+
+        class Error(view: View, retry: Retry) : Fail<VerseUi>(view, retry) {
+            override fun mapErrorMessage(item: VerseUi, textMapper: TextMapper) =
+                item.map(textMapper)
+        }
+    }
+
+    override fun diffUtilCallback(
+        list: ArrayList<VerseUi>,
+        data: List<VerseUi>
+    ) = VersesDiffUtilCallback(list, data, VerseUiMapper.Compare.Base())
+
+    inner class VersesDiffUtilCallback(
+        oldList: List<VerseUi>,
+        newList: List<VerseUi>,
+        same: VerseUiMapper.Compare
+    ) : DiffUtilCallback<VerseUi, VerseUiMapper.Compare>(oldList, newList, same) {
+        override fun same(item: VerseUi, same: VerseUiMapper.Compare) = item.map(same)
     }
 }

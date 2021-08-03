@@ -27,7 +27,7 @@ class ChaptersAdapter(
             clickListener,
             favoriteListener
         )
-        1 -> BaseViewHolder.Fail(R.layout.fail_fullscreen.makeView(parent), retry)
+        1 -> ChapterViewHolder.Error(R.layout.fail_fullscreen.makeView(parent), retry)
         2 -> BaseViewHolder.FullscreenProgress(R.layout.progress_fullscreen.makeView(parent))
         else -> throw IllegalStateException("unknown viewType $viewType")
     }
@@ -50,17 +50,35 @@ class ChaptersAdapter(
             private val textView = itemView.findViewById<CustomTextView>(R.id.textView)
             override fun bind(item: ChapterUi) {
                 reveal.close(false)
-                item.mapFavorite(backgroundView)
-                item.mapFavorite(favoriteButton)
+                item.map(backgroundView)
+                item.map(favoriteButton)
                 item.map(textView)
                 textView.setOnClickListener {
                     clickListener.click(item)
                 }
                 favoriteLayout.setOnClickListener {
-                    item.open(favoriteListener)
+                    item.map(ChapterUiMapper.Display(favoriteListener))
                     reveal.close(true)
                 }
             }
         }
+
+        class Error(view: View, retry: Retry) : Fail<ChapterUi>(view, retry) {
+            override fun mapErrorMessage(item: ChapterUi, textMapper: TextMapper) =
+                item.map(textMapper)
+        }
+    }
+
+    override fun diffUtilCallback(
+        list: ArrayList<ChapterUi>,
+        data: List<ChapterUi>
+    ) = ChapterDiffUtilCallback(list, data, ChapterUiMapper.Compare.Base())
+
+    inner class ChapterDiffUtilCallback(
+        oldList: List<ChapterUi>,
+        newList: List<ChapterUi>,
+        same: ChapterUiMapper.Compare
+    ) : DiffUtilCallback<ChapterUi, ChapterUiMapper.Compare>(oldList, newList, same) {
+        override fun same(item: ChapterUi, same: ChapterUiMapper.Compare) = item.map(same)
     }
 }

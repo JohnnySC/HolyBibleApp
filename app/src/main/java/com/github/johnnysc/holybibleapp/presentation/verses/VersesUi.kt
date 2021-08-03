@@ -22,9 +22,9 @@ sealed class VersesUi : ChangeFavorite<Int> {
 
         override fun changeFavorite(id: Int) {
             val itemToChange = data.find {
-                it.matches(id)
+                it.map(VerseUiMapper.Id(id))
             } ?: VerseUi.Empty
-            val newItem = itemToChange.changeState()
+            val newItem = itemToChange.map(VerseUiMapper.ChangeState())
             data[data.indexOf(itemToChange)] = newItem
         }
     }

@@ -2,14 +2,13 @@ package com.github.johnnysc.holybibleapp.presentation.books
 
 import com.github.johnnysc.holybibleapp.core.ChangeFavorite
 
-
 /**
  * @author Asatryan on 04.07.2021
  **/
 interface UiDataCache : ChangeFavorite<Int> {
 
     fun cache(list: List<BookUi>): ArrayList<BookUi>
-    fun changeState(id: Int): ArrayList<BookUi>
+    fun changeState(item: BookUi): ArrayList<BookUi>
     fun saveState()
 
     class Base(private val cacheId: CollapsedIdsCache) : UiDataCache {
@@ -21,28 +20,29 @@ interface UiDataCache : ChangeFavorite<Int> {
             var newList: ArrayList<BookUi> = ArrayList(list)
             val ids = cacheId.read()
             ids.forEach { id ->
-                newList = changeState(id)
+                cachedList.find {
+                    it.map(BookUiMapper.Id(id))
+                }?.let {
+                    newList = changeState(it)
+                }
             }
             return newList
         }
 
-        override fun changeState(id: Int): ArrayList<BookUi> {
+        override fun changeState(item: BookUi): ArrayList<BookUi> {
             val newList = ArrayList<BookUi>()
-            val item = cachedList.find {
-                it.matches(id)
-            }
 
             var add = false
             cachedList.forEachIndexed { index, book ->
                 if (book is BookUi.Testament) {
                     if (item == book) {
-                        val element = book.changeState()
+                        val element = book.map(BookUiMapper.ChangeTestamentState())
                         cachedList[index] = element
                         newList.add(element)
-                        add = !element.isCollapsed()
+                        add = !element.map(BookUiMapper.CollapsedState())
                     } else {
                         newList.add(book)
-                        add = !book.isCollapsed()
+                        add = !book.map(BookUiMapper.CollapsedState())
                     }
                 } else {
                     if (add) newList.add(book)
@@ -55,18 +55,18 @@ interface UiDataCache : ChangeFavorite<Int> {
         override fun saveState() {
             cacheId.start()
             cachedList.filter {
-                it.isCollapsed()
+                it.map(BookUiMapper.CollapsedState())
             }.forEach {
-                it.saveId(cacheId)
+                it.map(BookUiMapper.Store(cacheId))
             }
             cacheId.finish()
         }
 
         override fun changeFavorite(id: Int) {
             val itemToChange = cachedList.find {
-                it.matches(id)
+                it.map(BookUiMapper.Id(id))
             } ?: BookUi.Empty
-            val newItem = itemToChange.changeState()
+            val newItem = itemToChange.map(BookUiMapper.ChangeBookState())
             cachedList[cachedList.indexOf(itemToChange)] = newItem
         }
     }

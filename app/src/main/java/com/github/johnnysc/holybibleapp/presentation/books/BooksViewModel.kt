@@ -12,6 +12,7 @@ import com.github.johnnysc.holybibleapp.domain.books.BooksDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.books.BooksInteractor
 import com.github.johnnysc.holybibleapp.presentation.main.BaseViewModel
 import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
+import com.github.johnnysc.holybibleapp.sl.core.Feature
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -50,8 +51,8 @@ class BooksViewModel(
         communication.observe(owner, observer)
     }
 
-    fun collapseOrExpand(id: Int) {
-        communication.map(BooksUi.Base(uiDataCache.changeState(id)))
+    fun collapseOrExpand(item: BookUi) {
+        communication.map(BooksUi.Base(uiDataCache.changeState(item)))
         save()
     }
 
@@ -63,8 +64,10 @@ class BooksViewModel(
 
     fun save() = uiDataCache.saveState()
 
-    override fun saveScrollPosition(position: Int) = booksInteractor.saveScrollPosition(position)
-    override fun scrollPosition() = booksInteractor.scrollPosition()
+    override fun saveScrollPosition(position: Int) =
+        booksInteractor.saveScrollPosition(Feature.BOOKS, position)
+
+    override fun scrollPosition() = booksInteractor.scrollPosition(Feature.BOOKS)
 
     fun init() {
         navigator.saveBooksScreen()

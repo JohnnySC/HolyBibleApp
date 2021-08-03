@@ -1,47 +1,26 @@
 package com.github.johnnysc.holybibleapp.presentation.verses
 
-import com.github.johnnysc.holybibleapp.core.*
-import com.github.johnnysc.holybibleapp.presentation.books.ChangeState
-import com.github.johnnysc.holybibleapp.presentation.books.MapFavorite
-
 /**
  * @author Asatryan on 17.07.2021
  **/
-sealed class VerseUi : ComparableTextMapper<VerseUi>, MapFavorite, ChangeState<VerseUi>, Open<Int>,
-    Matcher<Int> {
+interface VerseUi {
 
-    override fun map(mapper: TextMapper) = Unit
-    override fun changeState(): VerseUi = Empty
-    override fun open(show: Show<Int>) = Unit
-    override fun matches(arg: Int) = false
-
-    abstract class Abstract(private val text: String) : VerseUi() {
-        override fun map(mapper: TextMapper) = mapper.map(text)
-    }
+    fun <T> map(mapper: VerseUiMapper<T>): T = mapper.map(0, "", false)
 
     data class Base(
-        private val id: Int,
-        private val text: String,
-        private val isFavorite: Boolean
-    ) : Abstract(text) {
-
-        override fun open(show: Show<Int>) = show.open(id)
-        override fun mapFavorite(mapper: FavoriteMapper) = mapper.map(isFavorite)
-        override fun matches(arg: Int) = arg == id
-
-        override fun same(item: VerseUi) = item is Base && item.id == id
-        override fun changeState() = Base(id, text, !isFavorite)
-
-        override fun sameContent(item: VerseUi) =
-            item is Base && item.text == text && isFavorite == item.isFavorite
+        private val id: Int, private val text: String, private val isFavorite: Boolean
+    ) : VerseUi {
+        override fun <T> map(mapper: VerseUiMapper<T>) = mapper.map(id, text, isFavorite)
     }
 
-    class Fail(text: String) : Abstract(text)
-    data class Next(private val text: String) : Abstract(text) {
-        override fun same(item: VerseUi) = item is Next
-        override fun sameContent(item: VerseUi) = true
+    class Fail(private val text: String) : VerseUi {
+        override fun <T> map(mapper: VerseUiMapper<T>) = mapper.map(-1, text, false)
     }
 
-    object Progress : VerseUi()
-    object Empty : VerseUi()
+    data class Next(private val text: String) : VerseUi {
+        override fun <T> map(mapper: VerseUiMapper<T>) = mapper.map(-2, text, false)
+    }
+
+    object Progress : VerseUi
+    object Empty : VerseUi
 }

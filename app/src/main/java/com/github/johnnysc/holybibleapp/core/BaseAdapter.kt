@@ -13,18 +13,20 @@ import com.github.johnnysc.holybibleapp.R
 /**
  * @author Asatryan on 12.07.2021
  **/
-abstract class BaseAdapter<E : ComparableTextMapper<E>, T : BaseViewHolder<E>> :
+abstract class BaseAdapter<E, T : BaseViewHolder<E>> :
     RecyclerView.Adapter<T>(), ListMapper<E> {
 
     protected val list = ArrayList<E>()
 
     override fun map(data: List<E>) {
-        val diffCallback = DiffUtilCallback(list, data)
+        val diffCallback: DiffUtil.Callback = diffUtilCallback(list, data)
         val result = DiffUtil.calculateDiff(diffCallback)
         list.clear()
         list.addAll(data)
         result.dispatchUpdatesTo(this)
     }
+
+    abstract fun diffUtilCallback(list: ArrayList<E>, data: List<E>): DiffUtil.Callback
 
     override fun getItemCount() = list.size
 
@@ -35,15 +37,12 @@ abstract class BaseAdapter<E : ComparableTextMapper<E>, T : BaseViewHolder<E>> :
         LayoutInflater.from(parent.context).inflate(this, parent, false)
 }
 
-interface ComparableTextMapper<T : ComparableTextMapper<T>> : Abstract.Object<Unit, TextMapper>,
-    Comparing<T>
-
-abstract class BaseViewHolder<E : ComparableTextMapper<E>>(view: View) :
+abstract class BaseViewHolder<E>(view: View) :
     RecyclerView.ViewHolder(view) {
     open fun bind(item: E) {
     }
 
-    class FullscreenProgress<E : ComparableTextMapper<E>>(view: View) :
+    class FullscreenProgress<E>(view: View) :
         BaseViewHolder<E>(view) {
         private val imageView = itemView.findViewById<ImageView>(R.id.imageView)
         override fun bind(item: E) {
@@ -56,18 +55,20 @@ abstract class BaseViewHolder<E : ComparableTextMapper<E>>(view: View) :
         }
     }
 
-    class Fail<E : ComparableTextMapper<E>>(
+    abstract class Fail<E>(
         view: View,
         private val retry: Retry
     ) : BaseViewHolder<E>(view) {
         private val message = itemView.findViewById<CustomTextView>(R.id.messageTextView)
         private val button = itemView.findViewById<View>(R.id.tryAgainButton)
         override fun bind(item: E) {
-            item.map(message)
+            mapErrorMessage(item, message)
             button.setOnClickListener {
                 retry.tryAgain()
             }
         }
+
+        abstract fun mapErrorMessage(item: E, textMapper: TextMapper)
     }
 }
 

@@ -8,6 +8,7 @@ import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersInteractor
 import com.github.johnnysc.holybibleapp.presentation.main.BaseViewModel
 import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
+import com.github.johnnysc.holybibleapp.sl.core.Feature
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -62,9 +63,9 @@ class ChaptersViewModel(
         navigator.nextScreen(navigationCommunication)
     }
 
-    override fun scrollPosition() = chaptersInteractor.scrollPosition()
+    override fun scrollPosition() = chaptersInteractor.scrollPosition(Feature.CHAPTERS)
     override fun saveScrollPosition(position: Int) =
-        chaptersInteractor.saveScrollPosition(position)
+        chaptersInteractor.saveScrollPosition(Feature.CHAPTERS, position)
 
     override fun onCleared() {
         super.onCleared()

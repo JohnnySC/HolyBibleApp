@@ -22,11 +22,11 @@ class BooksFragment : BaseFragment<BooksViewModel>() {
             object : Retry {
                 override fun tryAgain() = viewModel.fetchBooks()
             },
-            object : BooksAdapter.CollapseListener {
-                override fun collapseOrExpand(id: Int) = viewModel.collapseOrExpand(id)
+            object : ClickListener<BookUi> {
+                override fun click(item: BookUi) = viewModel.collapseOrExpand(item)
             },
             object : ClickListener<BookUi> {
-                override fun click(item: BookUi) = item.open(viewModel)
+                override fun click(item: BookUi) = item.map(BookUiMapper.Display(viewModel))
             },
             object : Show<Int> {
                 override fun open(id: Int) = viewModel.changeFavorite(id)
