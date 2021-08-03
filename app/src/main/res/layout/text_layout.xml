@@ -1,32 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.johnnysc.holybibleapp.core.SwipeRevealLayout
+<com.github.johnnysc.holybibleapp.core.SwipeMenuLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRevealLayout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:ios="false"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    app:dragEdge="right"
-    app:mode="normal">
-
-    <FrameLayout
-        android:id="@+id/changeFavoriteLayout"
-        android:layout_width="@dimen/item_height"
-        android:layout_height="match_parent"
-        android:background="?selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true">
-
-        <com.github.johnnysc.holybibleapp.core.FavoriteView
-            android:id="@+id/changeFavoriteView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            tools:ignore="ContentDescription"
-            tools:src="@drawable/ic_star_full_black_24" />
-
-    </FrameLayout>
+    android:background="@color/white">
 
     <com.github.johnnysc.holybibleapp.core.CustomFrameLayout
         android:id="@+id/backgroundView"
@@ -46,4 +27,22 @@
             tools:text="Genesis" />
     </com.github.johnnysc.holybibleapp.core.CustomFrameLayout>
 
-</com.github.johnnysc.holybibleapp.core.SwipeRevealLayout>
+    <FrameLayout
+        android:id="@+id/changeFavoriteLayout"
+        android:layout_width="@dimen/item_height"
+        android:layout_height="match_parent"
+        android:background="?selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true">
+
+        <com.github.johnnysc.holybibleapp.core.FavoriteView
+            android:id="@+id/changeFavoriteView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            tools:ignore="ContentDescription"
+            tools:src="@drawable/ic_star_full_black_24" />
+
+    </FrameLayout>
+
+</com.github.johnnysc.holybibleapp.core.SwipeMenuLayout>

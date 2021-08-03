@@ -39,7 +39,7 @@ class ChaptersAdapter(
             private val clickListener: ClickListener<ChapterUi>,
             private val favoriteListener: Show<Pair<Int, Int>>
         ) : ChapterViewHolder(view) {
-            private val reveal: SwipeRevealLayout = itemView.findViewById(R.id.swipeRevealLayout)
+            private val reveal: SwipeMenuLayout = itemView.findViewById(R.id.swipeRevealLayout)
             private val backgroundView: CustomFrameLayout =
                 itemView.findViewById(R.id.backgroundView)
             private val favoriteButton =
@@ -49,7 +49,6 @@ class ChaptersAdapter(
 
             private val textView = itemView.findViewById<CustomTextView>(R.id.textView)
             override fun bind(item: ChapterUi) {
-                reveal.close(false)
                 item.map(backgroundView)
                 item.map(favoriteButton)
                 item.map(textView)
@@ -58,7 +57,7 @@ class ChaptersAdapter(
                 }
                 favoriteLayout.setOnClickListener {
                     item.map(ChapterUiMapper.Display(favoriteListener))
-                    reveal.close(true)
+                    reveal.smoothClose()
                 }
             }
         }

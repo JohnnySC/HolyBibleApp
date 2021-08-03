@@ -37,7 +37,7 @@ class VersesAdapter(
             private val favoriteListener: Show<Int>
         ) : VerseViewHolder(view) {
             private val textView = itemView.findViewById<CustomTextView>(R.id.textView)
-            private val reveal: SwipeRevealLayout = itemView.findViewById(R.id.swipeRevealLayout)
+            private val reveal: SwipeMenuLayout = itemView.findViewById(R.id.swipeRevealLayout)
             private val backgroundView: CustomFrameLayout =
                 itemView.findViewById(R.id.backgroundView)
 
@@ -47,13 +47,12 @@ class VersesAdapter(
                 itemView.findViewById<View>(R.id.changeFavoriteLayout)
 
             override fun bind(item: VerseUi) {
-                reveal.close(false)
                 item.map(backgroundView)
                 item.map(favoriteButton)
                 item.map(textView)
                 favoriteLayout.setOnClickListener {
                     item.map(VerseUiMapper.Display(favoriteListener))
-                    reveal.close(true)
+                    reveal.smoothClose()
                 }
             }
         }

@@ -47,7 +47,7 @@ class BooksAdapter(
             private val bookListener: ClickListener<BookUi>,
             private val favoriteListener: Show<Int>
         ) : Info(view) {
-            private val reveal: SwipeRevealLayout = itemView.findViewById(R.id.swipeRevealLayout)
+            private val reveal: SwipeMenuLayout = itemView.findViewById(R.id.swipeRevealLayout)
             private val backgroundView: CustomFrameLayout =
                 itemView.findViewById(R.id.backgroundView)
             private val favoriteButton =
@@ -57,12 +57,11 @@ class BooksAdapter(
 
             override fun bind(item: BookUi) {
                 super.bind(item)
-                reveal.close(false)
                 item.map(backgroundView)
                 item.map(favoriteButton)
                 favoriteLayout.setOnClickListener {
                     item.map(BookUiMapper.Display(favoriteListener))
-                    reveal.close(true)
+                    reveal.smoothClose()
                 }
                 name.setOnClickListener {
                     bookListener.click(item)
