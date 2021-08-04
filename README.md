@@ -54,5 +54,6 @@ https://www.youtube.com/playlist?list=PLQRyeBV1rkk2xIL3ViHAEZ0h08wMOfutO
 
 16. release/1.2
 
+17. feature/HB09_favorites
 
 //todo add next steps
