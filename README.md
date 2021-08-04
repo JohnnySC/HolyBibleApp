@@ -52,5 +52,7 @@ https://www.youtube.com/playlist?list=PLQRyeBV1rkk2xIL3ViHAEZ0h08wMOfutO
 
 15. feature/HB08_next_chapter
 
+16. release/1.2
+
 
 //todo add next steps
