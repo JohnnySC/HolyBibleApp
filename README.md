@@ -56,4 +56,6 @@ https://www.youtube.com/playlist?list=PLQRyeBV1rkk2xIL3ViHAEZ0h08wMOfutO
 
 17. feature/HB09_favorites
 
-//todo add next steps
+18. feature/HB10_share_and_deeplink
+
+19. release/1.3
