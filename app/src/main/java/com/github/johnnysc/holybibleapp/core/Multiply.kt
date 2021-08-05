@@ -21,6 +21,8 @@ class Multiply(times: Int = 1) : Abstract.Mapper.Data<Int, Int> {
 
     fun rest(number: Int) = number % MULTIPLY
 
+    fun divide(number:Int) = number / MULTIPLY
+
     private companion object {
         const val MULTIPLY = 1000
     }

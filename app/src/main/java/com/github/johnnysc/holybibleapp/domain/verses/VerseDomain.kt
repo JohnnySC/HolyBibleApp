@@ -5,7 +5,7 @@ import com.github.johnnysc.holybibleapp.core.Matcher
 /**
  * @author Asatryan on 17.07.2021
  **/
-interface VerseDomain {
+interface VerseDomain : Matcher<Int> {
     fun <T> map(mapper: VerseDomainToUiMapper<T>): T
 
     data class Base(
@@ -16,11 +16,13 @@ interface VerseDomain {
     ) : VerseDomain {
         override fun <T> map(mapper: VerseDomainToUiMapper<T>) =
             mapper.map(id, visibleId, text, isFavorite)
+
+        override fun matches(arg: Int) = arg == visibleId
     }
 
-    object Next : VerseDomain, Matcher<Pair<Int, String>> {
+    object Next : VerseDomain {
         override fun <T> map(mapper: VerseDomainToUiMapper<T>): T = mapper.map(ID, ID, TEXT)
-        override fun matches(arg: Pair<Int, String>) = arg.first == ID && arg.second == TEXT
+        override fun matches(arg: Int) = arg == ID
 
         private const val ID = -200
         private const val TEXT = "next chapter text"

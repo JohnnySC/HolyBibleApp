@@ -11,7 +11,7 @@ sealed class VersesUi : ChangeFavorite<Int> {
 
     abstract fun map(list: ListMapper<VerseUi>, text: TextMapper)
 
-    class Base(
+    data class Base(
         private val data: MutableList<VerseUi>,
         private val title: String
     ) : VersesUi() {

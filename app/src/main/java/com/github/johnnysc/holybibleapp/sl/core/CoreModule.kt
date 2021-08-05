@@ -1,15 +1,18 @@
 package com.github.johnnysc.holybibleapp.sl.core
 
 import android.content.Context
+import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.RealmProvider
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.core.ScrollPositionCache
 import com.github.johnnysc.holybibleapp.presentation.books.BookCache
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterCache
+import com.github.johnnysc.holybibleapp.presentation.deeplink.DeeplinkData
 import com.github.johnnysc.holybibleapp.presentation.languages.Language
 import com.github.johnnysc.holybibleapp.presentation.main.MainViewModel
 import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
 import com.github.johnnysc.holybibleapp.presentation.main.Navigator
+
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,8 +35,9 @@ class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
     lateinit var navigator: Navigator
     lateinit var navigationCommunication: NavigationCommunication
     lateinit var bookCache: BookCache
-    lateinit var chapterCache: ChapterCache //todo move to chapter repository
+    lateinit var chapterCache: ChapterCache
     lateinit var language: Language
+    lateinit var deeplinkData: DeeplinkData
     private lateinit var retrofit: Retrofit
 
     fun init(context: Context) {
@@ -78,6 +82,8 @@ class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
             ScrollPositionCache.Mock(resourceProvider)
         else
             ScrollPositionCache.Base(resourceProvider)
+
+        deeplinkData = DeeplinkData.Base(resourceProvider.string(R.string.deeplink))
     }
 
     fun <T> makeService(clazz: Class<T>): T = retrofit.create(clazz)

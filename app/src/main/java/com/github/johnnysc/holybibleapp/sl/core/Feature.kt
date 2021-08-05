@@ -8,5 +8,7 @@ enum class Feature {
     BOOKS,
     CHAPTERS,
     VERSES,
-    LANGUAGES
+    LANGUAGES,
+    DEEPLINK,
+    DEEPLINK_VERSES
 }

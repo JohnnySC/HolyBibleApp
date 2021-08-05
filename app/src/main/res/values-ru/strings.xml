@@ -14,4 +14,5 @@
     <string name="book_and_chapter">%s Гл.%d</string>
     <string name="loading">Загрузка…</string>
     <string name="next_chapter">Перейти к следующей главе</string>
+    <string name="share_verse">Поделиться стихом</string>
 </resources>

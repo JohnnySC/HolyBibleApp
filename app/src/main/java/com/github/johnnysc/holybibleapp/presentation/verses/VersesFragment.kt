@@ -2,6 +2,7 @@ package com.github.johnnysc.holybibleapp.presentation.verses
 
 import android.os.Bundle
 import android.view.View
+import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
 import com.github.johnnysc.holybibleapp.core.Show
@@ -10,9 +11,7 @@ import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 /**
  * @author Asatryan on 17.07.2021
  **/
-class VersesFragment : BaseFragment<VersesViewModel>() {
-
-    override fun viewModelClass() = VersesViewModel::class.java
+abstract class VersesFragment<T : VersesViewModel> : BaseFragment<T>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -26,7 +25,13 @@ class VersesFragment : BaseFragment<VersesViewModel>() {
             },
             object : Show<Int> {
                 override fun open(id: Int) = viewModel.changeFavorite(id)
-            }
+            },
+            object : ClickListener<VerseUi> {
+                override fun click(item: VerseUi) = ShareVerse.Base(
+                    getString(R.string.share_verse),
+                    viewModel.share(item)
+                ).share(requireActivity() as ShareMapper)
+            },
         )
 
         viewModel.observeVerses(this, { ui ->
@@ -36,5 +41,9 @@ class VersesFragment : BaseFragment<VersesViewModel>() {
         setAdapter(adapter)
 
         viewModel.init()
+    }
+
+    class Base : VersesFragment<VersesViewModel.Base>() {
+        override fun viewModelClass() = VersesViewModel.Base::class.java
     }
 }

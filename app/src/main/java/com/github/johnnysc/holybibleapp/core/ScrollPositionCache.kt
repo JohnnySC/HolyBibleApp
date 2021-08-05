@@ -20,6 +20,7 @@ interface ScrollPositionCache {
                 Feature.BOOKS -> saveBooksScrollPosition(position)
                 Feature.CHAPTERS -> saveChaptersScrollPosition(position)
                 Feature.VERSES -> saveVersesScrollPosition(position)
+                Feature.DEEPLINK_VERSES -> { /*just dont save it on deeplink screen*/}
                 else -> throw IllegalStateException("unknown feature $feature")
             }
         }
@@ -28,6 +29,7 @@ interface ScrollPositionCache {
             Feature.BOOKS,
             Feature.CHAPTERS,
             Feature.VERSES -> get(feature.name)
+            Feature.DEEPLINK_VERSES -> 0
             else -> throw IllegalStateException("unknown feature $feature")
         }
 

@@ -11,7 +11,7 @@ import com.github.johnnysc.holybibleapp.domain.verses.VerseDomainToUiMapper
 class BaseVerseDomainToUiMapper(private val resourceProvider: ResourceProvider) :
     VerseDomainToUiMapper<VerseUi> {
     override fun map(id: Int, visibleId: Int, text: String, isFavorite: Boolean) =
-        if (VerseDomain.Next.matches(Pair(id, text)))
+        if (VerseDomain.Next.matches(id))
             VerseUi.Next(resourceProvider.string(R.string.next_chapter))
         else
             VerseUi.Base(id, "$visibleId $text", isFavorite)

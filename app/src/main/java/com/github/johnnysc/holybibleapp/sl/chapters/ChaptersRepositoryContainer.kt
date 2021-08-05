@@ -9,6 +9,7 @@ import com.github.johnnysc.holybibleapp.data.chapters.cache.ChaptersCacheMapper
 import com.github.johnnysc.holybibleapp.data.chapters.cloud.ChaptersCloudDataSource
 import com.github.johnnysc.holybibleapp.data.chapters.cloud.ChaptersCloudMapper
 import com.github.johnnysc.holybibleapp.data.chapters.cloud.ChaptersService
+import com.github.johnnysc.holybibleapp.presentation.books.BookCache
 import com.github.johnnysc.holybibleapp.sl.core.CoreModule
 import com.github.johnnysc.holybibleapp.sl.core.RepositoryContainer
 
@@ -18,6 +19,7 @@ import com.github.johnnysc.holybibleapp.sl.core.RepositoryContainer
 class ChaptersRepositoryContainer(
     private val coreModule: CoreModule,
     private val useMocks: Boolean,
+    private val bookCache: BookCache,
     private val booksRu: () -> List<BookRu>
 ) : RepositoryContainer<ChaptersRepository> {
 
@@ -26,10 +28,10 @@ class ChaptersRepositoryContainer(
         cacheDataSource(),
         cloudMapper(),
         cacheMapper(),
-        coreModule.bookCache
+        bookCache
     )
 
-    private fun cacheMapper() = ChaptersCacheMapper.Base(ToChapterMapper.Db(coreModule.bookCache))
+    private fun cacheMapper() = ChaptersCacheMapper.Base(ToChapterMapper.Db(bookCache))
 
     private fun cacheDataSource() =
         ChaptersCacheDataSource.Base(coreModule.realmProvider, ChapterDataToDbMapper.Base())
@@ -56,5 +58,5 @@ class ChaptersRepositoryContainer(
     )
 
     private fun cloudMapper() =
-        ChaptersCloudMapper.Base(ToChapterMapper.Cloud(coreModule.bookCache))
+        ChaptersCloudMapper.Base(ToChapterMapper.Cloud(bookCache))
 }

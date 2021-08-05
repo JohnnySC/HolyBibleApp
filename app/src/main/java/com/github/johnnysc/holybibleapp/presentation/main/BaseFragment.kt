@@ -31,7 +31,7 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment(), Matcher<String> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel = (requireActivity() as MainActivity).viewModel(viewModelClass(), this)
+        viewModel = (requireActivity() as BaseActivity).viewModel(viewModelClass(), this)
     }
 
     override fun onCreateView(

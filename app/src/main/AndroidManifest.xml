@@ -12,6 +12,22 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.HolyBibleApp">
+        <activity
+            android:name=".presentation.deeplink.DeeplinkActivity"
+            android:launchMode="singleInstance">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="github.com"
+                    android:pathPrefix="/johnnysc/holybibleapp/ids"
+                    android:scheme="https" />
+            </intent-filter>
+
+        </activity>
         <activity android:name=".presentation.main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

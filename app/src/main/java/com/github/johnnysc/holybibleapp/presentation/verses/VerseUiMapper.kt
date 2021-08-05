@@ -1,7 +1,9 @@
 package com.github.johnnysc.holybibleapp.presentation.verses
 
+import com.github.johnnysc.holybibleapp.core.Multiply
 import com.github.johnnysc.holybibleapp.core.Same
 import com.github.johnnysc.holybibleapp.core.Show
+import com.github.johnnysc.holybibleapp.presentation.deeplink.DeeplinkData
 
 /**
  * @author Asatryan on 03.08.2021
@@ -35,5 +37,22 @@ interface VerseUiMapper<T> {
 
     class Id(private val id: Int) : VerseUiMapper<Boolean> {
         override fun map(id: Int, text: String, isFavorite: Boolean) = this.id == id
+    }
+
+    class Share(
+        private val deeplinkData: DeeplinkData,
+        private val bookNameAndChapterNumber: String
+    ) : VerseUiMapper<String> {
+
+        override fun map(id: Int, text: String, isFavorite: Boolean): String {
+            val multiply = Multiply()
+            val bookId = multiply.divide(multiply.divide(id))
+            val chapterId = multiply.rest(multiply.divide(id))
+            val verseId = multiply.rest(multiply.rest(id))
+            return deeplinkData.shareText(
+                "$bookNameAndChapterNumber\n$text\n",
+                "${bookId}_${chapterId}_$verseId"
+            )
+        }
     }
 }
