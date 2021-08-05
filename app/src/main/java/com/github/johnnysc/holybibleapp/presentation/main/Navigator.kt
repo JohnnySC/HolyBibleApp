@@ -29,7 +29,7 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
         private val screens = listOf(
             BooksFragment::class.java,
             ChaptersFragment::class.java,
-            VersesFragment::class.java,
+            VersesFragment.Base::class.java,
             LanguagesFragment::class.java
         )
 

@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.github.johnnysc.holybibleapp.presentation.books.BooksViewModel
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChaptersViewModel
+import com.github.johnnysc.holybibleapp.presentation.deeplink.DeeplinkVersesViewModel
+import com.github.johnnysc.holybibleapp.presentation.deeplink.DeeplinkViewModel
 import com.github.johnnysc.holybibleapp.presentation.languages.LanguagesViewModel
 import com.github.johnnysc.holybibleapp.presentation.main.MainViewModel
 import com.github.johnnysc.holybibleapp.presentation.verses.VersesViewModel
@@ -19,8 +21,10 @@ class ViewModelsFactory(
         put(MainViewModel::class.java, Feature.MAIN)
         put(BooksViewModel::class.java, Feature.BOOKS)
         put(ChaptersViewModel::class.java, Feature.CHAPTERS)
-        put(VersesViewModel::class.java, Feature.VERSES)
+        put(VersesViewModel.Base::class.java, Feature.VERSES)
         put(LanguagesViewModel::class.java, Feature.LANGUAGES)
+        put(DeeplinkViewModel::class.java, Feature.DEEPLINK)
+        put(DeeplinkVersesViewModel::class.java, Feature.DEEPLINK_VERSES)
     }
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

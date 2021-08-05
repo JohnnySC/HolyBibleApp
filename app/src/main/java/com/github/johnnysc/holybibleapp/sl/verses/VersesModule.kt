@@ -13,49 +13,69 @@ import com.github.johnnysc.holybibleapp.data.verses.cloud.VersesCloudMapper
 import com.github.johnnysc.holybibleapp.data.verses.cloud.VersesService
 import com.github.johnnysc.holybibleapp.domain.verses.BaseVerseDataToDomainMapper
 import com.github.johnnysc.holybibleapp.domain.verses.BaseVersesDataToDomainMapper
+import com.github.johnnysc.holybibleapp.domain.verses.VersesDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.verses.VersesInteractor
-import com.github.johnnysc.holybibleapp.presentation.verses.BaseVerseDomainToUiMapper
-import com.github.johnnysc.holybibleapp.presentation.verses.BaseVersesDomainToUiMapper
-import com.github.johnnysc.holybibleapp.presentation.verses.VersesCommunication
-import com.github.johnnysc.holybibleapp.presentation.verses.VersesViewModel
+import com.github.johnnysc.holybibleapp.presentation.books.BookCache
+import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterCache
+import com.github.johnnysc.holybibleapp.presentation.verses.*
 import com.github.johnnysc.holybibleapp.sl.core.BaseModule
 import com.github.johnnysc.holybibleapp.sl.core.CoreModule
 
 /**
  * @author Asatryan on 17.07.2021
  **/
-class VersesModule(
-    private val coreModule: CoreModule,
+abstract class VersesModule(
+    protected val coreModule: CoreModule,
     private val booksRepository: BooksRepository,
     private val chaptersRepository: ChaptersRepository,
     private val useMocks: Boolean,
+    private val bookCache: BookCache,
+    private val chapterCache: ChapterCache,
     private val booksRu: () -> List<BookRu>
 ) : BaseModule<VersesViewModel> {
 
-    override fun viewModel() = VersesViewModel(
-        coreModule.navigator,
-        interactor(),
-        communications(),
-        mapper(),
-        coreModule.resourceProvider
-    )
-
-    private fun communications() = VersesCommunication.Base()
-
-    private fun mapper() =
-        BaseVersesDomainToUiMapper(
+    class Base(
+        coreModule: CoreModule,
+        booksRepository: BooksRepository,
+        chaptersRepository: ChaptersRepository,
+        useMocks: Boolean,
+        booksRu: () -> List<BookRu>
+    ) : VersesModule(
+        coreModule,
+        booksRepository,
+        chaptersRepository,
+        useMocks,
+        coreModule.bookCache,
+        coreModule.chapterCache,
+        booksRu,
+    ) {
+        override fun mapper() = BaseVersesDomainToUiMapper(
             BaseVerseDomainToUiMapper(coreModule.resourceProvider),
             coreModule.resourceProvider
         )
 
-    private fun interactor() = VersesInteractor.Base(
+        override fun viewModel() = VersesViewModel.Base(
+            coreModule.navigator,
+            interactor(),
+            communications(),
+            mapper(),
+            coreModule.resourceProvider,
+            coreModule.deeplinkData,
+        )
+    }
+
+    protected fun communications() = VersesCommunication.Base()
+
+    protected abstract fun mapper(): VersesDomainToUiMapper<VersesUi>
+
+    protected fun interactor() = VersesInteractor.Base(
         repository(),
         BaseVersesDataToDomainMapper(BaseVerseDataToDomainMapper()),
         booksRepository,
-        coreModule.bookCache,
+        bookCache,
         coreModule.scrollPositionCache,
         chaptersRepository,
-        coreModule.chapterCache,
+        chapterCache,
     )
 
     private fun repository(): VersesRepository {
@@ -65,8 +85,8 @@ class VersesModule(
             cacheDataSource(),
             VersesCloudMapper.Base(mapper),
             VersesCacheMapper.Base(mapper),
-            coreModule.chapterCache,
-            coreModule.bookCache
+            chapterCache,
+            bookCache
         )
     }
 

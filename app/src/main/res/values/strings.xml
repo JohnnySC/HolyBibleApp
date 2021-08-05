@@ -13,4 +13,6 @@
     <string name="book_and_chapter">%s Ch.%d</string>
     <string name="loading">Loading…</string>
     <string name="next_chapter">Go to next chapter</string>
+    <string name="share_verse">Share verse</string>
+    <string name="deeplink" translatable="false">https://github.com/johnnysc/holybibleapp/ids</string>
 </resources>

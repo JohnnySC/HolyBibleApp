@@ -11,7 +11,8 @@ import com.github.johnnysc.holybibleapp.core.*
 class VersesAdapter(
     private val retry: Retry,
     private val clickListener: ClickListener<VerseUi>,
-    private val favoriteListener: Show<Int>
+    private val favoriteListener: Show<Int>,
+    private val shareClickListener: ClickListener<VerseUi>
 ) : BaseAdapter<VerseUi, BaseViewHolder<VerseUi>>() {
 
     override fun getItemViewType(position: Int) = when (list[position]) {
@@ -23,7 +24,12 @@ class VersesAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
-        0 -> VerseViewHolder.Base(R.layout.verse_layout.makeView(parent), favoriteListener)
+        0 -> VerseViewHolder.Base(
+            (if (itemCount == 1) R.layout.single_verse_layout
+            else R.layout.verse_layout).makeView(parent),
+            favoriteListener,
+            shareClickListener
+        )
         1 -> VerseViewHolder.Error(R.layout.fail_fullscreen.makeView(parent), retry)
         2 -> BaseViewHolder.FullscreenProgress(R.layout.progress_fullscreen.makeView(parent))
         3 -> VerseViewHolder.Next(R.layout.next_layout.makeView(parent), clickListener)
@@ -34,12 +40,14 @@ class VersesAdapter(
 
         class Base(
             view: View,
-            private val favoriteListener: Show<Int>
+            private val favoriteListener: Show<Int>,
+            private val shareClickListener: ClickListener<VerseUi>
         ) : VerseViewHolder(view) {
             private val textView = itemView.findViewById<CustomTextView>(R.id.textView)
             private val reveal: SwipeMenuLayout = itemView.findViewById(R.id.swipeRevealLayout)
             private val backgroundView: CustomFrameLayout =
                 itemView.findViewById(R.id.backgroundView)
+            private val shareView = itemView.findViewById<View>(R.id.shareLayout)
 
             private val favoriteButton =
                 itemView.findViewById<FavoriteView>(R.id.changeFavoriteView)
@@ -53,6 +61,9 @@ class VersesAdapter(
                 favoriteLayout.setOnClickListener {
                     item.map(VerseUiMapper.Display(favoriteListener))
                     reveal.smoothClose()
+                }
+                shareView.setOnClickListener {
+                    shareClickListener.click(item)
                 }
             }
         }
