@@ -1,10 +1,10 @@
 package com.github.johnnysc.holybibleapp.data.chapters
 
 import com.github.johnnysc.holybibleapp.core.Abstract
-import com.github.johnnysc.holybibleapp.core.TextMapper
+import com.github.johnnysc.holybibleapp.data.books.BookData
 
 /**
  * @author Asatryan on 11.07.2021
  **/
-abstract class ChaptersDataToDomainMapper<T> :
-    Abstract.Mapper.DataToDomain.Base<Pair<List<ChapterData>, Abstract.Object<Unit, TextMapper>>, T>()
+interface ChaptersDataToDomainMapper<T> :
+    Abstract.Mapper.DataToDomain<Pair<List<ChapterData>, BookData>, T>

@@ -2,7 +2,7 @@ package com.github.johnnysc.holybibleapp.presentation.books
 
 import android.os.Bundle
 import android.view.View
-import com.github.johnnysc.holybibleapp.core.ClickListener
+import com.github.johnnysc.holybibleapp.presentation.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
 import com.github.johnnysc.holybibleapp.core.Show
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
@@ -13,14 +13,14 @@ import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 class BooksFragment : BaseFragment<BooksViewModel>() {
 
     override fun viewModelClass() = BooksViewModel::class.java
-    override fun showBackIcon() = false
+    override fun showBack() = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = BooksAdapter(
             object : Retry {
-                override fun tryAgain() = viewModel.fetchBooks()
+                override fun tryAgain() = viewModel.fetch()
             },
             object : ClickListener<BookUi> {
                 override fun click(item: BookUi) = viewModel.collapseOrExpand(item)
@@ -40,7 +40,7 @@ class BooksFragment : BaseFragment<BooksViewModel>() {
     }
 
     override fun onPause() {
-        viewModel.save()
+        viewModel.save(Unit)
         super.onPause()
     }
 }

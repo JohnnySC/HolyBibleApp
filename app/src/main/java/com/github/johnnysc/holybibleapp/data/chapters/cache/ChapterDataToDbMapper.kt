@@ -1,6 +1,6 @@
 package com.github.johnnysc.holybibleapp.data.chapters.cache
 
-import com.github.johnnysc.holybibleapp.core.DbWrapper
+import com.github.johnnysc.holybibleapp.data.core.DbWrapper
 import com.github.johnnysc.holybibleapp.data.chapters.ChapterId
 import io.realm.RealmObject
 

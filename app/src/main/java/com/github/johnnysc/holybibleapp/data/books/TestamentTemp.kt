@@ -8,6 +8,7 @@ import com.github.johnnysc.holybibleapp.core.Save
  **/
 interface TestamentTemp : Matcher<String>, Save<String> {
     fun isEmpty(): Boolean
+    fun clear() = save("")
 
     class Base : TestamentTemp {
         private var temp: String = ""

@@ -29,7 +29,7 @@
                 android:contentDescription="@string/english"
                 tools:src="@drawable/english_flag" />
 
-            <com.github.johnnysc.holybibleapp.core.CustomRadioButton
+            <com.github.johnnysc.holybibleapp.presentation.core.view.CustomRadioButton
                 android:id="@+id/englishRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                 android:contentDescription="@string/russian"
                 android:src="@drawable/russian_flag" />
 
-            <com.github.johnnysc.holybibleapp.core.CustomRadioButton
+            <com.github.johnnysc.holybibleapp.presentation.core.view.CustomRadioButton
                 android:id="@+id/russianRadioButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

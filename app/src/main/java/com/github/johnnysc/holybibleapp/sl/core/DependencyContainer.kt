@@ -78,6 +78,7 @@ interface DependencyContainer {
             ChaptersRepositoryContainer(coreModule, useMocks, coreModule.bookCache, booksRu)
                 .repository()
 
-        private fun russianBooks() = RussianBooksContainer(coreModule).booksRu()
+        private fun russianBooks() =
+            RussianBooksContainer(coreModule, RussianBooksTypeToken()).booksRu()
     }
 }

@@ -1,8 +1,8 @@
 package com.github.johnnysc.holybibleapp.sl.core
 
-import com.github.johnnysc.holybibleapp.data.books.BooksRepository
 import com.github.johnnysc.holybibleapp.data.books.cloud.BookRu
-import com.github.johnnysc.holybibleapp.data.chapters.ChaptersRepository
+import com.github.johnnysc.holybibleapp.domain.books.BooksRepository
+import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersRepository
 import com.github.johnnysc.holybibleapp.sl.books.BooksRepositoryProvider
 import com.github.johnnysc.holybibleapp.sl.books.ClearBooks
 import com.github.johnnysc.holybibleapp.sl.chapters.ChaptersRepositoryProvider

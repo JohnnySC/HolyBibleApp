@@ -1,12 +1,10 @@
 package com.github.johnnysc.holybibleapp.domain.chapters
 
-import com.github.johnnysc.holybibleapp.core.Interactor
+import com.github.johnnysc.holybibleapp.domain.core.Interactor
 import com.github.johnnysc.holybibleapp.core.Read
-import com.github.johnnysc.holybibleapp.core.ScrollPositionCache
-import com.github.johnnysc.holybibleapp.data.books.BooksRepository
 import com.github.johnnysc.holybibleapp.data.chapters.ChaptersDataToDomainMapper
-import com.github.johnnysc.holybibleapp.data.chapters.ChaptersRepository
-import com.github.johnnysc.holybibleapp.sl.core.Feature
+import com.github.johnnysc.holybibleapp.domain.books.BooksRepository
+import com.github.johnnysc.holybibleapp.domain.core.ScrollPosition
 
 /**
  * @author Asatryan on 12.07.2021
@@ -20,7 +18,7 @@ interface ChaptersInteractor : Interactor {
         private val mapper: ChaptersDataToDomainMapper<ChaptersDomain>,
         private val booksRepository: BooksRepository,
         private val bookIdContainer: Read<Int>,
-        scrollPosition: ScrollPositionCache
+        scrollPosition: ScrollPosition
     ) : Interactor.Abstract(repository, scrollPosition), ChaptersInteractor {
         override suspend fun fetchChapters() = ChaptersAndBooksDomain(
             repository.fetchData(),

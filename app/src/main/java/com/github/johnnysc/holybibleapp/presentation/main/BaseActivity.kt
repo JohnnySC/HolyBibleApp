@@ -7,13 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelStoreOwner
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.BibleApp
-import com.github.johnnysc.holybibleapp.core.TextMapper
-import com.github.johnnysc.holybibleapp.presentation.verses.ShareMapper
+import com.github.johnnysc.holybibleapp.presentation.core.TextMapper
+import com.github.johnnysc.holybibleapp.presentation.verses.Share
 
 /**
  * @author Asatryan on 04.08.2021
  **/
-abstract class BaseActivity : AppCompatActivity(), TextMapper, ShareMapper {
+abstract class BaseActivity : AppCompatActivity(), TextMapper, Share {
 
     fun <T : ViewModel> viewModel(model: Class<T>, owner: ViewModelStoreOwner) =
         (application as BibleApp).viewModel(model, owner)
@@ -22,7 +22,7 @@ abstract class BaseActivity : AppCompatActivity(), TextMapper, ShareMapper {
         title = data
     }
 
-    override fun share(share: Intent) = startActivity(share)
+    override fun share(data: Intent) = startActivity(data)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

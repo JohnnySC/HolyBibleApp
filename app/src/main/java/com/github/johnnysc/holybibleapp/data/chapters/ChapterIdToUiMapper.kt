@@ -11,12 +11,11 @@ interface ChapterIdToUiMapper<T> {
     fun map(realId: Int, generatedId: Int, isFavorite: Boolean): T
 
     class Base(private val resourceProvider: ResourceProvider) : ChapterIdToUiMapper<ChapterUi> {
-        override fun map(realId: Int, generatedId: Int, isFavorite: Boolean) =
-            ChapterUi.Base(
-                realId,
-                generatedId,
-                resourceProvider.string(R.string.chapter_number, realId),
-                isFavorite
-            )
+        override fun map(realId: Int, generatedId: Int, isFavorite: Boolean) = ChapterUi.Base(
+            realId,
+            generatedId,
+            resourceProvider.string(R.string.chapter_number, realId),
+            isFavorite
+        )
     }
 }

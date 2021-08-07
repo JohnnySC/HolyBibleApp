@@ -20,11 +20,7 @@ interface UiDataCache : ChangeFavorite<Int> {
             var newList: ArrayList<BookUi> = ArrayList(list)
             val ids = cacheId.read()
             ids.forEach { id ->
-                cachedList.find {
-                    it.map(BookUiMapper.Id(id))
-                }?.let {
-                    newList = changeState(it)
-                }
+                cachedList.find { it.map(BookUiMapper.Id(id)) }?.let { newList = changeState(it) }
             }
             return newList
         }
@@ -54,18 +50,13 @@ interface UiDataCache : ChangeFavorite<Int> {
 
         override fun saveState() {
             cacheId.start()
-            cachedList.filter {
-                it.map(BookUiMapper.CollapsedState())
-            }.forEach {
-                it.map(BookUiMapper.Store(cacheId))
-            }
+            cachedList.filter { it.map(BookUiMapper.CollapsedState()) }
+                .forEach { it.map(BookUiMapper.Store(cacheId)) }
             cacheId.finish()
         }
 
         override fun changeFavorite(id: Int) {
-            val itemToChange = cachedList.find {
-                it.map(BookUiMapper.Id(id))
-            } ?: BookUi.Empty
+            val itemToChange = cachedList.find { it.map(BookUiMapper.Id(id)) } ?: BookUi.Empty
             val newItem = itemToChange.map(BookUiMapper.ChangeBookState())
             cachedList[cachedList.indexOf(itemToChange)] = newItem
         }

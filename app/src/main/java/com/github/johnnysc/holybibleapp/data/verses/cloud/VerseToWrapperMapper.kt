@@ -13,10 +13,12 @@ interface VerseToWrapperMapper : Abstract.Mapper {
     class Base(
         private val bookId: Int,
         private val chapterId: Int,
-        private val id: Int
+        private val id: Int,
+        private val multiplyTwice: Multiply,
+        private val multiply: Multiply,
     ) : VerseToWrapperMapper {
         override fun map(text: String): VerseCloud {
-            val finalId = Multiply(2).map(bookId) + Multiply(1).map(chapterId) + id
+            val finalId = multiplyTwice.map(bookId) + multiply.map(chapterId) + id
             return VerseRuWrapper(finalId, id, text)
         }
     }

@@ -1,7 +1,7 @@
 package com.github.johnnysc.holybibleapp.presentation.books
 
 import com.github.johnnysc.holybibleapp.core.ChangeFavorite
-import com.github.johnnysc.holybibleapp.core.Communication
+import com.github.johnnysc.holybibleapp.presentation.core.Communication
 
 /**
  * @author Asatryan on 27.06.2021

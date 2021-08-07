@@ -1,8 +1,10 @@
 package com.github.johnnysc.holybibleapp.data.chapters.cache
 
+import com.github.johnnysc.holybibleapp.core.Multiply
 import com.github.johnnysc.holybibleapp.data.chapters.ChapterData
 import com.github.johnnysc.holybibleapp.data.chapters.ChapterId
 import com.github.johnnysc.holybibleapp.data.chapters.ToChapterMapper
+import com.github.johnnysc.holybibleapp.data.core.FavoritesList
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -15,7 +17,8 @@ class ChaptersCacheMapperTest {
 
     @Test
     fun test_mapping() {
-        val mapper = ChaptersCacheMapper.Base(TestMapper(7))
+        val multiply = Multiply()
+        val mapper = ChaptersCacheMapper.Base(TestMapper(7, multiply))
         val actual = mapper.map(
             Pair(
                 listOf(
@@ -29,19 +32,23 @@ class ChaptersCacheMapperTest {
                         id = 7003
                     },
                 ),
-                listOf(7001, 7002)
+                FavoritesList(listOf(7001, 7002))
             )
         )
         val expected = listOf(
-            ChapterData.Base(ChapterId.Base(7, 1), true),
-            ChapterData.Base(ChapterId.Base(7, 2), true),
-            ChapterData.Base(ChapterId.Base(7, 3), false),
+            ChapterData.Base(ChapterId.Base(7, 1, multiply = multiply), true),
+            ChapterData.Base(ChapterId.Base(7, 2, multiply = multiply), true),
+            ChapterData.Base(ChapterId.Base(7, 3, multiply = multiply), false),
         )
         assertEquals(expected, actual)
     }
 
-    private inner class TestMapper(private val bookId: Int) : ToChapterMapper<ChapterData> {
+    private inner class TestMapper(
+        private val bookId: Int,
+        private val multiply: Multiply,
+    ) : ToChapterMapper<ChapterData> {
         override fun map(id: Int, isFavorite: Boolean) =
-            ChapterData.Base(ChapterId.Base(bookId, chapterIdGenerated = id), isFavorite)
+            ChapterData.Base(ChapterId.Base(bookId, chapterIdGenerated = id, multiply = multiply),
+                isFavorite)
     }
 }

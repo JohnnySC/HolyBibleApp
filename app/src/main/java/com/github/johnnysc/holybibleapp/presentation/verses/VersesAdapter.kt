@@ -1,9 +1,13 @@
 package com.github.johnnysc.holybibleapp.presentation.verses
 
-import android.view.View
 import android.view.ViewGroup
 import com.github.johnnysc.holybibleapp.R
-import com.github.johnnysc.holybibleapp.core.*
+import com.github.johnnysc.holybibleapp.core.Retry
+import com.github.johnnysc.holybibleapp.core.Show
+import com.github.johnnysc.holybibleapp.presentation.core.BaseAdapter
+import com.github.johnnysc.holybibleapp.presentation.core.BaseViewHolder
+import com.github.johnnysc.holybibleapp.presentation.core.ClickListener
+import com.github.johnnysc.holybibleapp.presentation.core.DiffUtilCallback
 
 /**
  * @author Asatryan on 17.07.2021
@@ -25,8 +29,8 @@ class VersesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = when (viewType) {
         0 -> VerseViewHolder.Base(
-            (if (itemCount == 1) R.layout.single_verse_layout
-            else R.layout.verse_layout).makeView(parent),
+            (if (itemCount == 1) R.layout.single_verse_layout else R.layout.verse_layout)
+                .makeView(parent),
             favoriteListener,
             shareClickListener
         )
@@ -34,55 +38,6 @@ class VersesAdapter(
         2 -> BaseViewHolder.FullscreenProgress(R.layout.progress_fullscreen.makeView(parent))
         3 -> VerseViewHolder.Next(R.layout.next_layout.makeView(parent), clickListener)
         else -> throw IllegalStateException("unknown viewType $viewType")
-    }
-
-    abstract class VerseViewHolder(view: View) : BaseViewHolder<VerseUi>(view) {
-
-        class Base(
-            view: View,
-            private val favoriteListener: Show<Int>,
-            private val shareClickListener: ClickListener<VerseUi>
-        ) : VerseViewHolder(view) {
-            private val textView = itemView.findViewById<CustomTextView>(R.id.textView)
-            private val reveal: SwipeMenuLayout = itemView.findViewById(R.id.swipeRevealLayout)
-            private val backgroundView: CustomFrameLayout =
-                itemView.findViewById(R.id.backgroundView)
-            private val shareView = itemView.findViewById<View>(R.id.shareLayout)
-
-            private val favoriteButton =
-                itemView.findViewById<FavoriteView>(R.id.changeFavoriteView)
-            private val favoriteLayout =
-                itemView.findViewById<View>(R.id.changeFavoriteLayout)
-
-            override fun bind(item: VerseUi) {
-                item.map(backgroundView)
-                item.map(favoriteButton)
-                item.map(textView)
-                favoriteLayout.setOnClickListener {
-                    item.map(VerseUiMapper.Display(favoriteListener))
-                    reveal.smoothClose()
-                }
-                shareView.setOnClickListener {
-                    shareClickListener.click(item)
-                }
-            }
-        }
-
-        class Next(view: View, private val clickListener: ClickListener<VerseUi>) :
-            VerseViewHolder(view) {
-            private val nextButton = itemView.findViewById<CustomButton>(R.id.nextButton)
-            override fun bind(item: VerseUi) {
-                item.map(nextButton)
-                nextButton.setOnClickListener {
-                    clickListener.click(item)
-                }
-            }
-        }
-
-        class Error(view: View, retry: Retry) : Fail<VerseUi>(view, retry) {
-            override fun mapErrorMessage(item: VerseUi, textMapper: TextMapper) =
-                item.map(textMapper)
-        }
     }
 
     override fun diffUtilCallback(

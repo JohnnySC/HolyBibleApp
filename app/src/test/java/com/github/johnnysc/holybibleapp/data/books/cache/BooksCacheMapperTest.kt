@@ -2,6 +2,7 @@ package com.github.johnnysc.holybibleapp.data.books.cache
 
 import com.github.johnnysc.holybibleapp.data.books.BookData
 import com.github.johnnysc.holybibleapp.data.books.ToBookMapper
+import com.github.johnnysc.holybibleapp.data.core.FavoritesList
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -33,7 +34,7 @@ class BooksCacheMapperTest {
                         name = "three"
                         testament = "nt"
                     }),
-                listOf(1, 2)
+                FavoritesList(listOf(1, 2))
             )
         )
         val expected = listOf(

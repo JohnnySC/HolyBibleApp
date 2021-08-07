@@ -11,14 +11,16 @@ interface CollapsedIdsCache : Save<Int>, Read<Set<Int>> {
     fun start()
     fun finish()
 
-    abstract class Abstract(preferencesProvider: PreferencesProvider) : CollapsedIdsCache {
-        private val sharedPreferences by lazy {
-            preferencesProvider.provideSharedPreferences(getFileName())
-        }
+    abstract class Abstract(
+        preferencesProvider: PreferencesProvider,
+        fileName: String,
+        private val key: String
+    ) : CollapsedIdsCache {
+        private val sharedPreferences = preferencesProvider.provideSharedPreferences(fileName)
         private val idSet = mutableSetOf<Int>()
 
         override fun read(): Set<Int> {
-            val set = sharedPreferences.getStringSet(getKey(), emptySet()) ?: emptySet()
+            val set = sharedPreferences.getStringSet(key, emptySet()) ?: emptySet()
             return set.mapTo(HashSet()) { it.toInt() }
         }
 
@@ -32,19 +34,12 @@ interface CollapsedIdsCache : Save<Int>, Read<Set<Int>> {
 
         override fun finish() {
             val set = idSet.mapTo(HashSet()) { it.toString() }
-            sharedPreferences.edit().putStringSet(getKey(), set).apply()
+            sharedPreferences.edit().putStringSet(key, set).apply()
         }
-
-        protected abstract fun getFileName(): String
-        protected abstract fun getKey(): String
     }
 
     class Base(preferencesProvider: PreferencesProvider) :
-        CollapsedIdsCache.Abstract(preferencesProvider) {
-
-        override fun getFileName() = ID_LIST_NAME
-        override fun getKey() = IDS_KEY
-
+        CollapsedIdsCache.Abstract(preferencesProvider, ID_LIST_NAME, IDS_KEY) {
         private companion object {
             const val ID_LIST_NAME = "collapsedItemsIdList"
             const val IDS_KEY = "collapsedItemsIdsKey"
@@ -52,11 +47,7 @@ interface CollapsedIdsCache : Save<Int>, Read<Set<Int>> {
     }
 
     class Mock(preferencesProvider: PreferencesProvider) :
-        CollapsedIdsCache.Abstract(preferencesProvider) {
-
-        override fun getFileName() = ID_LIST_NAME
-        override fun getKey() = IDS_KEY
-
+        CollapsedIdsCache.Abstract(preferencesProvider, ID_LIST_NAME, IDS_KEY) {
         private companion object {
             const val ID_LIST_NAME = "MockCollapsedItemsIdList"
             const val IDS_KEY = "MockCollapsedItemsIdsKey"

@@ -9,7 +9,7 @@ import android.widget.ImageView
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.github.johnnysc.holybibleapp.R
-import com.github.johnnysc.holybibleapp.core.CustomRadioButton
+import com.github.johnnysc.holybibleapp.presentation.core.view.CustomRadioButton
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 
 /**
@@ -17,7 +17,7 @@ import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
  **/
 class LanguagesFragment : BaseFragment<LanguagesViewModel>() {
 
-    override fun showBackIcon() = viewModel.showBackIcon()
+    override fun showBack() = viewModel.showBack()
     override fun layoutResId() = R.layout.fragment_languages
     override fun viewModelClass() = LanguagesViewModel::class.java
 
@@ -51,7 +51,7 @@ class LanguagesFragment : BaseFragment<LanguagesViewModel>() {
         russian.setOnClickListener(chooseRussian)
         russianRadioButton.setOnClickListener(chooseRussian)
 
-        viewModel.observeLanguage(this, {
+        viewModel.observe(this, {
             it.map(
                 englishRadioButton,
                 russianRadioButton,
@@ -60,7 +60,7 @@ class LanguagesFragment : BaseFragment<LanguagesViewModel>() {
                 ::noLanguageChosen
             )
         })
-        viewModel.init()
+        viewModel.fetch()
     }
 
     private fun englishChosen() {

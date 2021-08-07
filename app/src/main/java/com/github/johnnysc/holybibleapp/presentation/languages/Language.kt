@@ -1,5 +1,7 @@
 package com.github.johnnysc.holybibleapp.presentation.languages
 
+import com.github.johnnysc.holybibleapp.core.ChooseLanguages
+import com.github.johnnysc.holybibleapp.core.ChosenLanguage
 import com.github.johnnysc.holybibleapp.core.PreferencesProvider
 import com.github.johnnysc.holybibleapp.core.Read
 
@@ -8,23 +10,22 @@ import com.github.johnnysc.holybibleapp.core.Read
  **/
 interface Language : ChooseLanguages, ChosenLanguage, Read<Int> {
 
-    abstract class Abstract(preferencesProvider: PreferencesProvider) : Language {
+    abstract class Abstract(
+        preferencesProvider: PreferencesProvider,
+        fileName: String,
+        private val key: String
+    ) : Language {
 
-        private val sharedPreferences by lazy {
-            preferencesProvider.provideSharedPreferences(getLanguageFileName())
-        }
+        private val sharedPreferences = preferencesProvider.provideSharedPreferences(fileName)
 
-        protected abstract fun getLanguageFileName(): String
-        protected abstract fun getLanguageKey(): String
-
-        override fun read() = sharedPreferences.getInt(getLanguageKey(), -1)
+        override fun read() = sharedPreferences.getInt(key, -1)
         override fun chooseEnglish() = save(ENGLISH)
         override fun chooseRussian() = save(RUSSIAN)
         override fun isChosenEnglish() = read() == ENGLISH
         override fun isChosenRussian() = read() == RUSSIAN
 
         private fun save(language: Int) {
-            sharedPreferences.edit().putInt(getLanguageKey(), language).apply()
+            sharedPreferences.edit().putInt(key, language).apply()
         }
 
         private companion object {
@@ -33,23 +34,17 @@ interface Language : ChooseLanguages, ChosenLanguage, Read<Int> {
         }
     }
 
-    class Base(resourceProvider: PreferencesProvider) : Abstract(resourceProvider) {
-        override fun getLanguageFileName() = LANGUAGES_FILE_NAME
-        override fun getLanguageKey() = LANGUAGES_KEY
-
+    class Base(resourceProvider: PreferencesProvider) : Abstract(resourceProvider, FILE_NAME, KEY) {
         private companion object {
-            const val LANGUAGES_FILE_NAME = "languagesFileName"
-            const val LANGUAGES_KEY = "languagesKey"
+            const val FILE_NAME = "languagesFileName"
+            const val KEY = "languagesKey"
         }
     }
 
-    class Mock(resourceProvider: PreferencesProvider) : Abstract(resourceProvider) {
-        override fun getLanguageFileName() = LANGUAGES_FILE_NAME
-        override fun getLanguageKey() = LANGUAGES_KEY
-
+    class Mock(resourceProvider: PreferencesProvider) : Abstract(resourceProvider, FILE_NAME, KEY) {
         private companion object {
-            const val LANGUAGES_FILE_NAME = "mockLanguagesFileName"
-            const val LANGUAGES_KEY = "mockLanguagesKey"
+            const val FILE_NAME = "mockLanguagesFileName"
+            const val KEY = "mockLanguagesKey"
         }
     }
 
@@ -75,14 +70,4 @@ interface Language : ChooseLanguages, ChosenLanguage, Read<Int> {
         override fun isChosenRussian() = language.isChosenRussian()
         override fun read() = language.read()
     }
-}
-
-interface ChosenLanguage {
-    fun isChosenEnglish(): Boolean
-    fun isChosenRussian(): Boolean
-}
-
-interface ChooseLanguages {
-    fun chooseEnglish()
-    fun chooseRussian()
 }

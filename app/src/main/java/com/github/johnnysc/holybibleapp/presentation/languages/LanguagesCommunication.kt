@@ -1,6 +1,6 @@
 package com.github.johnnysc.holybibleapp.presentation.languages
 
-import com.github.johnnysc.holybibleapp.core.Communication
+import com.github.johnnysc.holybibleapp.presentation.core.Communication
 
 /**
  * @author Asatryan on 18.07.2021

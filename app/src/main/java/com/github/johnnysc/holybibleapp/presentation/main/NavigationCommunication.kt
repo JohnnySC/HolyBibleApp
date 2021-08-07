@@ -1,6 +1,6 @@
 package com.github.johnnysc.holybibleapp.presentation.main
 
-import com.github.johnnysc.holybibleapp.core.Communication
+import com.github.johnnysc.holybibleapp.presentation.core.Communication
 
 /**
  * @author Asatryan on 13.07.2021

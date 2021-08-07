@@ -7,7 +7,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.github.johnnysc.holybibleapp.core.CustomTextView
+    <com.github.johnnysc.holybibleapp.presentation.core.view.CustomTextView
         android:id="@+id/messageTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

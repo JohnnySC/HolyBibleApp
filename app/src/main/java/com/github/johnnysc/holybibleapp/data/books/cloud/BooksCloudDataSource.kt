@@ -1,8 +1,8 @@
 package com.github.johnnysc.holybibleapp.data.books.cloud
 
 import com.github.johnnysc.holybibleapp.R
+import com.github.johnnysc.holybibleapp.core.ChosenLanguage
 import com.github.johnnysc.holybibleapp.core.RawResourceReader
-import com.github.johnnysc.holybibleapp.presentation.languages.ChosenLanguage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -13,11 +13,10 @@ interface BooksCloudDataSource {
 
     suspend fun fetchBooks(): List<BookCloud>
 
-    abstract class Abstract(private val gson: Gson) : BooksCloudDataSource {
-        override suspend fun fetchBooks(): List<BookCloud.Base> = gson.fromJson(
-            getDataAsString(),
-            object : TypeToken<List<BookCloud.Base>>() {}.type
-        )
+    abstract class Abstract(private val gson: Gson, private val typeToken: TypeToken<*>) :
+        BooksCloudDataSource {
+        override suspend fun fetchBooks(): List<BookCloud.Base> =
+            gson.fromJson(getDataAsString(), typeToken.type)
 
         protected abstract suspend fun getDataAsString(): String
     }
@@ -25,7 +24,7 @@ interface BooksCloudDataSource {
     class Base(
         private val languages: ChosenLanguage,
         private val englishCloudDataSource: BooksCloudDataSource,
-        private val russianDataSource: BooksCloudDataSource
+        private val russianDataSource: BooksCloudDataSource,
     ) : BooksCloudDataSource {
         override suspend fun fetchBooks() = (
                 if (languages.isChosenRussian())
@@ -40,19 +39,18 @@ interface BooksCloudDataSource {
     }
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    class English(
-        private val service: BooksService,
-        gson: Gson,
-    ) : BooksCloudDataSource.Abstract(gson) {
+    class English(private val service: BooksService, gson: Gson, typeToken: TypeToken<*>) :
+        BooksCloudDataSource.Abstract(gson, typeToken) {
         override suspend fun getDataAsString() = service.fetchBooks().string()
     }
 
     class Mock(
-        private val rawResourceReader: RawResourceReader,
-        gson: Gson
-    ) : BooksCloudDataSource.Abstract(gson) {
+        private val rawResourceReader: RawResourceReader, gson: Gson, typeToken: TypeToken<*>
+    ) : BooksCloudDataSource.Abstract(gson, typeToken) {
 
         override suspend fun getDataAsString() =
             rawResourceReader.readText(R.raw.books_successful_response)
     }
 }
+
+class BooksTypeToken : TypeToken<List<BookCloud.Base>>()

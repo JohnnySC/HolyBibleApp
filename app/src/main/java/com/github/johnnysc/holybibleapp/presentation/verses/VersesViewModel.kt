@@ -1,13 +1,12 @@
 package com.github.johnnysc.holybibleapp.presentation.verses
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.holybibleapp.core.ChangeFavorite
+import com.github.johnnysc.holybibleapp.core.Multiply
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
-import com.github.johnnysc.holybibleapp.core.TextMapper
 import com.github.johnnysc.holybibleapp.domain.verses.VersesDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.verses.VersesInteractor
+import com.github.johnnysc.holybibleapp.presentation.core.TextMapper
 import com.github.johnnysc.holybibleapp.presentation.deeplink.DeeplinkData
 import com.github.johnnysc.holybibleapp.presentation.main.BaseViewModel
 import com.github.johnnysc.holybibleapp.sl.core.Feature
@@ -21,11 +20,13 @@ import kotlinx.coroutines.withContext
 abstract class VersesViewModel(
     private val navigator: VersesNavigator,
     private val interactor: VersesInteractor,
-    private val communication: VersesCommunication,
+    communication: VersesCommunication,
     private val mapper: VersesDomainToUiMapper<VersesUi>,
     private val deeplinkData: DeeplinkData,
-    resourceProvider: ResourceProvider
-) : BaseViewModel(resourceProvider), ChangeFavorite<Int> {
+    resourceProvider: ResourceProvider,
+    private val multiply: Multiply,
+) : BaseViewModel<VersesCommunication, VersesUi>(resourceProvider, communication),
+    ChangeFavorite<Int> {
 
     abstract fun init()
     abstract val feature: Feature
@@ -38,24 +39,18 @@ abstract class VersesViewModel(
     override fun saveScrollPosition(position: Int) =
         interactor.saveScrollPosition(feature, position)
 
-    fun fetchVerses() {
+    override fun fetch() {
         communication.map(VersesUi.Base(ArrayList(listOf(VerseUi.Progress)), title()))
         viewModelScope.launch(Dispatchers.IO) {
             val list = interactor.fetchVerses()
             val ui = list.map(mapper)
-            withContext(Dispatchers.Main) {
-                communication.map(ui)
-            }
+            withContext(Dispatchers.Main) { communication.map(ui) }
         }
-    }
-
-    fun observeVerses(owner: LifecycleOwner, observer: Observer<VersesUi>) {
-        communication.observe(owner, observer)
     }
 
     fun showNextChapterVerses() {
         interactor.showNextChapter()
-        fetchVerses()
+        fetch()
     }
 
     fun share(item: VerseUi): String {
@@ -65,10 +60,10 @@ abstract class VersesViewModel(
                 bookNameAndChapterNumber = data
             }
         })
-        return item.map(VerseUiMapper.Share(deeplinkData, bookNameAndChapterNumber))
+        return item.map(VerseUiMapper.Share(deeplinkData, bookNameAndChapterNumber, multiply))
     }
 
-    protected fun saveVersesScreen() = navigator.saveVersesScreen()
+    protected fun saveVersesScreen() = navigator.save(feature)
 
     class Base(
         navigator: VersesNavigator,
@@ -76,19 +71,15 @@ abstract class VersesViewModel(
         communication: VersesCommunication,
         mapper: VersesDomainToUiMapper<VersesUi>,
         resourceProvider: ResourceProvider,
-        deeplinkData: DeeplinkData
+        deeplinkData: DeeplinkData,
+        multiply: Multiply,
     ) : VersesViewModel(
-        navigator,
-        interactor,
-        communication,
-        mapper,
-        deeplinkData,
-        resourceProvider
+        navigator, interactor, communication, mapper, deeplinkData, resourceProvider, multiply
     ) {
         override val feature = Feature.VERSES
         override fun init() {
             saveVersesScreen()
-            fetchVerses()
+            fetch()
         }
     }
 }

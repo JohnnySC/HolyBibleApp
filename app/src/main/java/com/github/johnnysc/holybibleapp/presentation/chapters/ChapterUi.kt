@@ -11,7 +11,7 @@ interface ChapterUi {
         private val visibleId: Int,
         private val id: Int,
         private val text: String,
-        private val isFavorite: Boolean = false
+        private val isFavorite: Boolean = false,
     ) : ChapterUi {
 
         override fun <T> map(mapper: ChapterUiMapper<T>) =

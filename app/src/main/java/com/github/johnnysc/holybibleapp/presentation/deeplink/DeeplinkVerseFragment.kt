@@ -7,5 +7,5 @@ import com.github.johnnysc.holybibleapp.presentation.verses.VersesFragment
  **/
 class DeeplinkVerseFragment : VersesFragment<DeeplinkVersesViewModel>() {
     override fun viewModelClass() = DeeplinkVersesViewModel::class.java
-    override fun showBackIcon() = false
+    override fun showBack() = false
 }

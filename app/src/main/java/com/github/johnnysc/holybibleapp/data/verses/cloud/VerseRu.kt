@@ -13,9 +13,7 @@ data class VerseRu(@SerializedName("verse") private val text: String) :
 }
 
 data class VerseRuWrapper(
-    private val finalId: Int,
-    private val id: Int,
-    private val verse: String,
+    private val finalId: Int, private val id: Int, private val verse: String
 ) : VerseCloud {
     override fun <T> map(mapper: ToVerseMapper<T>, isFavorite: Boolean) =
         mapper.map(finalId, id, verse, isFavorite)

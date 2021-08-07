@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.os.Build
 import android.os.LocaleList
 import androidx.annotation.StringRes
-import com.github.johnnysc.holybibleapp.presentation.languages.ChooseLanguages
 import java.io.BufferedReader
 import java.util.*
 

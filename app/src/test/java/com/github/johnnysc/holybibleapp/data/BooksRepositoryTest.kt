@@ -1,15 +1,15 @@
 package com.github.johnnysc.holybibleapp.data
 
-import com.github.johnnysc.holybibleapp.core.Limits
+import com.github.johnnysc.holybibleapp.data.books.BaseBooksRepository
 import com.github.johnnysc.holybibleapp.data.books.BookData
 import com.github.johnnysc.holybibleapp.data.books.BooksData
-import com.github.johnnysc.holybibleapp.data.books.BooksRepository
 import com.github.johnnysc.holybibleapp.data.books.cache.BookDb
 import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheDataSource
 import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheMapper
 import com.github.johnnysc.holybibleapp.data.books.cloud.BookCloud
 import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudDataSource
 import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudMapper
+import com.github.johnnysc.holybibleapp.data.core.Limits
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -26,7 +26,7 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
     fun test_no_connection_no_cache() = runBlocking {
         val testCloudDataSource = TestBooksCloudDataSource(returnSuccess = false)
         val testCacheDataSource = TestBooksCacheDataSource(returnSuccess = false)
-        val repository = BooksRepository.Base(
+        val repository = BaseBooksRepository(
             testCloudDataSource,
             testCacheDataSource,
             BooksCloudMapper.Base(TestToBookMapper()),
@@ -43,7 +43,7 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
     fun test_cloud_success_no_cache() = runBlocking {
         val testCloudDataSource = TestBooksCloudDataSource(returnSuccess = true)
         val testCacheDataSource = TestBooksCacheDataSource(returnSuccess = false)
-        val repository = BooksRepository.Base(
+        val repository = BaseBooksRepository(
             testCloudDataSource,
             testCacheDataSource,
             BooksCloudMapper.Base(TestToBookMapper()),
@@ -66,7 +66,7 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
     fun test_no_connection_with_cache() = runBlocking {
         val testCloudDataSource = TestBooksCloudDataSource(returnSuccess = false)
         val testCacheDataSource = TestBooksCacheDataSource(returnSuccess = true)
-        val repository = BooksRepository.Base(
+        val repository = BaseBooksRepository(
             testCloudDataSource,
             testCacheDataSource,
             BooksCloudMapper.Base(TestToBookMapper()),
@@ -88,7 +88,7 @@ class BooksRepositoryTest : BaseBooksRepositoryTest() {
     fun test_cloud_success_with_cache() = runBlocking {
         val testCloudDataSource = TestBooksCloudDataSource(returnSuccess = true)
         val testCacheDataSource = TestBooksCacheDataSource(returnSuccess = true)
-        val repository = BooksRepository.Base(
+        val repository = BaseBooksRepository(
             testCloudDataSource,
             testCacheDataSource,
             BooksCloudMapper.Base(TestToBookMapper()),
