@@ -1,9 +1,13 @@
 package com.github.johnnysc.holybibleapp.presentation.chapters
 
-import android.view.View
 import android.view.ViewGroup
 import com.github.johnnysc.holybibleapp.R
-import com.github.johnnysc.holybibleapp.core.*
+import com.github.johnnysc.holybibleapp.core.Retry
+import com.github.johnnysc.holybibleapp.core.Show
+import com.github.johnnysc.holybibleapp.presentation.core.BaseAdapter
+import com.github.johnnysc.holybibleapp.presentation.core.BaseViewHolder
+import com.github.johnnysc.holybibleapp.presentation.core.ClickListener
+import com.github.johnnysc.holybibleapp.presentation.core.DiffUtilCallback
 
 /**
  * @author Asatryan on 12.07.2021
@@ -32,51 +36,15 @@ class ChaptersAdapter(
         else -> throw IllegalStateException("unknown viewType $viewType")
     }
 
-    abstract class ChapterViewHolder(view: View) : BaseViewHolder<ChapterUi>(view) {
-
-        class Base(
-            view: View,
-            private val clickListener: ClickListener<ChapterUi>,
-            private val favoriteListener: Show<Pair<Int, Int>>
-        ) : ChapterViewHolder(view) {
-            private val reveal: SwipeMenuLayout = itemView.findViewById(R.id.swipeRevealLayout)
-            private val backgroundView: CustomFrameLayout =
-                itemView.findViewById(R.id.backgroundView)
-            private val favoriteButton =
-                itemView.findViewById<FavoriteView>(R.id.changeFavoriteView)
-            private val favoriteLayout =
-                itemView.findViewById<View>(R.id.changeFavoriteLayout)
-
-            private val textView = itemView.findViewById<CustomTextView>(R.id.textView)
-            override fun bind(item: ChapterUi) {
-                item.map(backgroundView)
-                item.map(favoriteButton)
-                item.map(textView)
-                textView.setOnClickListener {
-                    clickListener.click(item)
-                }
-                favoriteLayout.setOnClickListener {
-                    item.map(ChapterUiMapper.Display(favoriteListener))
-                    reveal.smoothClose()
-                }
-            }
-        }
-
-        class Error(view: View, retry: Retry) : Fail<ChapterUi>(view, retry) {
-            override fun mapErrorMessage(item: ChapterUi, textMapper: TextMapper) =
-                item.map(textMapper)
-        }
-    }
-
     override fun diffUtilCallback(
         list: ArrayList<ChapterUi>,
-        data: List<ChapterUi>
+        data: List<ChapterUi>,
     ) = ChapterDiffUtilCallback(list, data, ChapterUiMapper.Compare.Base())
 
     inner class ChapterDiffUtilCallback(
         oldList: List<ChapterUi>,
         newList: List<ChapterUi>,
-        same: ChapterUiMapper.Compare
+        same: ChapterUiMapper.Compare,
     ) : DiffUtilCallback<ChapterUi, ChapterUiMapper.Compare>(oldList, newList, same) {
         override fun same(item: ChapterUi, same: ChapterUiMapper.Compare) = item.map(same)
     }

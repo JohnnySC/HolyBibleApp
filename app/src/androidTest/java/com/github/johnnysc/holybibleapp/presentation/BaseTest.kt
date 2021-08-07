@@ -16,11 +16,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiSelector
 import com.github.johnnysc.holybibleapp.R
-import com.github.johnnysc.holybibleapp.core.RealmProvider
+import com.github.johnnysc.holybibleapp.data.core.RealmProvider
 import com.github.johnnysc.holybibleapp.core.RecyclerViewMatcher
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.core.lazyActivityScenarioRule
-import com.github.johnnysc.holybibleapp.presentation.languages.ChosenLanguage
+import com.github.johnnysc.holybibleapp.core.ChosenLanguage
 import com.github.johnnysc.holybibleapp.presentation.main.MainActivity
 import org.junit.Before
 import org.junit.Rule

@@ -2,7 +2,7 @@ package com.github.johnnysc.holybibleapp.presentation.chapters
 
 import android.os.Bundle
 import android.view.View
-import com.github.johnnysc.holybibleapp.core.ClickListener
+import com.github.johnnysc.holybibleapp.presentation.core.ClickListener
 import com.github.johnnysc.holybibleapp.core.Retry
 import com.github.johnnysc.holybibleapp.core.Show
 import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
@@ -19,7 +19,7 @@ class ChaptersFragment : BaseFragment<ChaptersViewModel>() {
 
         val adapter = ChaptersAdapter(
             object : Retry {
-                override fun tryAgain() = viewModel.fetchChapters()
+                override fun tryAgain() = viewModel.fetch()
             },
             object : ClickListener<ChapterUi> {
                 override fun click(item: ChapterUi) = item.map(ChapterUiMapper.Display(viewModel))
@@ -28,7 +28,7 @@ class ChaptersFragment : BaseFragment<ChaptersViewModel>() {
                 override fun open(id: Pair<Int, Int>) = viewModel.changeFavorite(id)
             }
         )
-        viewModel.observeChapters(this, { ui ->
+        viewModel.observe(this, { ui ->
             ui.map(adapter, title())
             scrollTo()
         })

@@ -41,11 +41,11 @@ interface VerseUiMapper<T> {
 
     class Share(
         private val deeplinkData: DeeplinkData,
-        private val bookNameAndChapterNumber: String
+        private val bookNameAndChapterNumber: String,
+        private val multiply: Multiply
     ) : VerseUiMapper<String> {
 
         override fun map(id: Int, text: String, isFavorite: Boolean): String {
-            val multiply = Multiply()
             val bookId = multiply.divide(multiply.divide(id))
             val chapterId = multiply.rest(multiply.divide(id))
             val verseId = multiply.rest(multiply.rest(id))

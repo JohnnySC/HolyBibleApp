@@ -1,8 +1,6 @@
 package com.github.johnnysc.holybibleapp.presentation.deeplink
 
 import android.content.Intent
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.core.Save
@@ -18,20 +16,20 @@ import kotlinx.coroutines.withContext
 class DeeplinkViewModel(
     resourceProvider: ResourceProvider,
     private val saveIds: Save<String>,
-    private val communication: NavigationCommunication
-) : BaseViewModel(resourceProvider) {
+    communication: NavigationCommunication,
+) : BaseViewModel<NavigationCommunication, Int>(resourceProvider, communication) {
 
-    fun init(intent: Intent?) {
+    private var data = ""
+
+    override fun fetch() {
         viewModelScope.launch(Dispatchers.IO) {
-            val data = intent?.data.toString()
             saveIds.save(data)
-            withContext(Dispatchers.Main) {
-                communication.map(1)
-            }
+            withContext(Dispatchers.Main) { communication.map(1) }
         }
     }
 
-    fun observe(owner: LifecycleOwner, observer: Observer<Int>) {
-        communication.observe(owner, observer)
+    fun init(intent: Intent?) {
+        data = intent?.data.toString()
+        fetch()
     }
 }

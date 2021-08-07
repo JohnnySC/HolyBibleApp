@@ -1,12 +1,11 @@
 package com.github.johnnysc.holybibleapp.domain.verses
 
-import com.github.johnnysc.holybibleapp.core.Interactor
+import com.github.johnnysc.holybibleapp.domain.core.Interactor
 import com.github.johnnysc.holybibleapp.core.Read
-import com.github.johnnysc.holybibleapp.core.ScrollPositionCache
-import com.github.johnnysc.holybibleapp.data.books.BooksRepository
-import com.github.johnnysc.holybibleapp.data.chapters.ChaptersRepository
 import com.github.johnnysc.holybibleapp.data.verses.VersesDataToDomainMapper
-import com.github.johnnysc.holybibleapp.data.verses.VersesRepository
+import com.github.johnnysc.holybibleapp.domain.books.BooksRepository
+import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersRepository
+import com.github.johnnysc.holybibleapp.domain.core.ScrollPosition
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterCache
 import com.github.johnnysc.holybibleapp.sl.core.Feature
 
@@ -24,9 +23,9 @@ interface VersesInteractor : Interactor {
         private val mapper: VersesDataToDomainMapper<VersesDomain>,
         private val booksRepository: BooksRepository,
         private val bookIdContainer: Read<Int>,
-        scrollPositionCache: ScrollPositionCache,
+        scrollPositionCache: ScrollPosition,
         private val chaptersRepository: ChaptersRepository,
-        private val chapterCache: ChapterCache, //todo move to repository
+        private val chapterCache: ChapterCache,
     ) : Interactor.Abstract(repository, scrollPositionCache), VersesInteractor {
 
         override fun showNextChapter() {

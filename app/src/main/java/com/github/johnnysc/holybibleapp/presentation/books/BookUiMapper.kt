@@ -1,6 +1,9 @@
 package com.github.johnnysc.holybibleapp.presentation.books
 
-import com.github.johnnysc.holybibleapp.core.*
+import com.github.johnnysc.holybibleapp.core.Same
+import com.github.johnnysc.holybibleapp.core.Save
+import com.github.johnnysc.holybibleapp.core.Show
+import com.github.johnnysc.holybibleapp.presentation.core.TextMapper
 
 /**
  * @author Asatryan on 02.08.2021

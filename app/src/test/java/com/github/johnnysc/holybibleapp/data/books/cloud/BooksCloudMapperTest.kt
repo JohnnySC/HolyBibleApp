@@ -2,6 +2,7 @@ package com.github.johnnysc.holybibleapp.data.books.cloud
 
 import com.github.johnnysc.holybibleapp.data.books.BookData
 import com.github.johnnysc.holybibleapp.data.books.ToBookMapper
+import com.github.johnnysc.holybibleapp.data.core.FavoritesList
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -22,7 +23,7 @@ class BooksCloudMapperTest {
                     BookCloud.Base(2, "two", "ot"),
                     BookCloud.Base(3, "three", "nt"),
                 ),
-                listOf(1, 2)
+                FavoritesList(listOf(1, 2))
             )
         )
         val expected = listOf(

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.johnnysc.holybibleapp.core.CustomButton xmlns:android="http://schemas.android.com/apk/res/android"
+<com.github.johnnysc.holybibleapp.presentation.core.view.CustomButton
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nextButton"
     style="@style/Widget.MaterialComponents.Button.OutlinedButton"

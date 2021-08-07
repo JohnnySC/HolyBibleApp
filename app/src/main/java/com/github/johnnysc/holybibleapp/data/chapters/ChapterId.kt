@@ -1,7 +1,7 @@
 package com.github.johnnysc.holybibleapp.data.chapters
 
-import com.github.johnnysc.holybibleapp.core.DbWrapper
-import com.github.johnnysc.holybibleapp.core.Limits
+import com.github.johnnysc.holybibleapp.data.core.DbWrapper
+import com.github.johnnysc.holybibleapp.data.core.Limits
 import com.github.johnnysc.holybibleapp.core.Multiply
 import io.realm.RealmObject
 
@@ -16,7 +16,8 @@ interface ChapterId : Limits {
     class Base(
         private val bookId: Int, //[1 - 66]
         chapterIdReal: Int = 0,
-        chapterIdGenerated: Int = 0
+        chapterIdGenerated: Int = 0,
+        private val multiply: Multiply
     ) : ChapterId {
         private val chapterIdReal: Int//[1 - 999]
         private val chapterIdGenerated: Int// [1001 - 66999]
@@ -24,15 +25,15 @@ interface ChapterId : Limits {
         init {
             if (chapterIdReal == 0) {
                 this.chapterIdGenerated = chapterIdGenerated
-                this.chapterIdReal = Multiply().rest(chapterIdGenerated)
+                this.chapterIdReal = multiply.rest(chapterIdGenerated)
             } else {
                 this.chapterIdReal = chapterIdReal
-                this.chapterIdGenerated = Multiply().map(bookId) + chapterIdReal
+                this.chapterIdGenerated = multiply.map(bookId) + chapterIdReal
             }
         }
 
-        override fun min() = Multiply().map(bookId)
-        override fun max() = Multiply().map(bookId + 1)
+        override fun min() = multiply.map(bookId)
+        override fun max() = multiply.map(bookId + 1)
 
         override fun <T> map(mapper: ChapterIdToUiMapper<T>, isFavorite: Boolean) =
             mapper.map(chapterIdReal, chapterIdGenerated, isFavorite)

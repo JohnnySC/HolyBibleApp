@@ -1,5 +1,6 @@
 package com.github.johnnysc.holybibleapp.data.verses.cloud
 
+import com.github.johnnysc.holybibleapp.data.core.FavoritesList
 import com.github.johnnysc.holybibleapp.data.verses.ToVerseMapper
 import com.github.johnnysc.holybibleapp.data.verses.VerseData
 import org.junit.Assert.assertEquals
@@ -22,7 +23,7 @@ class VersesCloudMapperTest {
                     VerseCloud.Base(5_004_002, 2, "two"),
                     VerseCloud.Base(5_004_003, 3, "three"),
                 ),
-                listOf(5_004_001, 5_004_00_2)
+                FavoritesList(listOf(5_004_001, 5_004_00_2))
             )
         )
         val expected = listOf(

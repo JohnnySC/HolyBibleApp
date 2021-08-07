@@ -2,11 +2,8 @@ package com.github.johnnysc.holybibleapp.domain
 
 import com.github.johnnysc.holybibleapp.core.ErrorType
 import com.github.johnnysc.holybibleapp.data.books.BookData
-import com.github.johnnysc.holybibleapp.data.books.BookDataToDomainMapper
-import com.github.johnnysc.holybibleapp.domain.books.BaseBooksDataToDomainMapper
-import com.github.johnnysc.holybibleapp.domain.books.BookDomain
-import com.github.johnnysc.holybibleapp.domain.books.BooksDomain
-import com.github.johnnysc.holybibleapp.domain.books.TestamentType
+import com.github.johnnysc.holybibleapp.data.books.TestamentTemp
+import com.github.johnnysc.holybibleapp.domain.books.*
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.net.UnknownHostException
@@ -18,10 +15,16 @@ import java.net.UnknownHostException
  */
 class BaseBooksDataToDomainMapperTest {
 
-    private val mapper = BaseBooksDataToDomainMapper(object : BookDataToDomainMapper<BookDomain> {
-        override fun map(id: Int, name: String, isFavorite: Boolean) =
-            BookDomain.Base(id, name, isFavorite)
-    })
+    private val temp = TestamentTemp.Base()
+    private val mapper = BaseBooksDataToDomainMapper(
+        object : BookDataMapper<BookDomain> {
+            override fun map(id: Int, name: String, testament: String, isFavorite: Boolean) =
+                BookDomain.Base(id, name, isFavorite)
+        },
+        temp,
+        BookDataMapper.CompareTestament(temp),
+        BookDataMapper.SaveTestament(temp)
+    )
 
     @Test
     fun test_success() {

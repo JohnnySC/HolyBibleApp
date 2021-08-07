@@ -1,8 +1,8 @@
 package com.github.johnnysc.holybibleapp.presentation.deeplink
 
-import com.github.johnnysc.holybibleapp.core.BuildString
 import com.github.johnnysc.holybibleapp.core.Read
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
+import com.github.johnnysc.holybibleapp.domain.books.BookDomain
 import com.github.johnnysc.holybibleapp.domain.verses.VerseDomain
 import com.github.johnnysc.holybibleapp.presentation.verses.BaseVerseDomainToUiMapper
 import com.github.johnnysc.holybibleapp.presentation.verses.VerseUi
@@ -30,9 +30,8 @@ class DeeplinkVersesDomainToUiMapperTest {
             VerseDomain.Base(102, 2, "two", false),
             VerseDomain.Base(103, 3, "three", false),
         )
-        val buildString = BuildString.Empty()
-        val actual = mapper.map(Triple(source, buildString, 7))
-        val expected = VersesUi.Base(mutableListOf(VerseUi.Base(103, "3 three", false)), "")
+        val actual = mapper.map(Triple(source, BookDomain.Base(0, ""), 7))
+        val expected = VersesUi.Base(mutableListOf(VerseUi.Base(103, "3 three", false)), "mockWithArgs")
         assertEquals(expected, actual)
     }
 
@@ -49,9 +48,8 @@ class DeeplinkVersesDomainToUiMapperTest {
             VerseDomain.Base(102, 2, "two", false),
             VerseDomain.Base(103, 3, "three", false),
         )
-        val buildString = BuildString.Empty()
-        val actual = mapper.map(Triple(source, buildString, 7))
-        val expected = VersesUi.Base(mutableListOf(), "")
+        val actual = mapper.map(Triple(source, BookDomain.Base(0, ""), 7))
+        val expected = VersesUi.Base(mutableListOf(), "mockWithArgs")
         assertEquals(expected, actual)
     }
 
@@ -65,6 +63,7 @@ class DeeplinkVersesDomainToUiMapperTest {
         override fun readText(id: Int) = ""
         override fun provideSharedPreferences(name: String) =
             throw IllegalStateException("not used here")
+
         override fun chooseEnglish() = Unit
         override fun chooseRussian() = Unit
     }

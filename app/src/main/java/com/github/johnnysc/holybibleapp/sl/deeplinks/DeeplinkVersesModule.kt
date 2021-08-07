@@ -1,9 +1,9 @@
 package com.github.johnnysc.holybibleapp.sl.deeplinks
 
-import com.github.johnnysc.holybibleapp.data.books.BooksRepository
 import com.github.johnnysc.holybibleapp.data.books.cloud.BookRu
-import com.github.johnnysc.holybibleapp.data.chapters.ChaptersRepository
 import com.github.johnnysc.holybibleapp.data.verse.VerseIdCache
+import com.github.johnnysc.holybibleapp.domain.books.BooksRepository
+import com.github.johnnysc.holybibleapp.domain.chapters.ChaptersRepository
 import com.github.johnnysc.holybibleapp.presentation.books.BookCache
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterCache
 import com.github.johnnysc.holybibleapp.presentation.deeplink.DeeplinkVersesDomainToUiMapper
@@ -44,6 +44,7 @@ class DeeplinkVersesModule(
         communications(),
         mapper(),
         coreModule.deeplinkData,
-        coreModule.resourceProvider
+        coreModule.resourceProvider,
+        coreModule.multiply
     )
 }

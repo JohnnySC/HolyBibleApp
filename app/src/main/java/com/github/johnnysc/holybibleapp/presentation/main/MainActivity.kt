@@ -15,9 +15,7 @@ class MainActivity : BaseActivity() {
 
         viewModel = viewModel(MainViewModel::class.java, this)
 
-        viewModel.observe(this, {
-            navigate(viewModel.fragment(it))
-        })
+        viewModel.observe(this, { navigate(viewModel.fragment(it)) })
         viewModel.init(savedInstanceState == null)
     }
 
@@ -40,14 +38,11 @@ class MainActivity : BaseActivity() {
 
     private fun navigate(fragment: BaseFragment<*>) = with(supportFragmentManager) {
         if (canReplace(fragment))
-            beginTransaction()
-                .replace(R.id.container, fragment, fragment.name())
-                .commit()
+            beginTransaction().replace(R.id.container, fragment, fragment.name()).commit()
     }
 
     override fun onBackPressed() {
-        if (viewModel.navigateBack())
-            super.onBackPressed()
+        if (viewModel.navigateBack()) super.onBackPressed()
     }
 }
 

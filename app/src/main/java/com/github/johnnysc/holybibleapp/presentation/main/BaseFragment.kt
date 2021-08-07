@@ -11,20 +11,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.johnnysc.holybibleapp.R
 import com.github.johnnysc.holybibleapp.core.Matcher
-import com.github.johnnysc.holybibleapp.core.TextMapper
+import com.github.johnnysc.holybibleapp.presentation.core.TextMapper
 
 /**
  * @author Asatryan on 13.07.2021
  **/
-abstract class BaseFragment<T : BaseViewModel> : Fragment(), Matcher<String> {
+abstract class BaseFragment<T : BaseViewModel<*, *>> : Fragment(), Matcher<String>,
+    BackNavigationUi {
 
     protected lateinit var viewModel: T
+    private var recyclerView: RecyclerView? = null//todo viewbinding
+    private var hasScrolled = false
+    private lateinit var layoutManager: LinearLayoutManager
 
     protected abstract fun viewModelClass(): Class<T>
-    protected open fun layoutResId() = R.layout.fragment_main
-    protected open fun showBackIcon() = true
 
-    private var recyclerView: RecyclerView? = null//todo viewbinding
+    override fun showBack(): Boolean = true
 
     override fun matches(arg: String) = name() == arg
     fun name(): String = javaClass.simpleName
@@ -35,21 +37,15 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment(), Matcher<String> {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View? {
         return inflater.inflate(layoutResId(), container, false)
     }
 
-    private var hasScrolled = false
-
-    private lateinit var layoutManager: LinearLayoutManager
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         (requireActivity() as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(
-            showBackIcon()
+            showBack()
         )
         title().map(viewModel.title())
         layoutManager = LinearLayoutManager(requireContext())
@@ -63,22 +59,21 @@ abstract class BaseFragment<T : BaseViewModel> : Fragment(), Matcher<String> {
         )
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveScrollPosition(layoutManager.findLastCompletelyVisibleItemPosition())
+    }
+
+    protected open fun layoutResId() = R.layout.fragment_main
     protected fun title() = requireActivity() as TextMapper
     protected fun setAdapter(adapter: RecyclerView.Adapter<*>) {
         recyclerView?.adapter = adapter
     }
-
-    private fun itemsCount() = recyclerView?.adapter?.itemCount ?: 0
-
     protected fun scrollTo(position: Int = viewModel.scrollPosition()) {
         if (itemsCount() > position && position > 0 && !hasScrolled) {
             recyclerView?.smoothScrollToPosition(position)
             hasScrolled = true
         }
     }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.saveScrollPosition(layoutManager.findLastCompletelyVisibleItemPosition())
-    }
+    private fun itemsCount() = recyclerView?.adapter?.itemCount ?: 0
 }

@@ -1,6 +1,6 @@
 package com.github.johnnysc.holybibleapp.presentation.languages
 
-import com.github.johnnysc.holybibleapp.core.TextMapper
+import com.github.johnnysc.holybibleapp.presentation.core.TextMapper
 
 /**
  * @author Asatryan on 24.07.2021

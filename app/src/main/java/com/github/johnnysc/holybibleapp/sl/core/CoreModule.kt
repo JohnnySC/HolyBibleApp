@@ -2,9 +2,11 @@ package com.github.johnnysc.holybibleapp.sl.core
 
 import android.content.Context
 import com.github.johnnysc.holybibleapp.R
-import com.github.johnnysc.holybibleapp.core.RealmProvider
+import com.github.johnnysc.holybibleapp.core.Multiply
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
-import com.github.johnnysc.holybibleapp.core.ScrollPositionCache
+import com.github.johnnysc.holybibleapp.data.core.AbstractScrollPositionCache
+import com.github.johnnysc.holybibleapp.data.core.RealmProvider
+import com.github.johnnysc.holybibleapp.domain.core.ScrollPosition
 import com.github.johnnysc.holybibleapp.presentation.books.BookCache
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChapterCache
 import com.github.johnnysc.holybibleapp.presentation.deeplink.DeeplinkData
@@ -12,7 +14,6 @@ import com.github.johnnysc.holybibleapp.presentation.languages.Language
 import com.github.johnnysc.holybibleapp.presentation.main.MainViewModel
 import com.github.johnnysc.holybibleapp.presentation.main.NavigationCommunication
 import com.github.johnnysc.holybibleapp.presentation.main.Navigator
-
 import com.google.gson.Gson
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -28,7 +29,7 @@ class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
         const val BASE_URL = "https://bible-go-api.rkeplin.com/v1/"
     }
 
-    lateinit var scrollPositionCache: ScrollPositionCache
+    lateinit var scrollPositionCache: ScrollPosition
     lateinit var resourceProvider: ResourceProvider
     lateinit var gson: Gson
     lateinit var realmProvider: RealmProvider
@@ -38,6 +39,8 @@ class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
     lateinit var chapterCache: ChapterCache
     lateinit var language: Language
     lateinit var deeplinkData: DeeplinkData
+    val multiply = Multiply()
+    val multiplyTwice = Multiply(2)
     private lateinit var retrofit: Retrofit
 
     fun init(context: Context) {
@@ -56,10 +59,8 @@ class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
         gson = Gson()
         resourceProvider = ResourceProvider.Base(context)
 
-        language = if (useMocks)
-            Language.Mock(resourceProvider)
-        else
-            Language.Base(resourceProvider)
+        language =
+            if (useMocks) Language.Mock(resourceProvider) else Language.Base(resourceProvider)
 
         if (language.isChosenRussian())
             resourceProvider.chooseRussian()
@@ -72,16 +73,14 @@ class CoreModule(private val useMocks: Boolean) : BaseModule<MainViewModel> {
             RealmProvider.Base(context, language)
         bookCache = BookCache.Base(resourceProvider)
         chapterCache = ChapterCache.Base(resourceProvider)
-        navigator = if (useMocks)
-            Navigator.Mock(resourceProvider)
-        else
-            Navigator.Base(resourceProvider)
+        navigator =
+            if (useMocks) Navigator.Mock(resourceProvider) else Navigator.Base(resourceProvider)
         navigationCommunication = NavigationCommunication.Base()
 
         scrollPositionCache = if (useMocks)
-            ScrollPositionCache.Mock(resourceProvider)
+            AbstractScrollPositionCache.Mock(resourceProvider)
         else
-            ScrollPositionCache.Base(resourceProvider)
+            AbstractScrollPositionCache.Base(resourceProvider)
 
         deeplinkData = DeeplinkData.Base(resourceProvider.string(R.string.deeplink))
     }

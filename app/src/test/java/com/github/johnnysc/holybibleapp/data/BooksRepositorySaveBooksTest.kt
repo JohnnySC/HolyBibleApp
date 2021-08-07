@@ -1,10 +1,8 @@
 package com.github.johnnysc.holybibleapp.data
 
-import com.github.johnnysc.holybibleapp.core.DbWrapper
-import com.github.johnnysc.holybibleapp.core.Limits
+import com.github.johnnysc.holybibleapp.data.books.BaseBooksRepository
 import com.github.johnnysc.holybibleapp.data.books.BookData
 import com.github.johnnysc.holybibleapp.data.books.BooksData
-import com.github.johnnysc.holybibleapp.data.books.BooksRepository
 import com.github.johnnysc.holybibleapp.data.books.cache.BookDataToDbMapper
 import com.github.johnnysc.holybibleapp.data.books.cache.BookDb
 import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheDataSource
@@ -12,6 +10,8 @@ import com.github.johnnysc.holybibleapp.data.books.cache.BooksCacheMapper
 import com.github.johnnysc.holybibleapp.data.books.cloud.BookCloud
 import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudDataSource
 import com.github.johnnysc.holybibleapp.data.books.cloud.BooksCloudMapper
+import com.github.johnnysc.holybibleapp.data.core.DbWrapper
+import com.github.johnnysc.holybibleapp.data.core.Limits
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -25,7 +25,7 @@ class BooksRepositorySaveBooksTest : BaseBooksRepositoryTest() {
     fun test_save_books() = runBlocking {
         val testCloudDataSource = TestBooksCloudDataSource()
         val testCacheDataSource = TestBooksCacheDataSource()
-        val repository = BooksRepository.Base(
+        val repository = BaseBooksRepository(
             testCloudDataSource,
             testCacheDataSource,
             BooksCloudMapper.Base(TestToBookMapper()),

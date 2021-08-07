@@ -1,5 +1,6 @@
 package com.github.johnnysc.holybibleapp.presentation.deeplink
 
+import com.github.johnnysc.holybibleapp.core.Multiply
 import com.github.johnnysc.holybibleapp.core.ResourceProvider
 import com.github.johnnysc.holybibleapp.domain.verses.VersesDomainToUiMapper
 import com.github.johnnysc.holybibleapp.domain.verses.VersesInteractor
@@ -18,15 +19,10 @@ class DeeplinkVersesViewModel(
     communication: VersesCommunication,
     mapper: VersesDomainToUiMapper<VersesUi>,
     deeplinkData: DeeplinkData,
-    resourceProvider: ResourceProvider
+    resourceProvider: ResourceProvider,
+    multiply: Multiply,
 ) : VersesViewModel(
-    navigator,
-    interactor,
-    communication,
-    mapper,
-    deeplinkData,
-    resourceProvider
-) {
+    navigator, interactor, communication, mapper, deeplinkData, resourceProvider, multiply) {
     override val feature = Feature.DEEPLINK_VERSES
-    override fun init() = fetchVerses()
+    override fun init() = fetch()
 }

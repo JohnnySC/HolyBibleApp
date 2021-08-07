@@ -4,27 +4,26 @@ import com.github.johnnysc.holybibleapp.core.PreferencesProvider
 import com.github.johnnysc.holybibleapp.core.Read
 import com.github.johnnysc.holybibleapp.core.Save
 import com.github.johnnysc.holybibleapp.presentation.books.BooksFragment
-import com.github.johnnysc.holybibleapp.presentation.books.BooksNavigator
 import com.github.johnnysc.holybibleapp.presentation.chapters.ChaptersFragment
-import com.github.johnnysc.holybibleapp.presentation.chapters.ChaptersNavigator
+import com.github.johnnysc.holybibleapp.presentation.core.FeatureNavigator
 import com.github.johnnysc.holybibleapp.presentation.languages.LanguagesFragment
 import com.github.johnnysc.holybibleapp.presentation.languages.LanguagesNavigator
 import com.github.johnnysc.holybibleapp.presentation.verses.VersesFragment
 import com.github.johnnysc.holybibleapp.presentation.verses.VersesNavigator
+import com.github.johnnysc.holybibleapp.sl.core.Feature
 
 /**
  * @author Asatryan on 13.07.2021
  **/
-interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, ChaptersNavigator,
-    VersesNavigator, LanguagesNavigator {
+interface Navigator : MainNavigator, FeatureNavigator, VersesNavigator, LanguagesNavigator,
+    Save<Int>, Read<Int> {
 
-    abstract class Abstract(preferencesProvider: PreferencesProvider) : Navigator {
-        private val sharedPreferences by lazy {
-            preferencesProvider.provideSharedPreferences(fileName())
-        }
-
-        protected abstract fun fileName(): String
-        protected abstract fun currentScreenKey(): String
+    abstract class Abstract(
+        preferencesProvider: PreferencesProvider,
+        fileName: String,
+        private val currentScreenKey: String,
+    ) : Navigator {
+        private val sharedPreferences = preferencesProvider.provideSharedPreferences(fileName)
 
         private val screens = listOf(
             BooksFragment::class.java,
@@ -37,16 +36,14 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
 
         override fun save(data: Int) {
             languagesChosen = false
-            sharedPreferences.edit().putInt(currentScreenKey(), data).apply()
+            sharedPreferences.edit().putInt(currentScreenKey, data).apply()
         }
 
-        override fun read() = sharedPreferences.getInt(currentScreenKey(), LANGUAGE_SCREEN)
+        override fun read() = sharedPreferences.getInt(currentScreenKey, LANGUAGE_SCREEN)
 
         override fun fragment(id: Int): BaseFragment<*> {
-            val finalId = if (id == LANGUAGE_SCREEN)
-                screens.indexOf(LanguagesFragment::class.java)
-            else
-                id
+            val finalId =
+                if (id == LANGUAGE_SCREEN) screens.indexOf(LanguagesFragment::class.java) else id
             return screens[finalId].newInstance()
         }
 
@@ -58,11 +55,12 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
         override fun navigateBack(navigationCommunication: NavigationCommunication) =
             navigationCommunication.map(previousScreen())
 
-        override fun saveBooksScreen() = save(BOOKS_SCREEN)
-        override fun saveChaptersScreen() = save(CHAPTERS_SCREEN)
-        override fun saveVersesScreen() = save(VERSES_SCREEN)
-        override fun saveLanguagesScreen() {
-            languagesChosen = true
+        override fun save(feature: Feature) = when (feature) {
+            Feature.BOOKS -> save(BOOKS_SCREEN)
+            Feature.CHAPTERS -> save(CHAPTERS_SCREEN)
+            Feature.VERSES -> save(VERSES_SCREEN)
+            Feature.LANGUAGES -> { languagesChosen = true }
+            else -> throw IllegalStateException("nothing for $feature")
         }
 
         override fun nextFromLanguages(): Int = read().let { saved ->
@@ -96,21 +94,16 @@ interface Navigator : Save<Int>, Read<Int>, MainNavigator, BooksNavigator, Chapt
         }
     }
 
-    class Base(preferencesProvider: PreferencesProvider) : Navigator.Abstract(preferencesProvider) {
-
-        override fun fileName() = NAVIGATOR_FILE_NAME
-        override fun currentScreenKey() = CURRENT_SCREEN_KEY
-
+    class Base(preferencesProvider: PreferencesProvider) : Navigator.Abstract(
+        preferencesProvider, NAVIGATOR_FILE_NAME, CURRENT_SCREEN_KEY) {
         private companion object {
             const val NAVIGATOR_FILE_NAME = "navigation"
             const val CURRENT_SCREEN_KEY = "screenId"
         }
     }
 
-    class Mock(preferencesProvider: PreferencesProvider) : Navigator.Abstract(preferencesProvider) {
-        override fun fileName() = NAVIGATOR_FILE_NAME
-        override fun currentScreenKey() = CURRENT_SCREEN_KEY
-
+    class Mock(preferencesProvider: PreferencesProvider) : Navigator.Abstract(
+        preferencesProvider, NAVIGATOR_FILE_NAME, CURRENT_SCREEN_KEY) {
         private companion object {
             const val NAVIGATOR_FILE_NAME = "mockNavigation"
             const val CURRENT_SCREEN_KEY = "mockScreenId"

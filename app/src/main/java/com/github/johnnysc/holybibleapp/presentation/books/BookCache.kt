@@ -1,6 +1,6 @@
 package com.github.johnnysc.holybibleapp.presentation.books
 
-import com.github.johnnysc.holybibleapp.core.IdCache
+import com.github.johnnysc.holybibleapp.data.core.IdCache
 import com.github.johnnysc.holybibleapp.core.PreferencesProvider
 
 /**

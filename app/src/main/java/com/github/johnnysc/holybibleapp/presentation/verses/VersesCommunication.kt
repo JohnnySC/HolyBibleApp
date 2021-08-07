@@ -1,9 +1,9 @@
 package com.github.johnnysc.holybibleapp.presentation.verses
 
 import com.github.johnnysc.holybibleapp.core.ChangeFavorite
-import com.github.johnnysc.holybibleapp.core.Communication
-import com.github.johnnysc.holybibleapp.core.ListMapper
-import com.github.johnnysc.holybibleapp.core.TextMapper
+import com.github.johnnysc.holybibleapp.presentation.core.Communication
+import com.github.johnnysc.holybibleapp.presentation.core.ListMapper
+import com.github.johnnysc.holybibleapp.presentation.core.TextMapper
 
 /**
  * @author Asatryan on 17.07.2021
