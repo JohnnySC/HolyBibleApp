@@ -59,3 +59,7 @@ https://www.youtube.com/playlist?list=PLQRyeBV1rkk2xIL3ViHAEZ0h08wMOfutO
 18. feature/HB10_share_and_deeplink
 
 19. release/1.3
+
+20. feature/refactoring_after_release_1.3
+
+and then just watch master branch
