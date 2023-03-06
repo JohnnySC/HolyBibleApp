@@ -37,15 +37,17 @@ class LanguagesViewModel(
 
     override fun fetch() {
         val choice = when {
-            language.isChosenRussian() -> LanguageChoice.RUSSIAN
-            language.isChosenEnglish() -> LanguageChoice.ENGLISH
-            else -> LanguageChoice.NONE
+            language.isChosenRussian() -> LanguageChoice.Russian()
+            language.isChosenEnglish() -> LanguageChoice.English()
+            else -> LanguageChoice.None()
         }
-        communication.map(LanguagesUi.Base(
-            choice,
-            resourceProvider.string(R.string.english),
-            resourceProvider.string(R.string.russian)
-        ))
+        communication.map(
+            LanguagesUi.Base(
+                choice,
+                resourceProvider.string(R.string.english),
+                resourceProvider.string(R.string.russian)
+            )
+        )
     }
 
     override fun showBack(): Boolean = with(navigator) {

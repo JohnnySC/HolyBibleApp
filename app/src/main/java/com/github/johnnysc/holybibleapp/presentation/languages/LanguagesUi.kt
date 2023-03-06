@@ -10,9 +10,7 @@ interface LanguagesUi {
     fun map(
         englishMapper: TextMapper,
         russianMapper: TextMapper,
-        russian: () -> Unit,
-        english: () -> Unit,
-        none: () -> Unit
+        chooseLanguageUi: ChooseLanguageUi
     )
 
     class Base(
@@ -20,26 +18,32 @@ interface LanguagesUi {
         private val englishTitle: String,
         private val russianTitle: String
     ) : LanguagesUi {
+
         override fun map(
             englishMapper: TextMapper,
             russianMapper: TextMapper,
-            russian: () -> Unit,
-            english: () -> Unit,
-            none: () -> Unit
+            chooseLanguageUi: ChooseLanguageUi
         ) {
             englishMapper.map(englishTitle)
             russianMapper.map(russianTitle)
-            when (choice) {
-                LanguageChoice.ENGLISH -> english()
-                LanguageChoice.RUSSIAN -> russian()
-                LanguageChoice.NONE -> none()
-            }
+            choice.map(chooseLanguageUi)
         }
     }
 }
 
-enum class LanguageChoice {
-    ENGLISH,
-    RUSSIAN,
-    NONE
+interface LanguageChoice {
+
+    fun map(languageUi: ChooseLanguageUi)
+
+    class English : LanguageChoice {
+        override fun map(languageUi: ChooseLanguageUi) = languageUi.englishChosen()
+    }
+
+    class Russian : LanguageChoice {
+        override fun map(languageUi: ChooseLanguageUi) = languageUi.russianChosen()
+    }
+
+    class None : LanguageChoice {
+        override fun map(languageUi: ChooseLanguageUi) = languageUi.noLanguageChosen()
+    }
 }

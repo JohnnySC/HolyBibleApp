@@ -15,7 +15,7 @@ import com.github.johnnysc.holybibleapp.presentation.main.BaseFragment
 /**
  * @author Asatryan on 18.07.2021
  **/
-class LanguagesFragment : BaseFragment<LanguagesViewModel>() {
+class LanguagesFragment : BaseFragment<LanguagesViewModel>(), ChooseLanguageUi {
 
     override fun showBack() = viewModel.showBack()
     override fun layoutResId() = R.layout.fragment_languages
@@ -51,19 +51,13 @@ class LanguagesFragment : BaseFragment<LanguagesViewModel>() {
         russian.setOnClickListener(chooseRussian)
         russianRadioButton.setOnClickListener(chooseRussian)
 
-        viewModel.observe(this, {
-            it.map(
-                englishRadioButton,
-                russianRadioButton,
-                ::russianChosen,
-                ::englishChosen,
-                ::noLanguageChosen
-            )
-        })
+        viewModel.observe(this) {
+            it.map(englishRadioButton, russianRadioButton, this)
+        }
         viewModel.fetch()
     }
 
-    private fun englishChosen() {
+    override fun englishChosen() {
         setStaticRussianFlag()
         englishRadioButton.isChecked = true
         val animatedVector =
@@ -77,7 +71,7 @@ class LanguagesFragment : BaseFragment<LanguagesViewModel>() {
         animatedVector?.start()
     }
 
-    private fun russianChosen() {
+    override fun russianChosen() {
         setStaticEnglishFlag()
         russianRadioButton.isChecked = true
         val animatedVector =
@@ -91,11 +85,17 @@ class LanguagesFragment : BaseFragment<LanguagesViewModel>() {
         animatedVector?.start()
     }
 
-    private fun noLanguageChosen() {
+    override fun noLanguageChosen() {
         setStaticRussianFlag()
         setStaticEnglishFlag()
     }
 
     private fun setStaticRussianFlag() = russianFlagView.setImageResource(R.drawable.russian_flag)
     private fun setStaticEnglishFlag() = englishFlagView.setImageResource(R.drawable.english_flag)
+}
+
+interface ChooseLanguageUi {
+    fun noLanguageChosen()
+    fun russianChosen()
+    fun englishChosen()
 }
